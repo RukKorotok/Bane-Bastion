@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Sources\Singletones">
+      <UniqueIdentifier>{c5f48620-6051-4e0e-bf23-fb1e90459083}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\InheritanceSource">
+      <UniqueIdentifier>{8d2d6bdf-567f-45ce-ac12-d4099469a322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObjects">
+      <UniqueIdentifier>{cbeca881-7c35-41be-b8e2-3f76642fff4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\UI">
+      <UniqueIdentifier>{eaf9056d-ce40-472e-a716-1e0f3b6db7d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\OutsidePlugins">
+      <UniqueIdentifier>{5fc6361b-f292-4246-9f49-11f78138563e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GameMain.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Sources\Singletones</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Sources\Singletones</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>Sources\Singletones</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Sources\Singletones</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>Sources\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Base.cpp">
+      <Filter>Sources\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Sources\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ini.c">
+      <Filter>Sources\OutsidePlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="INIReader.cpp">
+      <Filter>Sources\OutsidePlugins</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects.cpp">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Sources\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SmothTimer.cpp">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClCompile>
+    <ClCompile Include="Factories.cpp">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveSystem.cpp">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandlers.cpp">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Config.h">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Sources\Singletones</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Sources\Singletones</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>Sources\Singletones</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Sources\Singletones</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Sources\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Base.h">
+      <Filter>Sources\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Sources\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ini.h">
+      <Filter>Sources\OutsidePlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="INIReader.h">
+      <Filter>Sources\OutsidePlugins</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects.h">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Sources\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces.h">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClInclude>
+    <ClInclude Include="SmothTimer.h">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Factories.h">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveSystem.h">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClInclude>
+    <ClInclude Include="InputHandlers.h">
+      <Filter>Sources\InheritanceSource</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
