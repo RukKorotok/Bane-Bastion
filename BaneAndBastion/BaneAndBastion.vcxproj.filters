@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="DeveloperLevel.cpp" />
+    <ClCompile Include="GameMain.cpp" />
+    <ClCompile Include="Menu.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GamePlay\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bonus.cpp">
+      <Filter>GamePlay\Abiities</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DeveloperLevel.h" />
+    <ClInclude Include="GameSettings.h" />
+    <ClInclude Include="Menu.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GamePlay\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bonus.h">
+      <Filter>GamePlay\Abiities</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="UI">
+      <UniqueIdentifier>{8ee660f5-037c-4a33-a985-d01172009452}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GamePlay">
+      <UniqueIdentifier>{4e6b6ccf-8e97-4f49-b5d9-7b7c8798e9dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GamePlay\SceneObjects">
+      <UniqueIdentifier>{46d15acb-ed83-4b86-a774-2cb23d87cced}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GamePlay\Abiities">
+      <UniqueIdentifier>{5ff17a29-b69f-4375-9f34-80749313b0ea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

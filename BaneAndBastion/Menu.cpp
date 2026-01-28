@@ -17,7 +17,7 @@ namespace BaneAndBastion
 	{
 		for (auto& child : item.childrens)
 		{
-			child.parent = &item;
+			child.m_parent = &item;
 			InitMenuItem(child);
 		}
 	}
@@ -75,7 +75,7 @@ namespace BaneAndBastion
 			return;
 		}
 		
-		MenuItem* parent = selectedItem->parent;
+		MenuItem* parent = selectedItem->m_parent;
 		assert(parent); // There always should be parent
 
 		auto it = std::find_if(parent->childrens.begin(), parent->childrens.end(), [this](const auto& item) {
@@ -92,7 +92,7 @@ namespace BaneAndBastion
 			return;
 		}
 		
-		MenuItem* parent = selectedItem->parent;
+		MenuItem* parent = selectedItem->m_parent;
 		assert(parent); // There always should be parent
 		
 		auto it = std::find_if(parent->childrens.begin(), parent->childrens.end(), [this](const auto& item) {
@@ -134,6 +134,6 @@ namespace BaneAndBastion
 
 	MenuItem& Menu::GetCurrentContext()
 	{
-		return selectedItem ? *(selectedItem->parent) : rootItem;
+		return selectedItem ? *(selectedItem->m_parent) : rootItem;
 	}
 }

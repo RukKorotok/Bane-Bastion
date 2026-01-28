@@ -1,10 +1,12 @@
 #pragma once
 
+#include "SubScriptionSystem.h"
+
 namespace FalkonEngine
 {
 	class GameObject;
 
-	class Component
+	class Component : public Observable
 	{
 	public:
 		Component(GameObject* gameObject);
@@ -15,6 +17,6 @@ namespace FalkonEngine
 
 		GameObject* GetGameObject();
 	protected:
-		GameObject* gameObject;
+		GameObject* p_gameObject;
 	};
 }

@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameWorld.cpp">
+      <Filter>Scene\World</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
+      <Filter>Systems\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceSystem.cpp">
+      <Filter>Systems\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Utilites\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRendererComponent.cpp">
+      <Filter>Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix2D.cpp">
+      <Filter>Utilites\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderComponent.cpp">
+      <Filter>Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Utilites\Collition</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger.cpp">
+      <Filter>Utilites\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsSystem.cpp">
+      <Filter>Systems\Physic</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidbodyComponent.cpp">
+      <Filter>Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteColliderComponent.cpp">
+      <Filter>Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveComponent.cpp">
+      <Filter>Scene\Components\ObjectMobility</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Scene\Components\ObjectMobility</Filter>
+    </ClCompile>
+    <ClCompile Include="SubscriptionSystem.cpp">
+      <Filter>Messaging</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Scene\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.h">
+      <Filter>Scene\Entities</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="GameWorld.h">
+      <Filter>Scene\World</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IDelayedAction.h">
+      <Filter>Core\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="randomizer.h">
+      <Filter>Utilites\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>Systems\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceSystem.h">
+      <Filter>Systems\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Utilites\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRendererComponent.h">
+      <Filter>Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Utilites\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix2D.h">
+      <Filter>Utilites\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderComponent.h">
+      <Filter>Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Utilites\Collition</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger.h">
+      <Filter>Utilites\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsSystem.h">
+      <Filter>Systems\Physic</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidbodyComponent.h">
+      <Filter>Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteColliderComponent.h">
+      <Filter>Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveComponent.h">
+      <Filter>Scene\Components\ObjectMobility</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Scene\Components\ObjectMobility</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEvents.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SubScriptionSystem.h">
+      <Filter>Messaging</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Scene\Entities</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{c4886c11-4bf7-4907-abc6-68adf5ef02a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{c4b423c4-a716-4325-803c-a05bdcfa24f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{423b2410-797c-44f0-a89e-fdc2c7707274}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Components">
+      <UniqueIdentifier>{a6dccef5-b955-4d5e-8f96-533f80b077ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\World">
+      <UniqueIdentifier>{ef02ea39-fec3-4beb-af4b-e003dcdfdca0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Interfaces">
+      <UniqueIdentifier>{7c6c9898-f2bf-4339-bea8-9649d6fe4a6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilites">
+      <UniqueIdentifier>{2bfe97b3-959d-4de4-8852-eb2927108518}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilites\Math">
+      <UniqueIdentifier>{22a39c44-4b9f-4657-9670-efab1d281b50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilites\Time">
+      <UniqueIdentifier>{e274c1a7-7c24-4f17-873f-1d4444a282fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilites\Visual">
+      <UniqueIdentifier>{cf118aff-e366-4f08-b71d-0d562028258f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilites\Collition">
+      <UniqueIdentifier>{c06184d0-a767-4e2c-89b3-c1be5cd6c6e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilites\Events">
+      <UniqueIdentifier>{9d36159e-d7b0-4898-b7de-06b82a6e9541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Components\ObjectMobility">
+      <UniqueIdentifier>{9f0ee8b7-7ba9-4edb-96b1-b7ca2b75eb69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Messaging">
+      <UniqueIdentifier>{84c88454-7d3d-46e7-a676-09f99988d64c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{8647e6ba-b311-45ea-a5c2-e3bdc3ee6fca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems\Resource">
+      <UniqueIdentifier>{a76378f4-2f58-407e-a0d5-0143865baefc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems\Render">
+      <UniqueIdentifier>{bc7dac92-23a4-4336-9ded-50eb139c0f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems\Physic">
+      <UniqueIdentifier>{48cb98c0-54ca-4e58-a471-0b8108e23a65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Entities">
+      <UniqueIdentifier>{88132fdf-98a2-4828-9677-0d1d472159c4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

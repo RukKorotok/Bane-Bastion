@@ -16,7 +16,7 @@ namespace FalkonEngine
 		float GetHorizontalAxis() const;
 		float GetVerticalAxis() const;
 	private:
-		float horizontalAxis = 0.f;
-		float verticalAxis = 0.f;
+		float m_horizontalAxis = 0.f;
+		float m_verticalAxis = 0.f;
 	};
 }

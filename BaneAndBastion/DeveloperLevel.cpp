@@ -6,7 +6,7 @@ namespace BaneAndBastion
 {
 	void DeveloperLevel::Start()
 	{
-		player = std::make_shared<Player>();
+		m_player = std::make_shared<Player>();
 	}
 	void DeveloperLevel::Restart()
 	{

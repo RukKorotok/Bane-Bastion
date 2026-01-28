@@ -7,25 +7,37 @@ namespace FalkonEngine
 
 	void InputComponent::Update(float deltaTime)
 	{
-		verticalAxis = 0.f;
-		horizontalAxis = 0.f;
+		float currentVertical = 0.f;
+		float currentHorizontal = 0.f;
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			verticalAxis += 1.0f;
+			currentVertical -= 1.0f;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			verticalAxis -= 1.0f;
+			currentVertical += 1.0f;
 		}
-
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			horizontalAxis += 1.0f;
+			currentHorizontal += 1.0f;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			horizontalAxis -= 1.0f;
+			currentHorizontal -= 1.0f;
+		}
+
+		if (currentVertical != m_verticalAxis || currentHorizontal != m_horizontalAxis)
+		{
+			m_verticalAxis = currentVertical;
+			m_horizontalAxis = currentHorizontal;
+
+			FalkonEngine::GameEvent event;
+			event.type = FalkonEngine::GameEventType::InputDirectionChanged;
+			event.sender = this;
+			event.direction = { m_horizontalAxis, m_verticalAxis }; // x = Horizontal, y = Vertical
+
+			Notify(event);
 		}
 	}
 	void InputComponent::Render()
@@ -35,10 +47,10 @@ namespace FalkonEngine
 
 	float InputComponent::GetHorizontalAxis() const
 	{
-		return horizontalAxis;
+		return m_horizontalAxis;
 	}
 	float InputComponent::GetVerticalAxis() const
 	{
-		return verticalAxis;
+		return m_verticalAxis;
 	}
 }

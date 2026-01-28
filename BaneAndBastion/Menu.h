@@ -23,7 +23,7 @@ namespace BaneAndBastion
 
 		std::function<void(MenuItem& item)> onPressCallback;
 
-		MenuItem* parent = nullptr;
+		MenuItem* m_parent = nullptr;
 	};
 
 	class Menu

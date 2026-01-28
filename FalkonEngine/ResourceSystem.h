@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
@@ -12,6 +13,7 @@ namespace FalkonEngine
 	public:
 		static ResourceSystem* Instance();
 
+		/*Texture subsystem */
 		void LoadTexture(const std::string& name, std::string sourcePath, bool isSmooth = true);
 		const sf::Texture* GetTextureShared(const std::string& name) const;
 		sf::Texture* GetTextureCopy(const std::string& name) const;
@@ -23,11 +25,19 @@ namespace FalkonEngine
 		int GetTextureMapElementsCount(const std::string& name) const;
 		void DeleteSharedTextureMap(const std::string& name);
 
+		/*SoundEffects subsystem */
+		void LoadSound(const std::string& name, const std::string& sourcePath);
+		const sf::SoundBuffer* GetSoundShared(const std::string& name) const;
+		void DeleteSharedSound(const std::string& name);
+
+		/*Music subsystem */
+		sf::Music* LoadMusic(const std::string& name, const std::string& sourcePath);
+		sf::Music* GetMusic(const std::string& name) const;
+		void DeleteMusic(const std::string& name);
+
 		void Clear();
 
 	private:
-		std::map<std::string, sf::Texture*> textures;
-		std::map<std::string, std::vector<sf::Texture*>> textureMaps;
 
 		ResourceSystem() {}
 		~ResourceSystem() {}
@@ -37,5 +47,14 @@ namespace FalkonEngine
 
 		void DeleteAllTextures();
 		void DeleteAllTextureMaps();
+
+		void DeleteAllSounds();
+		void DeleteAllMusic();
+
+		std::map<std::string, sf::Texture*> m_textures;
+		std::map<std::string, std::vector<sf::Texture*>> m_textureMaps;
+
+		std::map<std::string, sf::SoundBuffer*> m_soundBuffers;
+		std::map<std::string, sf::Music*> m_musicTracks;
 	};
 }

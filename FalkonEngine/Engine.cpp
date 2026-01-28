@@ -44,6 +44,7 @@ namespace FalkonEngine
 			RenderSystem::Instance()->GetMainWindow().clear();
 
 			GameWorld::Instance()->Update(deltaTime);
+			GameWorld::Instance()->FixedUpdate(deltaTime);
 			GameWorld::Instance()->Render();
 			GameWorld::Instance()->LateUpdate();
 

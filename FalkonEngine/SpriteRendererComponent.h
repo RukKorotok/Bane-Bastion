@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TransformComponent.h"
+#include "Vector.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
 
@@ -22,10 +23,11 @@ namespace FalkonEngine
 		void FlipX(bool flip);
 		void FlipY(bool flip);
 	private:
-		sf::Sprite* sprite;
-		TransformComponent* transform;
+		Vector2Df m_scale;
+		sf::Sprite* m_sprite;
+		TransformComponent* m_transform;
 
-		bool isFlipX = false;
-		bool isFlipY = false;
+		bool m_isFlipX = false;
+		bool m_isFlipY = false;
 	};
 }

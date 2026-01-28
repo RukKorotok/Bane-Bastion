@@ -5,66 +5,76 @@
 
 namespace FalkonEngine
 {
+	//SpriteRendererComponent
+	//-----------------------------------------------------------------------------------------------------------
 	SpriteRendererComponent::SpriteRendererComponent(GameObject* gameObject) : Component(gameObject)
 	{
-		sprite = new sf::Sprite();
-		sprite->setScale({ 1, -1 });
-		transform = gameObject->GetComponent<TransformComponent>();
+		m_sprite = new sf::Sprite();
+		m_scale = { 1, -1 };
+		m_transform = gameObject->GetComponent<TransformComponent>();
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	SpriteRendererComponent::~SpriteRendererComponent()
 	{
-		if (sprite != nullptr)
+		if (m_sprite != nullptr)
 		{
-			delete sprite;
+			delete m_sprite;
 		}
 	}
-
+	//-----------------------------------------------------------------------------------------------------------
 	void SpriteRendererComponent::Update(float deltaTime)
 	{
 
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void SpriteRendererComponent::Render()
 	{
-		if (sprite != nullptr)
+		if (m_sprite != nullptr)
 		{
-			sprite->setPosition(Convert<sf::Vector2f, Vector2Df>(transform->GetWorldPosition()));
-			sprite->setRotation(transform->GetWorldRotation());
-			RenderSystem::Instance()->Render(*sprite);
+			m_sprite->setPosition(Convert<sf::Vector2f, Vector2Df>(m_transform->GetWorldPosition()));
+			m_sprite->setRotation(m_transform->GetWorldRotation());
+
+			auto transformScale = Convert<sf::Vector2f, Vector2Df>(m_transform->GetWorldScale());
+			m_sprite->setScale({ m_scale.x * transformScale.x, m_scale.y * transformScale.y });
+			RenderSystem::Instance()->Render(*m_sprite);
 		}
 	}
-
+	//-----------------------------------------------------------------------------------------------------------
 	const sf::Sprite* SpriteRendererComponent::GetSprite() const
 	{
-		return sprite;
+		return m_sprite;
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void SpriteRendererComponent::SetTexture(const sf::Texture& newTexture)
 	{
-		sprite->setTexture(newTexture);
-		auto textureSize = sprite->getTexture()->getSize();
-		sprite->setOrigin({ 0.5f * textureSize.x, 0.5f * textureSize.y });
+		m_sprite->setTexture(newTexture);
+		auto textureSize = m_sprite->getTexture()->getSize();
+		m_sprite->setOrigin({ 0.5f * textureSize.x, 0.5f * textureSize.y });
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void SpriteRendererComponent::SetPixelSize(int newWidth, int newHeight)
 	{
-		auto originalSize = sprite->getTexture()->getSize();
-		sprite->setScale((float)newWidth / (float)originalSize.x, -(float)newHeight / (float)originalSize.y);
+		auto originalSize = m_sprite->getTexture()->getSize();
+		m_scale = { (float)newWidth / (float)originalSize.x, -(float)newHeight / (float)originalSize.y };
 	}
-
+	//-----------------------------------------------------------------------------------------------------------
 	void SpriteRendererComponent::FlipX(bool flip)
 	{
-		if (flip != isFlipX)
+		if (flip != m_isFlipX)
 		{
-			auto scale = sprite->getScale();
-			sprite->setScale({ -scale.x, scale.y });
-			isFlipX = flip;
+			m_scale = { -m_scale.x, m_scale.y };
+
+			m_isFlipX = flip;
 		}
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void SpriteRendererComponent::FlipY(bool flip)
 	{
-		if (flip != isFlipY)
+		if (flip != m_isFlipY)
 		{
-			auto scale = sprite->getScale();
-			sprite->setScale({ scale.x, -scale.y });
-			isFlipY = flip;
+			m_scale = { m_scale.x, -m_scale.y };
+
+			m_isFlipY = flip;
 		}
 	}
 }
