@@ -10,26 +10,27 @@ namespace FalkonEngine
 
 	void RigidbodyComponent::Update(float deltaTime)
 	{
-		m_transform->MoveBy(m_linearVelocity);
-		m_transform->RotateBy(m_angleVelocity);
+		m_transform->MoveBy(m_linearVelocity * deltaTime);
+		m_transform->RotateBy(m_angleVelocity * deltaTime);
 
 		m_linearVelocity = (1.f - m_linearDamping * deltaTime) * m_linearVelocity;
 		m_angleVelocity = (1.f - m_angleDamping * deltaTime) * m_angleVelocity;
 
-		if (m_linearVelocity.x < 0.001f)
+		if (std::abs(m_linearVelocity.x) < 0.1f)
 		{
-			m_linearVelocity = { 0.f, m_linearVelocity.y };
+			m_linearVelocity.x = 0.0f;
 		}
-		if (m_linearVelocity.y < 0.001f)
+		if (std::abs(m_linearVelocity.y) < 0.1f)
 		{
-			m_linearVelocity = { m_linearVelocity.x, 0.f };
+			m_linearVelocity.y = 0.0f;
 		}
 
 		if (m_angleVelocity < 0.001f)
 		{
-			m_angleVelocity = 0.f;
+			m_angleVelocity = 0.0f;
 		}
 	}
+
 	void RigidbodyComponent::Render()
 	{
 
@@ -86,5 +87,17 @@ namespace FalkonEngine
 	bool RigidbodyComponent::GetKinematic() const
 	{
 		return m_isKinematic;
+	}
+	void RigidbodyComponent::ApplyImpulse(Vector2Df direction, float force)
+	{
+		// Ќормализуем направление на случай, если пришел "сырой" вектор
+		float len = std::sqrt(direction.x * direction.x + direction.y * direction.y);
+		if (len > 0.001f) {
+			direction.x /= len;
+			direction.y /= len;
+		}
+
+		// ѕрикладываем силу
+		AddLinearVelocity(direction * force);
 	}
 }

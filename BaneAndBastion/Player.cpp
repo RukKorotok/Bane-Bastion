@@ -1,72 +1,101 @@
 #include "Player.h"
 #include <ResourceSystem.h>
+#include "GameSettings.h"
 
 namespace BaneAndBastion
 {
 	//Player
 	//-----------------------------------------------------------------------------------------------------------
-	Player::Player()
+	Player::Player(FalkonEngine::Vector2Df position, std::string name, std::string texture) : DynamicWithPhysic(position, name, texture)
 	{
-		m_gameObject = FalkonEngine::GameWorld::Instance()->CreateGameObject<FalkonEngine::Entity>();
-		auto playerRenderer = m_gameObject->AddComponent<FalkonEngine::SpriteRendererComponent>();
-
-		playerRenderer->SetTexture(*FalkonEngine::ResourceSystem::Instance()->GetTextureShared("ball"));
-		playerRenderer->SetPixelSize(32, 32);
-
 		auto playerCamera = m_gameObject->AddComponent<FalkonEngine::CameraComponent>();
 		playerCamera->SetWindow(&FalkonEngine::RenderSystem::Instance()->GetMainWindow());
-		playerCamera->SetBaseResolution(1280, 720);
-
+		playerCamera->SetBaseResolution(1027, 720);
 
 		auto playerInput = m_gameObject->AddComponent<FalkonEngine::InputComponent>();
 		if (playerInput) {
 			playerInput->Subscribe(this);
 		}
 
-		auto playerMovement = m_gameObject->AddComponent<FalkonEngine::MoveComponent>();
-		if (playerMovement) {
-			playerMovement->Subscribe(this);
+		auto movement = m_gameObject->AddComponent<PlayerMoveComponent>();
+		if (movement)
+		{
+			movement->Subscribe(this);
+			movement->SetSpeed(100.0f);
+
+			if (auto* activeScene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive()))
+			{
+				movement->Subscribe(activeScene->GetGridManager());
+			}
+		}
+
+		if (auto* activeScene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive()))
+		{
+			m_gridManager->UpdateVisibleArea(position, 1);
 		}
 
 		auto transform = m_gameObject->GetComponent<FalkonEngine::TransformComponent>();
-		transform->RotateBy(90.f);
-		transform->MoveBy({ 1.0f, 0.0f });
-
-		auto test = FalkonEngine::GameWorld::Instance()->CreateGameObject<FalkonEngine::Entity>();
+		auto test = FalkonEngine::Scene::GetActive()->GetWorld()->CreateGameObject<FalkonEngine::Entity>();
 		auto testTransform = test->GetComponent<FalkonEngine::TransformComponent>();
 		testTransform->SetParent(transform);
 
-		transform->RotateBy(-90.0f);
-		transform->Print();
-		testTransform->Print();
+		auto rb = m_gameObject->GetComponent<FalkonEngine::RigidbodyComponent>();
+		auto collider = m_gameObject->GetComponent<FalkonEngine::SpriteColliderComponent>();
 
-		auto collider = m_gameObject->AddComponent<FalkonEngine::SpriteColliderComponent>();
-	}
+		if (rb)
+		{
+			rb->SetLinearDamping(5.0f); // Чем больше число, тем быстрее остановится после удара
+			rb->SetKinematic(false);    // Разрешаем физическим силам двигать игрока
+		}
 
-	FalkonEngine::GameObject* Player::GetGameObject()
-	{
-		return m_gameObject;
 	}
 
 	void Player::OnNotify(const FalkonEngine::GameEvent& event)
 	{
-		switch (event.type) {
-			// Логика Ввода -> в Движение
+		switch (event.type)
+		{
 		case FalkonEngine::GameEventType::InputDirectionChanged:
-			if (auto move = m_gameObject->GetComponent<FalkonEngine::MoveComponent>())
+		{
+			if (auto move = m_gameObject->GetComponent<PlayerMoveComponent>())
 			{
-				move->SetDirection({ event.direction.x, event.direction.y });
+				move->SetTargetDirection({ event.direction.x, event.direction.y });
 			}
 			break;
-
+		}
 		case FalkonEngine::GameEventType::PositionChanged:
-			auto camera = m_gameObject->GetComponent<FalkonEngine::CameraComponent>();
-			if (auto transform = m_gameObject->GetComponent<FalkonEngine::TransformComponent>())
+		{
+			auto collider = m_gameObject->GetComponent<FalkonEngine::SpriteColliderComponent>();
+			auto transform = m_gameObject->GetComponent<FalkonEngine::TransformComponent>();
+
+			if (m_gridManager)
+			{
+				sf::FloatRect currentBounds = collider->GetBounds();
+
+				// 1. Проверяем движение по оси X
+				sf::FloatRect boundsX = currentBounds;
+				boundsX.left += event.direction.x;
+				if (!m_gridManager->CheckGridCollision(boundsX, m_gameObject->GetID()))
+				{
+					transform->MoveBy(event.direction.x, 0.f);
+				}
+
+				// 2. Проверяем движение по оси Y
+				// Важно: берем уже обновленные (или текущие) границы
+				sf::FloatRect boundsY = collider->GetBounds();
+				boundsY.top += event.direction.y;
+				if (!m_gridManager->CheckGridCollision(boundsY, m_gameObject->GetID()))
+				{
+					transform->MoveBy(0.f, event.direction.y);
+				}
+
+				m_gridManager->RenderDebug(FalkonEngine::RenderSystem::Instance()->GetMainWindow());
+			}
+			else
 			{
 				transform->MoveBy(event.direction.x, event.direction.y);
-				transform->Print();
 			}
 			break;
+		}
 		}
 	}
 }

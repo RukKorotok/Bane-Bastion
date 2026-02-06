@@ -12,6 +12,12 @@ namespace FalkonEngine
 	public:
 		SpriteColliderComponent(GameObject* gameObject);
 		~SpriteColliderComponent();
+		const sf::FloatRect& GetBounds() const;
+
+		/** * @brief Get objectSize by grid size.
+		 * @param ppu Pixels Per Unit.
+		 */
+		Vector2Df GetSizeInUnits(float ppu) const;
 
 		void Update(float deltaTime) override;
 		void Render() override;

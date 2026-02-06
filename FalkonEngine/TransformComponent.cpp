@@ -14,10 +14,8 @@ namespace FalkonEngine
 
 	}
 	//-----------------------------------------------------------------------------------------------------------
-	void TransformComponent::Render()
-	{
-
-	}
+	void TransformComponent::Render() {}
+	// --- (Position) ---
 	//-----------------------------------------------------------------------------------------------------------
 	void TransformComponent::MoveBy(const Vector2Df& offset)
 	{
@@ -69,6 +67,7 @@ namespace FalkonEngine
 		m_localPosition.y = positionY;
 		m_isUpdated = false;
 	}
+	// --- (Rotation) ---
 	//-----------------------------------------------------------------------------------------------------------
 	void TransformComponent::RotateBy(float offset)
 	{
@@ -115,6 +114,7 @@ namespace FalkonEngine
 		}
 		m_isUpdated = false;
 	}
+	// --- (Scale) ---
 	//-----------------------------------------------------------------------------------------------------------
 	void TransformComponent::ScaleBy(const Vector2Df& scale)
 	{
@@ -220,6 +220,7 @@ namespace FalkonEngine
 		updateLocalTransform();
 		return m_localScale;
 	}
+	// --- (Parent) ---
 	//-----------------------------------------------------------------------------------------------------------
 	void TransformComponent::SetParent(TransformComponent* newParent)
 	{
@@ -262,6 +263,7 @@ namespace FalkonEngine
 
 		return m_parent->GetWorldTransform() * m_localTransform;
 	}
+	// --- (Debug) ---
 	//-----------------------------------------------------------------------------------------------------------
 	void TransformComponent::Print() const
 	{
@@ -289,7 +291,7 @@ namespace FalkonEngine
 		m_scale.x = std::sqrt(transform.GetMatrix()[0][0] * transform.GetMatrix()[0][0] + transform.GetMatrix()[1][0] * transform.GetMatrix()[1][0]);
 		m_scale.y = std::sqrt(transform.GetMatrix()[0][1] * transform.GetMatrix()[0][1] + transform.GetMatrix()[1][1] * transform.GetMatrix()[1][1]);
 
-		m_rotation = std::atan2(transform.GetMatrix()[0][1], transform.GetMatrix()[0][0]) * 180 / 3.14159265;
+		m_rotation = static_cast<float>(std::atan2(transform.GetMatrix()[0][1], transform.GetMatrix()[0][0]) * 180 / 3.14159265);
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void TransformComponent::setLocalInfoFrom(const Matrix2D& transform) const
@@ -300,7 +302,7 @@ namespace FalkonEngine
 		m_localScale.x = std::sqrt(transform.GetMatrix()[0][0] * transform.GetMatrix()[0][0] + transform.GetMatrix()[1][0] * transform.GetMatrix()[1][0]);
 		m_localScale.y = std::sqrt(transform.GetMatrix()[0][1] * transform.GetMatrix()[0][1] + transform.GetMatrix()[1][1] * transform.GetMatrix()[1][1]);
 		
-		m_localRotation = std::atan2(transform.GetMatrix()[0][1], transform.GetMatrix()[0][0]) * 180 / 3.14159265;
+		m_localRotation = static_cast<float>(std::atan2(transform.GetMatrix()[0][1], transform.GetMatrix()[0][0]) * 180 / 3.14159265);
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void TransformComponent::updateLocalTransform() const

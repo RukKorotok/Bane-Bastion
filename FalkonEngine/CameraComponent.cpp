@@ -4,42 +4,48 @@
 
 namespace FalkonEngine
 {
+	//CameraComponent
+	//-----------------------------------------------------------------------------------------------------------
 	CameraComponent::CameraComponent(GameObject* gameObject) : Component(gameObject)
 	{
-		view = new sf::View(sf::FloatRect(0, 0, 800, -600));
-		transform = gameObject->GetComponent<TransformComponent>();
+		m_view = new sf::View(sf::FloatRect(0.0f, 0.0f, 800.0f, -600.0f));
+		m_transform = gameObject->GetComponent<TransformComponent>();
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	CameraComponent::~CameraComponent()
 	{
-		delete view;
+		delete m_view;
 	}
-
+	//-----------------------------------------------------------------------------------------------------------
 	void CameraComponent::Update(float deltaTime)
 	{
-		auto position = transform->GetWorldPosition();
-		auto rotation = transform->GetWorldRotation();
+		auto position = m_transform->GetWorldPosition();
+		auto rotation = m_transform->GetWorldRotation();
 
-		view->setCenter(Convert<sf::Vector2f, Vector2Df>(position));
-		view->setRotation(rotation);
+		m_view->setCenter(Convert<sf::Vector2f, Vector2Df>(position));
+		m_view->setRotation(rotation);
 
-		window->setView(*view);
+		m_window->setView(*m_view);
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void CameraComponent::Render()
 	{
-		if (window == nullptr)
+		if (m_window == nullptr)
 		{
 			std::cout << "NULL window render." << std::endl;
 		}
 	}
-
+	//-----------------------------------------------------------------------------------------------------------
 	void CameraComponent::SetBaseResolution(int width, int height)
 	{
-		view->reset(sf::FloatRect(0, 0, width, -height));
+		m_view->reset(sf::FloatRect(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(-height)));
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void CameraComponent::SetWindow(sf::RenderWindow* newWindow)
 	{
-		window = newWindow;
+		m_window = newWindow;
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void CameraComponent::ZoomBy(float newZoom)
 	{
 		if (newZoom <= 0)
@@ -47,6 +53,6 @@ namespace FalkonEngine
 			std::cout << "Not allowed zoom lesser or equal than zero." << std::endl;
 			return;
 		}
-		view->zoom(newZoom);
+		m_view->zoom(newZoom);
 	}
 }

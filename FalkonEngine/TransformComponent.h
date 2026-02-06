@@ -17,21 +17,43 @@ namespace FalkonEngine
 		void Update(float deltaTime) override;
 		void Render() override;
 
+		// --- (Position) ---
+		/** move by offset */
 		void MoveBy(const Vector2Df& offset);
+
+		/** move by x offset and y offset */
 		void MoveBy(float offsetX, float offsetY);
+
+		/** set world position */
 		void SetWorldPosition(const Vector2Df& position);
 		void SetWorldPosition(float positionX, float positionY);
+
+		/** set local position */
 		void SetLocalPosition(const Vector2Df& position);
 		void SetLocalPosition(float positionX, float positionY);
 
+		// --- (Rotation) ---
+		/** rotate by added angle */
 		void RotateBy(float offset);
+
+		/** set world rotation */
 		void SetWorldRotation(float angle);
+
+		/** set local rotation */
 		void SetLocalRotation(float angle);
 
+		// --- (Scale) ---
+		/** scale by scaleOffset */
 		void ScaleBy(const Vector2Df& scaleOffset);
+
+		/** scale by scaleOffset x and scaleOffset y */
 		void ScaleBy(float scaleX, float scaleY);
+
+		/** set world scale */
 		void SetWorldScale(const Vector2Df& scale);
 		void SetWorldScale(float scaleX, float scaleY);
+
+		/** set local scale */
 		void SetLocalScale(const Vector2Df& scale);
 		void SetLocalScale(float scaleX, float scaleY);
 
@@ -44,10 +66,15 @@ namespace FalkonEngine
 		const Vector2Df& GetWorldScale() const;
 		const Vector2Df& GetLocalScale() const;
 
+		// --- (Parent) ---
+		/** set parent transform component */
 		void SetParent(TransformComponent* newParent);
 		TransformComponent* GetParent() const;
 
 		const Matrix2D GetWorldTransform() const;
+
+		// --- (Debug) ---
+		// Print debug info
 		void Print() const;
 
 	private:

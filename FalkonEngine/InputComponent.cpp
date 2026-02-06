@@ -3,8 +3,10 @@
 
 namespace FalkonEngine
 {
+	//InputComponent
+	//-----------------------------------------------------------------------------------------------------------
 	InputComponent::InputComponent(GameObject* gameObject) : Component(gameObject) {}
-
+	//-----------------------------------------------------------------------------------------------------------
 	void InputComponent::Update(float deltaTime)
 	{
 		float currentVertical = 0.f;
@@ -12,11 +14,11 @@ namespace FalkonEngine
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			currentVertical -= 1.0f;
+			currentVertical += 1.0f;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			currentVertical += 1.0f;
+			currentVertical -= 1.0f;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
@@ -40,15 +42,17 @@ namespace FalkonEngine
 			Notify(event);
 		}
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void InputComponent::Render()
 	{
 
 	}
-
+	//-----------------------------------------------------------------------------------------------------------
 	float InputComponent::GetHorizontalAxis() const
 	{
 		return m_horizontalAxis;
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	float InputComponent::GetVerticalAxis() const
 	{
 		return m_verticalAxis;

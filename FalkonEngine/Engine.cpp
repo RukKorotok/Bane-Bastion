@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Engine.h"
 #include <iostream>
-#include "GameWorld.h"
+#include "Scene.h"
 #include "RenderSystem.h"
 
 namespace FalkonEngine
@@ -43,10 +43,21 @@ namespace FalkonEngine
 
 			RenderSystem::Instance()->GetMainWindow().clear();
 
-			GameWorld::Instance()->Update(deltaTime);
-			GameWorld::Instance()->FixedUpdate(deltaTime);
-			GameWorld::Instance()->Render();
-			GameWorld::Instance()->LateUpdate();
+			Scene* activeScene = Scene::GetActive();
+
+			if (activeScene)
+			{
+				GameWorld* world = activeScene->GetWorld();
+
+				world->Update(deltaTime);
+				world->FixedUpdate(deltaTime);
+				world->Render();
+				world->LateUpdate();
+			}
+			else
+			{
+				std::cout << "Scene not loaded " << this << std::endl;
+			}
 
 			RenderSystem::Instance()->GetMainWindow().display();
 		}

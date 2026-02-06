@@ -18,15 +18,26 @@ namespace FalkonEngine
 		virtual void Update(float deltaTime) = 0;
 		virtual void Render() = 0;
 
+
 		void SetTrigger(bool newIsTrigger);
 
+		// -- (Subscribes) ---
+		//** Added collition in collitions array */
 		void SubscribeCollision(std::function<void(Collision)> onCollisionAction);
+
+		//** Remove collition in collitions array */
 		void UnsubscribeCollision(std::function<void(Collision)> onCollisionAction);
 
+		//** Added enter trigger in collitions array */
 		void SubscribeTriggerEnter(std::function<void(Trigger)> onTriggerEnterAction);
+
+		//** Remove enter trigger in collitions array */
 		void UnsubscribeTriggerEnter(std::function<void(Trigger)> onTriggerEnterAction);
 
+		//** Added exit trigger in collitions array */
 		void SubscribeTriggerExit(std::function<void(Trigger)> onTriggerExitAction);
+
+		//** Remove exit trigger in collitions array */
 		void UnsubscribeTriggerExit(std::function<void(Trigger)> onTriggerExitAction);
 
 		friend class PhysicsSystem;
@@ -39,8 +50,8 @@ namespace FalkonEngine
 		void OnTriggerEnter(Trigger trigger);
 		void OnTriggerExit(Trigger trigger);
 
-		std::vector<std::function<void(Collision)>> onCollisionActions;
-		std::vector<std::function<void(Trigger)>> onTriggerEnterActions;
-		std::vector<std::function<void(Trigger)>> onTriggerExitActions;
+		std::vector<std::function<void(Collision)>> p_onCollisionActions;
+		std::vector<std::function<void(Trigger)>> p_onTriggerEnterActions;
+		std::vector<std::function<void(Trigger)>> p_onTriggerExitActions;
 	};
 }

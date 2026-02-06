@@ -28,6 +28,16 @@ namespace FalkonEngine
 		PhysicsSystem::Instance()->Unsubscribe(this);
 	}
 	//-----------------------------------------------------------------------------------------------------------
+	const sf::FloatRect& SpriteColliderComponent::GetBounds() const
+	{
+		return m_bounds;
+	}
+	//-----------------------------------------------------------------------------------------------------------
+	Vector2Df SpriteColliderComponent::GetSizeInUnits(float ppu) const
+	{
+		return { m_bounds.width / ppu, m_bounds.height / ppu };
+	}
+	//-----------------------------------------------------------------------------------------------------------
 	void SpriteColliderComponent::Update(float deltaTime)
 	{
 		m_bounds = m_sprite->getGlobalBounds();
@@ -41,6 +51,6 @@ namespace FalkonEngine
 		rectangle.setOutlineColor(sf::Color::Red);
 		rectangle.setOutlineThickness(4);
 
-		RenderSystem::Instance()->Render(rectangle);
+		//RenderSystem::Instance()->Render(rectangle);
 	}
 }

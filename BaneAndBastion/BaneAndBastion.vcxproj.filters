@@ -1,13 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="DeveloperLevel.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="Menu.cpp">
       <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>GamePlay\SceneObjects</Filter>
     </ClCompile>
     <ClCompile Include="Bonus.cpp">
       <Filter>GamePlay\Abiities</Filter>
@@ -15,21 +11,107 @@
     <ClCompile Include="Text.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GridManager.cpp">
+      <Filter>Core\GridManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveComponent.cpp">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>GamePlay\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvironmentObject.cpp">
+      <Filter>GamePlay\SceneObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvironmentGenerator.cpp">
+      <Filter>Core\GridManager</Filter>
+    </ClCompile>
+    <ClCompile Include="PathfindingAStar.cpp">
+      <Filter>Core\AI\PathFinding</Filter>
+    </ClCompile>
+    <ClCompile Include="AIComponent.cpp">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicActor.cpp">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicWithPhysic.cpp">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
+    </ClCompile>
+    <ClCompile Include="AIMoveComponent.cpp">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMoveComponent.cpp">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DeveloperLevel.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="Menu.h">
       <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>GamePlay\SceneObjects</Filter>
     </ClInclude>
     <ClInclude Include="Bonus.h">
       <Filter>GamePlay\Abiities</Filter>
     </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GridStructures.h">
+      <Filter>Core\GridManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GridManager.h">
+      <Filter>Core\GridManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveComponent.h">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>GamePlay\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvironmentObject.h">
+      <Filter>GamePlay\SceneObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvironmentGenerator.h">
+      <Filter>Core\GridManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IPathfindingStrategy.h">
+      <Filter>Core\AI\PathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="PathfindingAStar.h">
+      <Filter>Core\AI\PathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="AIComponent.h">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicWithPhysic.h">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="AIMoveComponent.h">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMoveComponent.h">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicActor.h">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +126,27 @@
     </Filter>
     <Filter Include="GamePlay\Abiities">
       <UniqueIdentifier>{5ff17a29-b69f-4375-9f34-80749313b0ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{aab0218a-ab09-4566-91c8-62e6836203f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{11769730-19ab-4114-aa19-b38cdd20ecc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\GridManager">
+      <UniqueIdentifier>{2ec7d4e6-ab0e-45fa-8d53-db5621d179d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GamePlay\SceneObjects\Components">
+      <UniqueIdentifier>{a6432ad3-a8c5-46f6-a5f0-63ea37ead9a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\AI">
+      <UniqueIdentifier>{972979a5-fa69-475f-a6ab-bad8cd0c212e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\AI\PathFinding">
+      <UniqueIdentifier>{2d66dc22-46b4-4c4c-b503-2ca340e2fbb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GamePlay\SceneObjects\Dynamic">
+      <UniqueIdentifier>{d8b1d666-b703-4c92-9b08-7d8b7981ded7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

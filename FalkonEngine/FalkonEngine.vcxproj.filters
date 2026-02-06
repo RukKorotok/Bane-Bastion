@@ -52,9 +52,6 @@
     <ClCompile Include="SpriteColliderComponent.cpp">
       <Filter>Scene\Components</Filter>
     </ClCompile>
-    <ClCompile Include="MoveComponent.cpp">
-      <Filter>Scene\Components\ObjectMobility</Filter>
-    </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Scene\Components\ObjectMobility</Filter>
     </ClCompile>
@@ -66,6 +63,12 @@
     </ClCompile>
     <ClCompile Include="Entity.h">
       <Filter>Scene\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="MusicPlayer.cpp">
+      <Filter>Systems\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene\World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +138,6 @@
     <ClInclude Include="SpriteColliderComponent.h">
       <Filter>Scene\Components</Filter>
     </ClInclude>
-    <ClInclude Include="MoveComponent.h">
-      <Filter>Scene\Components\ObjectMobility</Filter>
-    </ClInclude>
     <ClInclude Include="TransformComponent.h">
       <Filter>Scene\Components\ObjectMobility</Filter>
     </ClInclude>
@@ -149,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Scene\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="MusicPlayer.h">
+      <Filter>Systems\Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

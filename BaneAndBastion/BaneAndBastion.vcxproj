@@ -125,6 +125,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)FalkonEngine;$(SolutionDir)\SFML\SFML-2.5.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,23 +160,52 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIComponent.cpp" />
+    <ClCompile Include="AIMoveComponent.cpp" />
     <ClCompile Include="Bonus.cpp" />
-    <ClCompile Include="DeveloperLevel.cpp" />
+    <ClCompile Include="DynamicActor.cpp" />
+    <ClInclude Include="DynamicActor.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClCompile Include="DynamicWithPhysic.cpp" />
+    <ClCompile Include="EnvironmentObject.cpp" />
+    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="GridManager.cpp" />
+    <ClCompile Include="MoveComponent.cpp" />
+    <ClCompile Include="NPC.cpp" />
+    <ClCompile Include="PathfindingAStar.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="PlayerMoveComponent.cpp" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="EnvironmentGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIComponent.h" />
+    <ClInclude Include="AIMoveComponent.h" />
     <ClInclude Include="Bonus.h" />
-    <ClInclude Include="DeveloperLevel.h" />
+    <ClInclude Include="DynamicWithPhysic.h" />
+    <ClInclude Include="EnvironmentObject.h" />
+    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="GridManager.h" />
+    <ClInclude Include="GridStructures.h" />
+    <ClInclude Include="MoveComponent.h" />
+    <ClInclude Include="IPathfindingStrategy.h" />
+    <ClInclude Include="NPC.h" />
+    <ClInclude Include="PathfindingAStar.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="PlayerMoveComponent.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="Wall.h" />
+    <ClInclude Include="EnvironmentGenerator.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FalkonEngine\FalkoknEngine.vcxproj">
+    <ProjectReference Include="..\FalkonEngine\FalkonEngine.vcxproj">
       <Project>{0785589b-6e7e-4d86-9dbe-ce7aa50d6b3f}</Project>
     </ProjectReference>
   </ItemGroup>

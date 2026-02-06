@@ -1,19 +1,19 @@
 #include "pch.h"
 #include "GameWorld.h"
+#include "SpriteColliderComponent.h"
+#include "Scene.h"
 
 namespace FalkonEngine
 {
-	//GameWorld
 	//-----------------------------------------------------------------------------------------------------------
-	GameWorld* GameWorld::Instance()
+	GameWorld::~GameWorld()
 	{
-		static GameWorld world;
-		return &world;
+		Clear();
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::Update(float deltaTime)
 	{
-		for (int i = 0; i < m_gameObjects.size(); i++)
+		for (size_t i = 0; i < m_gameObjects.size(); i++)
 		{
 			m_gameObjects[i]->Update(deltaTime);
 		}
@@ -31,7 +31,7 @@ namespace FalkonEngine
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::Render()
 	{
-		for (int i = 0; i < m_gameObjects.size(); i++)
+		for (size_t i = 0; i < m_gameObjects.size(); i++)
 		{
 			m_gameObjects[i]->Render();
 		}
@@ -39,25 +39,11 @@ namespace FalkonEngine
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::LateUpdate()
 	{
-		for (int i = m_markedToDestroyGameObjects.size() - 1; i >= 0; i--)
+		for (int i = static_cast<int>(m_markedToDestroyGameObjects.size()) - 1; i >= 0; i--)
 		{
 			DestroyGameObjectImmediate(m_markedToDestroyGameObjects[i]);
 		}
 	}
-	//-----------------------------------------------------------------------------------------------------------
-	//GameObject* GameWorld::CreateGameObject()
-	//{
-	//	GameObject* newGameObject = new GameObject();
-	//	m_gameObjects.push_back(newGameObject);
-	//	return newGameObject;
-	//}
-	////-----------------------------------------------------------------------------------------------------------
-	//GameObject* GameWorld::CreateGameObject(std::string name)
-	//{
-	//	GameObject* newGameObject = new GameObject(name);
-	//	m_gameObjects.push_back(newGameObject);
-	//	return newGameObject;
-	//}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::DestroyGameObject(GameObject* gameObject)
 	{
@@ -66,8 +52,10 @@ namespace FalkonEngine
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::Clear()
 	{
-		for (int i = m_gameObjects.size() - 1; i >= 0; i--)
+		size_t i = m_gameObjects.size();
+		while(i > 0)
 		{
+			i--;
 			if (m_gameObjects[i] == nullptr)
 			{
 				continue;
@@ -98,20 +86,30 @@ namespace FalkonEngine
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::DestroyGameObjectImmediate(GameObject* gameObject)
 	{
-		auto parent = gameObject->GetComponent<TransformComponent>()->GetParent();
-		if (parent != nullptr)
-		{
-			parent->GetGameObject()->RemoveChild(gameObject);
+		
+		if (!gameObject) return;
+		
+		GameEvent confirmEv;
+		confirmEv.type = FalkonEngine::GameEventType::ObjectRemoved;
+		confirmEv.sender = this;
+		confirmEv.object = gameObject;
+		this->Notify(confirmEv);
+
+		auto transform = gameObject->GetComponent<TransformComponent>();
+		if (transform && transform->GetParent()) {
+			transform->GetParent()->GetGameObject()->RemoveChild(gameObject);
 		}
 
-		for (auto transform : gameObject->GetComponentsInChildren<TransformComponent>())
-		{
-			GameObject* gameObjectToDelete = transform->GetGameObject();
+		std::vector<TransformComponent*> allTransforms = gameObject->GetComponentsInChildren<TransformComponent>();
 
-			m_gameObjects.erase(std::remove_if(m_gameObjects.begin(), m_gameObjects.end(), [gameObjectToDelete](GameObject* obj) { return obj == gameObjectToDelete; }), m_gameObjects.end());
-			m_markedToDestroyGameObjects.erase(std::remove_if(m_markedToDestroyGameObjects.begin(), m_markedToDestroyGameObjects.end(), [gameObjectToDelete](GameObject* obj) { return obj == gameObjectToDelete; }), m_markedToDestroyGameObjects.end());
+		for (auto* t : allTransforms) {
+			GameObject* obj = t->GetGameObject();
+			if (!obj) continue;
 
-			delete gameObject;
+			m_gameObjects.erase(std::remove(m_gameObjects.begin(), m_gameObjects.end(), obj), m_gameObjects.end());
+			m_markedToDestroyGameObjects.erase(std::remove(m_markedToDestroyGameObjects.begin(), m_markedToDestroyGameObjects.end(), obj), m_markedToDestroyGameObjects.end());
+
+			delete obj;
 		}
 	}
 }

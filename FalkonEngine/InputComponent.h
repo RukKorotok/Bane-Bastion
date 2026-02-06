@@ -13,7 +13,10 @@ namespace FalkonEngine
 		void Update(float deltaTime) override;
 		void Render() override;
 
+		//** Get horizontal axis value */
 		float GetHorizontalAxis() const;
+
+		//** Get vertical axis value */
 		float GetVerticalAxis() const;
 	private:
 		float m_horizontalAxis = 0.f;

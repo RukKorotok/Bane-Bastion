@@ -15,7 +15,7 @@ namespace FalkonEngine
 		void Render(const sf::Drawable& drawable);
 
 	private:
-		sf::RenderWindow* window;
+		sf::RenderWindow* m_window = nullptr;
 
 		RenderSystem() {}
 		~RenderSystem() {}

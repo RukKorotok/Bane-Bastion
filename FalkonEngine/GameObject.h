@@ -6,6 +6,7 @@
 
 namespace FalkonEngine
 {
+	class TransformComponent;
 
 	class GameObject : public Observer
 	{
@@ -15,6 +16,8 @@ namespace FalkonEngine
 		~GameObject();
 
 		std::string GetName() const;
+		uint32_t GetID() const;
+		void SetID(uint32_t id);
 		void Print(int depth = 0) const;
 
 		void Update(float deltaTime);
@@ -135,5 +138,7 @@ namespace FalkonEngine
 		std::vector<Component*> m_components = {};
 		std::vector<GameObject*> m_children = {};
 		std::string m_name;
+		uint32_t m_id;
+		inline static uint32_t s_nextID = 1;
 	};
 }

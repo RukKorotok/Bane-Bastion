@@ -5,10 +5,14 @@
 
 namespace FalkonEngine
 {
-	class GameWorld
+	class GameWorld : public Observable
 	{
 	public:
-		static GameWorld* Instance();
+		GameWorld() = default;
+		~GameWorld();
+
+		GameWorld(GameWorld const&) = delete;
+		GameWorld& operator= (GameWorld const&) = delete;
 
 		void Update(float deltaTime);
 		void FixedUpdate(float deltaTime);
@@ -32,11 +36,6 @@ namespace FalkonEngine
 
 		void Print() const;
 	private:
-		GameWorld() {}
-		~GameWorld() {}
-
-		GameWorld(GameWorld const&) = delete;
-		GameWorld& operator= (GameWorld const&) = delete;
 
 		float m_fixedCounter = 0.f;
 

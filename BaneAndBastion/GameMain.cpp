@@ -3,18 +3,22 @@
 #include "Player.h"
 #include "Engine.h"
 #include "ResourceSystem.h"
-#include "DeveloperLevel.h"
+#include "GameScene.h"
 #include "Matrix2D.h"
 
 using namespace BaneAndBastion;
 
 int main()
 {
-	FalkonEngine::RenderSystem::Instance()->SetMainWindow(new sf::RenderWindow(sf::VideoMode(1280, 720), "XYZRoguelike"));
+	FalkonEngine::RenderSystem::Instance()->SetMainWindow(new sf::RenderWindow(sf::VideoMode(1280, 720), "Bane&Bastion"));
 
-	FalkonEngine::ResourceSystem::Instance()->LoadTexture("ball", "Resources/Textures/ball.png");
+	FalkonEngine::ResourceSystem::Instance()->LoadTexture("monster", "Resources/Textures/monster.png");
+	FalkonEngine::ResourceSystem::Instance()->LoadTexture("wall", "Resources/Textures/wall.png");
+	FalkonEngine::ResourceSystem::Instance()->LoadTexture("knight", "Resources/Textures/knight.png");
 
-	auto developerLevel = std::make_shared<DeveloperLevel>();
+	FalkonEngine::ResourceSystem::Instance()->LoadMusic("NeverSurrender", "Resources/Music/NeverSurrender.wav");
+
+	auto developerLevel = std::make_shared<GameScene>();
 	developerLevel->Start();
 
 	FalkonEngine::Matrix2D zeroMatrix;

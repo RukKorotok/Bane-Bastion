@@ -25,9 +25,9 @@ namespace FalkonEngine
 		PhysicsSystem(PhysicsSystem const&) = delete;
 		PhysicsSystem& operator= (PhysicsSystem const&) = delete;
 
-		std::vector<ColliderComponent*> colliders;
-		std::map<ColliderComponent*, ColliderComponent*> triggersEnteredPair;
+		std::vector<ColliderComponent*> m_colliders;
+		std::map<ColliderComponent*, ColliderComponent*> m_triggersEnteredPair;
 
-		float fixedDeltaTime = 0.02f;
+		float m_fixedDeltaTime = 0.02f;
 	};
 }

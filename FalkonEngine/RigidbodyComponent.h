@@ -29,6 +29,9 @@ namespace FalkonEngine
 
 		void SetKinematic(bool newIsKinematic);
 		bool GetKinematic() const;
+
+		void ApplyImpulse(Vector2Df direction, float force);
+
 	private:
 		TransformComponent* m_transform;
 

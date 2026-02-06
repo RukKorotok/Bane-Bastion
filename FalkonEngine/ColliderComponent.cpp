@@ -3,86 +3,99 @@
 
 namespace FalkonEngine
 {
+	//ColliderComponent
+	//-----------------------------------------------------------------------------------------------------------
 	ColliderComponent::ColliderComponent(GameObject* gameObject) : Component(gameObject)
 	{
+		GameEvent event;
+		event.type = FalkonEngine::GameEventType::SubObjectSpawned;
+		event.sender = this;
 
+		Notify(event);
 	}
-
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::SetTrigger(bool newIsTrigger)
 	{
 		m_isTrigger = newIsTrigger;
 	}
-
+	// -- (Subscribes) ---
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::SubscribeCollision(std::function<void(Collision)> onCollisionAction)
 	{
-		onCollisionActions.push_back(onCollisionAction);
+		p_onCollisionActions.push_back(onCollisionAction);
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::UnsubscribeCollision(std::function<void(Collision)> onCollisionAction)
 	{
-		onCollisionActions.erase(std::remove_if
+		p_onCollisionActions.erase(std::remove_if
 		(
-			onCollisionActions.begin(),
-			onCollisionActions.end(),
+			p_onCollisionActions.begin(),
+			p_onCollisionActions.end(),
 			[&onCollisionAction](const std::function<void(Collision)>& action)
 			{
 				return action.target<void(Collision)>() == onCollisionAction.target<void(Collision)>();
 			}
-		), onCollisionActions.end());
+		), p_onCollisionActions.end());
 	}
-
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::SubscribeTriggerEnter(std::function<void(Trigger)> onTriggerEnterAction)
 	{
-		onTriggerEnterActions.push_back(onTriggerEnterAction);
+		p_onTriggerEnterActions.push_back(onTriggerEnterAction);
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::UnsubscribeTriggerEnter(std::function<void(Trigger)> onTriggerEnterAction)
 	{
-		onTriggerEnterActions.erase(std::remove_if
+		p_onTriggerEnterActions.erase(std::remove_if
 		(
-			onTriggerEnterActions.begin(),
-			onTriggerEnterActions.end(),
+			p_onTriggerEnterActions.begin(),
+			p_onTriggerEnterActions.end(),
 			[&onTriggerEnterAction](const std::function<void(Trigger)>& action)
 			{
 				return action.target<void(Trigger)>() == onTriggerEnterAction.target<void(Trigger)>();
 			}
-		), onTriggerEnterActions.end());
+		), p_onTriggerEnterActions.end());
 	}
-
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::SubscribeTriggerExit(std::function<void(Trigger)> onTriggerExitAction)
 	{
-		onTriggerExitActions.push_back(onTriggerExitAction);
+		p_onTriggerExitActions.push_back(onTriggerExitAction);
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::UnsubscribeTriggerExit(std::function<void(Trigger)> onTriggerExitAction)
 	{
-		onTriggerExitActions.erase(std::remove_if
+		p_onTriggerExitActions.erase(std::remove_if
 		(
-			onTriggerExitActions.begin(),
-			onTriggerExitActions.end(),
+			p_onTriggerExitActions.begin(),
+			p_onTriggerExitActions.end(),
 			[&onTriggerExitAction](const std::function<void(Trigger)>& action)
 			{
 				return action.target<void(Trigger)>() == onTriggerExitAction.target<void(Trigger)>();
 			}
-		), onTriggerExitActions.end());
+		), p_onTriggerExitActions.end());
 	}
-
+	//protected
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::OnCollision(Collision collision)
 	{
-		for (int i = 0; i < onCollisionActions.size(); i++)
+		for (int i = 0; i < p_onCollisionActions.size(); i++)
 		{
-			onCollisionActions[i](collision);
+			p_onCollisionActions[i](collision);
 		}
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::OnTriggerEnter(Trigger trigger)
 	{
-		for (int i = 0; i < onTriggerEnterActions.size(); i++)
+		for (int i = 0; i < p_onTriggerEnterActions.size(); i++)
 		{
-			onTriggerEnterActions[i](trigger);
+			p_onTriggerEnterActions[i](trigger);
 		}
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::OnTriggerExit(Trigger trigger)
 	{
-		for (int i = 0; i < onTriggerExitActions.size(); i++)
+		for (int i = 0; i < p_onTriggerExitActions.size(); i++)
 		{
-			onTriggerExitActions[i](trigger);
+			p_onTriggerExitActions[i](trigger);
 		}
 	}
 }

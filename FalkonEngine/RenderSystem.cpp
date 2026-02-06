@@ -11,15 +11,15 @@ namespace FalkonEngine
 
 	void RenderSystem::SetMainWindow(sf::RenderWindow* newWindow)
 	{
-		window = newWindow;
+		m_window = newWindow;
 	}
 	sf::RenderWindow& RenderSystem::GetMainWindow() const
 	{
-		return *window;
+		return *m_window;
 	}
 
 	void RenderSystem::Render(const sf::Drawable& drawable)
 	{
-		window->draw(drawable);
+		m_window->draw(drawable);
 	}
 }

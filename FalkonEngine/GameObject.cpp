@@ -9,12 +9,14 @@ namespace FalkonEngine
 	{
 		m_name = "GameObject";
 		AddComponent<TransformComponent>();
+		m_id = s_nextID++;
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	GameObject::GameObject(std::string newName)
 	{
 		m_name = newName;
 		AddComponent<TransformComponent>();
+		m_id = s_nextID++;
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	GameObject::~GameObject()
@@ -30,6 +32,19 @@ namespace FalkonEngine
 	std::string GameObject::GetName() const
 	{
 		return m_name;
+	}
+	//-----------------------------------------------------------------------------------------------------------
+	uint32_t GameObject::GetID() const
+	{
+		return m_id;
+	}
+	//-----------------------------------------------------------------------------------------------------------
+	void GameObject::SetID(uint32_t id)
+	{
+		m_id = id;
+		if (id >= s_nextID) {
+			s_nextID = id + 1;
+		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameObject::Print(int depth) const
