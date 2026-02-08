@@ -19,8 +19,6 @@ namespace FalkonEngine
 		void Render();
 		void LateUpdate();
 
-		/*GameObject* CreateGameObject();
-		GameObject* CreateGameObject(std::string name);*/
 		template<typename T, typename... Args>
 		T* CreateGameObject(Args&&... args) 
 		{

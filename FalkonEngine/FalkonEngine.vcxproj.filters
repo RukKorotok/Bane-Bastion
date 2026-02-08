@@ -41,7 +41,7 @@
       <Filter>Utilites\Collition</Filter>
     </ClCompile>
     <ClCompile Include="Trigger.cpp">
-      <Filter>Utilites\Events</Filter>
+      <Filter>Core\Events</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsSystem.cpp">
       <Filter>Systems\Physic</Filter>
@@ -127,7 +127,7 @@
       <Filter>Utilites\Collition</Filter>
     </ClInclude>
     <ClInclude Include="Trigger.h">
-      <Filter>Utilites\Events</Filter>
+      <Filter>Core\Events</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsSystem.h">
       <Filter>Systems\Physic</Filter>
@@ -141,9 +141,6 @@
     <ClInclude Include="TransformComponent.h">
       <Filter>Scene\Components\ObjectMobility</Filter>
     </ClInclude>
-    <ClInclude Include="GameEvents.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="SubScriptionSystem.h">
       <Filter>Messaging</Filter>
     </ClInclude>
@@ -152,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="MusicPlayer.h">
       <Filter>Systems\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEvents.h">
+      <Filter>Core\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -188,9 +188,6 @@
     <Filter Include="Utilites\Collition">
       <UniqueIdentifier>{c06184d0-a767-4e2c-89b3-c1be5cd6c6e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utilites\Events">
-      <UniqueIdentifier>{9d36159e-d7b0-4898-b7de-06b82a6e9541}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene\Components\ObjectMobility">
       <UniqueIdentifier>{9f0ee8b7-7ba9-4edb-96b1-b7ca2b75eb69}</UniqueIdentifier>
     </Filter>
@@ -211,6 +208,9 @@
     </Filter>
     <Filter Include="Scene\Entities">
       <UniqueIdentifier>{88132fdf-98a2-4828-9677-0d1d472159c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Events">
+      <UniqueIdentifier>{9d36159e-d7b0-4898-b7de-06b82a6e9541}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

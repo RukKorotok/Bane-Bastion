@@ -47,9 +47,7 @@ namespace BaneAndBastion
 		auto it = m_chunkContent.find(chunkPos);
 		if (it != m_chunkContent.end()) {
 			for (auto* obj : it->second) {
-				// Удаляем GameObject из физического мира движка
 				this->GetWorld()->DestroyGameObject(obj->GetGameObject());
-				// Удаляем саму обертку (EnvironmentObject)
 				delete obj;
 			}
 			m_chunkContent.erase(it);

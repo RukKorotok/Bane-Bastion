@@ -43,7 +43,10 @@ namespace BaneAndBastion
         * @param size ( 2.0f for ogr).
         */
         void OccupyArea(const FalkonEngine::Vector2Df& worldPos, const FalkonEngine::Vector2Df& size, std::uint32_t entityID);
+
         void UnregisterEntity(uint32_t id, const FalkonEngine::Vector2Df& pos, FalkonEngine::SpriteColliderComponent* col);
+
+        // --- (Debug) ---
         void DrawLogicDebug(const FalkonEngine::Vector2Df& playerPos);
         void RenderDebug(sf::RenderWindow& window);
 

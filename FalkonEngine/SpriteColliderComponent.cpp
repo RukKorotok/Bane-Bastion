@@ -50,7 +50,7 @@ namespace FalkonEngine
 		rectangle.setFillColor(sf::Color::Transparent);
 		rectangle.setOutlineColor(sf::Color::Red);
 		rectangle.setOutlineThickness(4);
-
+		//Debugvis
 		//RenderSystem::Instance()->Render(rectangle);
 	}
 }

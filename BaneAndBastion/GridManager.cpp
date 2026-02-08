@@ -15,11 +15,9 @@ namespace BaneAndBastion {
     FalkonEngine::Vector2Df GridManager::GridToWorld(int x, int y) const
     {
         float ppu = static_cast<float>(GameSettings::PixelsPerUnit);
-        // Координата угла + половина размера тайла = Центр ячейки
-        return {
-        static_cast<float>(x) * ppu + (ppu / 2.0f),
-        static_cast<float>(y) * ppu + (ppu / 2.0f)
-        };
+        return {static_cast<float>(x) * ppu + (ppu / 2.0f),
+                static_cast<float>(y) * ppu + (ppu / 2.0f)
+               };
     }
     //--------------------------------------------------------------------------------------------------------
     int GridManager::WorldToGrid(float coord) 
@@ -30,10 +28,9 @@ namespace BaneAndBastion {
     FalkonEngine::Vector2Di GridManager::WorldToChunk(int x, int y) 
     {
         float size = static_cast<float>(GameSettings::ChunkSize);
-        return FalkonEngine::Vector2Di(
-            static_cast<int>(std::floor(static_cast<float>(x) / size)),
-            static_cast<int>(std::floor(static_cast<float>(y) / size))
-        );
+        return FalkonEngine::Vector2Di(static_cast<int>(std::floor(static_cast<float>(x) / size)),
+                                       static_cast<int>(std::floor(static_cast<float>(y) / size))
+                                      );
     }
     //--------------------------------------------------------------------------------------------------------
     FalkonEngine::Vector2Di GridManager::WorldToLocal(int x, int y) {
@@ -45,18 +42,23 @@ namespace BaneAndBastion {
         return FalkonEngine::Vector2Di(lx, ly);
     }
     //--------------------------------------------------------------------------------------------------------
-    void GridManager::UpdateVisibleArea(const FalkonEngine::Vector2Df& playerPos, int viewDistance) {
+    void GridManager::UpdateVisibleArea(const FalkonEngine::Vector2Df& playerPos, int viewDistance) 
+    {
         int gridX = WorldToGrid(playerPos.x);
         int gridY = WorldToGrid(playerPos.y);
         FalkonEngine::Vector2Di center = WorldToChunk(gridX, gridY);
 
-        for (int x = center.x - viewDistance; x <= center.x + viewDistance; ++x) {
-            for (int y = center.y - viewDistance; y <= center.y + viewDistance; ++y) {
+        for (int x = center.x - viewDistance; x <= center.x + viewDistance; ++x) 
+        {
+            for (int y = center.y - viewDistance; y <= center.y + viewDistance; ++y) 
+            {
                 FalkonEngine::Vector2Di pos(x, y);
-                if (m_chunks.find(pos) == m_chunks.end()) {
+                if (m_chunks.find(pos) == m_chunks.end()) 
+                {
                     m_chunks[pos] = Chunk();
                     auto envObjects = EnvironmentGenerator::GenerateForChunk(pos.x, pos.y);
-                    if (auto* scene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive())) {
+                    if (auto* scene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive())) 
+                    {
                         for (auto* obj : envObjects) scene->AddToChunk(pos, obj);
                     }
                 }
@@ -64,7 +66,8 @@ namespace BaneAndBastion {
         }
     }
     //--------------------------------------------------------------------------------------------------------
-    Cell* GridManager::GetCell(int x, int y) {
+    Cell* GridManager::GetCell(int x, int y) 
+    {
         FalkonEngine::Vector2Di cp = WorldToChunk(x, y);
         auto it = m_chunks.find(cp);
         if (it == m_chunks.end()) return nullptr;
@@ -73,8 +76,9 @@ namespace BaneAndBastion {
         return &it->second.cells[lp.x][lp.y];
     }
     //--------------------------------------------------------------------------------------------------------
-    bool GridManager::CheckGridCollision(const sf::FloatRect& bounds, uint32_t seekerID) {
-        float epsilon = 0.2f; // Чтобы не "залипать" в узких проходах
+    bool GridManager::CheckGridCollision(const sf::FloatRect& bounds, uint32_t seekerID) 
+    {
+        float epsilon = 0.2f; // For narrow passage
         int left = WorldToGrid(bounds.left + epsilon);
         int right = WorldToGrid(bounds.left + bounds.width - epsilon);
         int top = WorldToGrid(bounds.top + epsilon);
@@ -83,7 +87,7 @@ namespace BaneAndBastion {
         for (int x = left; x <= right; ++x) {
             for (int y = top; y <= bottom; ++y) {
                 Cell* cell = GetCell(x, y);
-                // Если ячейки нет (край карты) или она непроходима
+                // If there is no cell(edge ??of the map) or it is impassable
                 if (cell == nullptr || !cell->CanBeOccupiedBy(seekerID))
                 {
                     return true;
@@ -93,7 +97,8 @@ namespace BaneAndBastion {
         return false;
     }
     //--------------------------------------------------------------------------------------------------------
-    void GridManager::OccupyArea(const FalkonEngine::Vector2Df& worldPos, const FalkonEngine::Vector2Df& size, std::uint32_t entityID) {
+    void GridManager::OccupyArea(const FalkonEngine::Vector2Df& worldPos, const FalkonEngine::Vector2Df& size, std::uint32_t entityID) 
+    {
         int left = WorldToGrid(worldPos.x - size.x / 2.0f);
         int right = WorldToGrid(worldPos.x + size.x / 2.0f - 0.1f);
         int top = WorldToGrid(worldPos.y - size.y / 2.0f);
@@ -106,7 +111,8 @@ namespace BaneAndBastion {
         }
     }
     //--------------------------------------------------------------------------------------------------------
-    void GridManager::UnregisterEntity(uint32_t id, const FalkonEngine::Vector2Df& pos, FalkonEngine::SpriteColliderComponent* col) {
+    void GridManager::UnregisterEntity(uint32_t id, const FalkonEngine::Vector2Df& pos, FalkonEngine::SpriteColliderComponent* col) 
+    {
         float ppu = GameSettings::PixelsPerUnit;
         float halfW = (col ? col->GetBounds().width : ppu) / 2.0f;
         float halfH = (col ? col->GetBounds().height : ppu) / 2.0f;
@@ -124,9 +130,10 @@ namespace BaneAndBastion {
         }
     }
     //--------------------------------------------------------------------------------------------------------
-    void GridManager::OnNotify(const FalkonEngine::GameEvent& event) {
-        // Оставляем только очистку при удалении объекта
-        if (event.type == FalkonEngine::GameEventType::ObjectRemoved && event.object) {
+    void GridManager::OnNotify(const FalkonEngine::GameEvent& event) 
+    {
+        if (event.type == FalkonEngine::GameEventType::ObjectRemoved && event.object) 
+        {
             auto col = event.object->GetComponent<FalkonEngine::SpriteColliderComponent>();
             auto tr = event.object->GetComponent<FalkonEngine::TransformComponent>();
             if (tr) UnregisterEntity(event.object->GetID(), tr->GetWorldPosition(), col);
@@ -136,8 +143,9 @@ namespace BaneAndBastion {
     void GridManager::DrawLogicDebug(const FalkonEngine::Vector2Df& playerPos)
     {
         static sf::Clock debugClock;
-        if (debugClock.getElapsedTime().asSeconds() > 0.5f) {
-            std::system("cls"); // Очистка консоли
+        if (debugClock.getElapsedTime().asSeconds() > 0.5f) 
+        {
+            std::system("cls");
 
             std::cout << "------- ALL OCCUPIED CELLS -------" << std::endl;
             std::cout << "Total Chunks Loaded: " << m_chunks.size() << std::endl;
@@ -148,14 +156,15 @@ namespace BaneAndBastion {
 
             int chunkSize = GameSettings::ChunkSize;
 
-            for (auto& [chunkPos, chunk] : m_chunks) {
-                for (int lx = 0; lx < chunkSize; ++lx) {
-                    for (int ly = 0; ly < chunkSize; ++ly) {
-
+            for (auto& [chunkPos, chunk] : m_chunks) 
+            {
+                for (int lx = 0; lx < chunkSize; ++lx) 
+                {
+                    for (int ly = 0; ly < chunkSize; ++ly) 
+                    {
                         uint32_t id = chunk.cells[lx][ly].entityID;
-
-                        if (id != 0) {
-                            // Вычисляем глобальный адрес ячейки для сверки
+                        if (id != 0) 
+                        {
                             int gx = chunkPos.x * chunkSize + lx;
                             int gy = chunkPos.y * chunkSize + ly;
 
@@ -185,10 +194,10 @@ namespace BaneAndBastion {
         {
             float chunkWorldX = chunkPos.x * chunkSizePixels;
             float chunkWorldY = chunkPos.y * chunkSizePixels;
-            // Рамка чанка
+            // chunk frame
             chunkBounds.setPosition(chunkWorldX, chunkWorldY);
             window.draw(chunkBounds);
-            // Клетки (рисуем только если они заняты, чтобы не перегружать рендер
+            // Cells(we draw only if they are occupied, so as not to overload the renderer)
             for (int x = 0; x < GameSettings::ChunkSize; ++x) 
             {
                 for (int y = 0; y < GameSettings::ChunkSize; ++y) 

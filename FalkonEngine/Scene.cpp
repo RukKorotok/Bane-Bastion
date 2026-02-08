@@ -14,7 +14,10 @@ namespace FalkonEngine
 	Scene::~Scene() 
 	{
 		delete m_world;
-		if (s_activeScene == this) s_activeScene = nullptr;
+		if (s_activeScene == this)
+		{
+			s_activeScene = nullptr;
+		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	Scene* Scene::GetActive() 

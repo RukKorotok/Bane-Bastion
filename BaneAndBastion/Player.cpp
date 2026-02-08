@@ -44,8 +44,8 @@ namespace BaneAndBastion
 
 		if (rb)
 		{
-			rb->SetLinearDamping(5.0f); // „ем больше число, тем быстрее остановитс€ после удара
-			rb->SetKinematic(false);    // –азрешаем физическим силам двигать игрока
+			rb->SetLinearDamping(5.0f);
+			rb->SetKinematic(false);
 		}
 
 	}
@@ -70,17 +70,12 @@ namespace BaneAndBastion
 			if (m_gridManager)
 			{
 				sf::FloatRect currentBounds = collider->GetBounds();
-
-				// 1. ѕровер€ем движение по оси X
 				sf::FloatRect boundsX = currentBounds;
 				boundsX.left += event.direction.x;
 				if (!m_gridManager->CheckGridCollision(boundsX, m_gameObject->GetID()))
 				{
 					transform->MoveBy(event.direction.x, 0.f);
 				}
-
-				// 2. ѕровер€ем движение по оси Y
-				// ¬ажно: берем уже обновленные (или текущие) границы
 				sf::FloatRect boundsY = collider->GetBounds();
 				boundsY.top += event.direction.y;
 				if (!m_gridManager->CheckGridCollision(boundsY, m_gameObject->GetID()))

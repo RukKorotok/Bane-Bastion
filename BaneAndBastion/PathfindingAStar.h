@@ -18,7 +18,6 @@ namespace BaneAndBastion
         FalkonEngine::Vector2Df GetNextStep(FalkonEngine::Vector2Df start, FalkonEngine::Vector2Df target) override;
 
     private:
-        // ¬нутренний метод поиска пути по индексам сетки
         std::vector<FalkonEngine::Vector2Di> PerformAStar(FalkonEngine::Vector2Di start, FalkonEngine::Vector2Di target);
     };
 }

@@ -90,14 +90,13 @@ namespace FalkonEngine
 	}
 	void RigidbodyComponent::ApplyImpulse(Vector2Df direction, float force)
 	{
-		// Ќормализуем направление на случай, если пришел "сырой" вектор
+		// normalize weet value
 		float len = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 		if (len > 0.001f) {
 			direction.x /= len;
 			direction.y /= len;
 		}
 
-		// ѕрикладываем силу
 		AddLinearVelocity(direction * force);
 	}
 }

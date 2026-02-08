@@ -20,7 +20,8 @@ namespace BaneAndBastion
 
                 int roll = random<int>(0, 100);
 
-                if (roll < 10) { // 10% шанс на стену
+                if (roll < 10) // 10% chance per wall
+                {
                     objects.push_back(new Wall(worldX, worldY));
                 }
             }

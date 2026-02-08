@@ -33,14 +33,14 @@ namespace BaneAndBastion
         Vector2Df myPos = myTransform->GetWorldPosition();
         Vector2Df playerPos = playerTransform->GetWorldPosition();
 
-        // Если игрок в радиусе обнаружения
+        // If the player is within detection range
         if ((playerPos - myPos).GetLength() < m_detectionRange) 
         {
             auto nextPoint = m_strategy->GetNextStep(myPos, playerPos);
 
             if (nextPoint.GetLength() < 0.001f) 
             {
-                return; // Точка слишком близка к нулю, игнорируем
+                return; // The point is too close to zero, ignore it
             }
 
                 GameEvent event;
@@ -49,7 +49,7 @@ namespace BaneAndBastion
                 event.direction.x = nextPoint.x;
                 event.direction.y = nextPoint.y;
 
-                this->Notify(event); // Отправляем NPC
+                this->Notify(event); // Sending NPCs
         }
     }
 }

@@ -162,7 +162,6 @@
   <ItemGroup>
     <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="AIMoveComponent.cpp" />
-    <ClCompile Include="Bonus.cpp" />
     <ClCompile Include="DynamicActor.cpp" />
     <ClInclude Include="DynamicActor.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -177,7 +176,6 @@
     <ClCompile Include="PathfindingAStar.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="PlayerMoveComponent.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -186,7 +184,6 @@
   <ItemGroup>
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="AIMoveComponent.h" />
-    <ClInclude Include="Bonus.h" />
     <ClInclude Include="DynamicWithPhysic.h" />
     <ClInclude Include="EnvironmentObject.h" />
     <ClInclude Include="GameScene.h" />
@@ -198,7 +195,6 @@
     <ClInclude Include="PathfindingAStar.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="GameSettings.h" />
-    <ClInclude Include="Menu.h" />
     <ClInclude Include="PlayerMoveComponent.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Wall.h" />

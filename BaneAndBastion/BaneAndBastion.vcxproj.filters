@@ -2,12 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="Menu.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Bonus.cpp">
-      <Filter>GamePlay\Abiities</Filter>
-    </ClCompile>
     <ClCompile Include="Text.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -56,12 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSettings.h" />
-    <ClInclude Include="Menu.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Bonus.h">
-      <Filter>GamePlay\Abiities</Filter>
-    </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>UI</Filter>
     </ClInclude>

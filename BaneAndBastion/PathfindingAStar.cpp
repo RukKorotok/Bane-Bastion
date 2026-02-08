@@ -14,11 +14,10 @@ namespace BaneAndBastion
         FalkonEngine::Vector2Di sGrid(gm->WorldToGrid(start.x), gm->WorldToGrid(start.y));
         FalkonEngine::Vector2Di tGrid(gm->WorldToGrid(target.x), gm->WorldToGrid(target.y));
 
-        // Если игрок ушел за край карты или в стену (вдруг?), ищем ближайшую свободную
+        // If player not in grid
         auto cell = gm->GetCell(tGrid.x, tGrid.y);
         if (!cell || cell->entityID != 0) {
-            // Можно добавить логику поиска ближайшей свободной соседа, 
-            // но для начала просто вернем текущую позицию
+            // Not used yet
             return start;
         }
 
@@ -34,7 +33,7 @@ namespace BaneAndBastion
             return gm->GridToWorld(path[1].x, path[1].y);
         }
 
-        // Если путь не найден (заперт), идем по прямой (пусть бот тычется в стену, создавая давление)
+        // if not find path, go forward
         return target;
     }
 
@@ -44,20 +43,20 @@ namespace BaneAndBastion
 
         std::unordered_map<FalkonEngine::Vector2Di, Node*> allNodes;
 
-        // 2. Очередь с приоритетом (наверху всегда узел с минимальным f)
+        // 2. queue with priority
         auto compare = [](Node* a, Node* b) 
         { 
             return a->f() > b->f(); 
         };
         std::priority_queue<Node*, std::vector<Node*>, decltype(compare)> openSet(compare);
 
-        // Вспомогательная лямбда для очистки памяти
+        // clear memory
         auto cleanup = [&allNodes]() 
         {
             for (auto& pair : allNodes) delete pair.second;
         };
 
-        // Создаем начальный узел
+        // Create start point
         Node* startNode = new Node{ start, 0, abs(target.x - start.x) + abs(target.y - start.y) * 10, nullptr };
         openSet.push(startNode);
         allNodes[start] = startNode;
@@ -71,25 +70,25 @@ namespace BaneAndBastion
             Node* current = openSet.top();
             openSet.pop();
 
-            // Если дошли до цели
+            // Target reached
             if (current->pos == target) 
             {
                 std::vector<FalkonEngine::Vector2Di> path;
                 while (current) 
                 {
-                    path.push_back(current->pos); // Добавляем в конец (быстро)
+                    path.push_back(current->pos);
                     current = current->parent;
                 }
-                std::reverse(path.begin(), path.end()); // Переворачиваем один раз
+                std::reverse(path.begin(), path.end());
                 cleanup();
                 return path;
             }
 
-            // Соседи (вверх, вниз, влево, вправо)
+            // Тeighboring cells
             FalkonEngine::Vector2Di neighbors[8] = 
             {
-                {0, 1}, {0, -1}, {1, 0}, {-1, 0}, // Прямые
-                {1, 1}, {1, -1}, {-1, 1}, {-1, -1} // Диагонали
+                {0, 1}, {0, -1}, {1, 0}, {-1, 0},
+                {1, 1}, {1, -1}, {-1, 1}, {-1, -1}
             };
 
             for (auto& off : neighbors) 
@@ -97,32 +96,30 @@ namespace BaneAndBastion
                 FalkonEngine::Vector2Di nextPos = current->pos + off;
                 auto cell = gm->GetCell(nextPos.x, nextPos.y);
 
-                // Если клетка существует и проходима
                 if (!cell || cell->entityID != 0)
                 {
                     continue;
                 }
 
-                // 2. Логика для диагоналей (проверка углов)
                 bool isDiagonal = (off.x != 0 && off.y != 0);
                 if (isDiagonal) 
                 {
-                    // Проверяем "проход" между клетками (чтобы не резать углы стен)
+                    // We check the "passage" between the cells(so as not to cut the corners of the walls)
                     auto side1 = gm->GetCell(current->pos.x + off.x, current->pos.y);
                     auto side2 = gm->GetCell(current->pos.x, current->pos.y + off.y);
                     if (!side1 || side1->entityID != 0 || !side2 || side2->entityID != 0) 
                     {
-                        continue; // Проход заблокирован углом стены
+                        continue; // Blocked
                     }
                 }
 
-                // 3. Считаем стоимость G (10 для прямых, 14 для диагоналей)
+                // 10 for direct path, 14 for diagonal)
                 int moveCost = isDiagonal ? 14 : 10;
                 int newG = current->g + moveCost;
 
                 auto it = allNodes.find(nextPos);
-                if (it == allNodes.end() || newG < it->second->g) {
-                    // Эвристика H тоже умножается на 10 для соответствия масштабу G
+                if (it == allNodes.end() || newG < it->second->g) 
+                {
                     int h = (abs(target.x - nextPos.x) + abs(target.y - nextPos.y)) * 10;
 
                     Node* n = new Node{ nextPos, newG, h, current };
@@ -132,6 +129,6 @@ namespace BaneAndBastion
             }
         }
         cleanup();
-        return {}; // Путь не найден
+        return {}; // Not finded
     }
 }

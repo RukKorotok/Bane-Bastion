@@ -15,7 +15,6 @@ namespace BaneAndBastion
 
 		if (collider)
 		{
-			// Подписываемся на лямбда-функцию, которая выполнится при столкновении
 			collider->SubscribeCollision([this](FalkonEngine::Collision collision)
 				{
 					auto otherGO = collision.GetSecond()->GetGameObject();
@@ -25,7 +24,6 @@ namespace BaneAndBastion
 						auto rb = m_gameObject->GetComponent<RigidbodyComponent>();
 						if (rb)
 						{
-							// Движок сам посчитал, куда лететь, мы только даем силу
 							rb->ApplyImpulse(collision.GetKnockbackDirection(), 500.f);
 						}
 					}
