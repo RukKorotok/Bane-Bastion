@@ -50,6 +50,10 @@ namespace BaneAndBastion
                 event.direction.y = nextPoint.y;
 
                 this->Notify(event); // Sending NPCs
+
+                FE_APP_TRACE("AIComponent: NPC " + std::to_string(event.entityID) +
+                    " requested movement to (" + std::to_string(nextPoint.x) +
+                    ", " + std::to_string(nextPoint.y) + ")");
         }
     }
 }

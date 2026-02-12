@@ -10,34 +10,33 @@ using namespace BaneAndBastion;
 
 int main()
 {
-	FalkonEngine::RenderSystem::Instance()->SetMainWindow(new sf::RenderWindow(sf::VideoMode(1280, 720), "Bane&Bastion"));
+	sf::RenderWindow window(sf::VideoMode(1280, 720), "Bane & Bastion");
+	FalkonEngine::RenderSystem::Instance()->SetMainWindow(&window);
 
-	FalkonEngine::ResourceSystem::Instance()->LoadTexture("monster", "Resources/Textures/monster.png");
-	FalkonEngine::ResourceSystem::Instance()->LoadTexture("wall", "Resources/Textures/wall.png");
-	FalkonEngine::ResourceSystem::Instance()->LoadTexture("knight", "Resources/Textures/knight.png");
+	auto* resources = FalkonEngine::ResourceSystem::Instance();
+	resources->LoadTexture("monster", "Resources/Textures/monster.png");
+	resources->LoadTexture("wall", "Resources/Textures/wall.png");
+	resources->LoadTexture("knight", "Resources/Textures/knight.png");
 
-	FalkonEngine::ResourceSystem::Instance()->LoadMusic("NeverSurrender", "Resources/Music/NeverSurrender.wav");
+	if (!resources->LoadMusic("NeverSurrender", "Resources/Music/NeverSurrender.wav"))
+	{
+		FE_CORE_WARN("Main: Initial music not loaded, but continuing...");
+	}
 
-	auto developerLevel = std::make_shared<GameScene>();
+	auto developerLevel = std::make_shared<GameScene>("TestLevel");
 	developerLevel->Start();
 
-	FalkonEngine::Matrix2D zeroMatrix;
-	zeroMatrix.Print();
+	FE_CORE_INFO("Bane & Bastion: Engine is ready to run.");
 
-	FalkonEngine::Matrix2D translationMatrix = FalkonEngine::Matrix2D(Vector2D(12.0f, 5.0f), 0.0f, Vector2Df(1.0f, 1.0f));
-	translationMatrix.Print();
-
-	FalkonEngine::Matrix2D rotationMatrix = FalkonEngine::Matrix2D(Vector2D(0.0f, 0.0f), 90.0f, Vector2Df(1.0f, 1.0f));
-	rotationMatrix.Print();
-
-	(rotationMatrix * translationMatrix).Print();
-
-	FalkonEngine::Matrix2D someMatrix = FalkonEngine::Matrix2D(Vector2D(13.0f, 25.0f), 90.0f, Vector2Df(1.5f, 1.0f));
-	someMatrix.Print();
-
-	(someMatrix * someMatrix.GetInversed()).Print();
-
-	FalkonEngine::Engine::Instance()->Run();
+	try
+	{
+		FalkonEngine::Engine::Instance()->Run();
+	}
+	catch (const std::exception& e)
+	{
+		FE_CORE_ERROR("CRITICAL ENGINE ERROR: " + std::string(e.what()));
+		return -1;
+	}
 
 	return 0;
 }

@@ -9,5 +9,6 @@
 
 // Добавьте сюда заголовочные файлы для предварительной компиляции
 #include "framework.h"
+#include "Log.h"
 
 #endif //PCH_H

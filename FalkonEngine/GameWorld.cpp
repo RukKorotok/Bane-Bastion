@@ -8,6 +8,7 @@ namespace FalkonEngine
 	//-----------------------------------------------------------------------------------------------------------
 	GameWorld::~GameWorld()
 	{
+		FE_APP_TRACE("GameWorld destructor called. Clearing all objects.");
 		Clear();
 	}
 	//-----------------------------------------------------------------------------------------------------------
@@ -22,9 +23,16 @@ namespace FalkonEngine
 	void GameWorld::FixedUpdate(float deltaTime)
 	{
 		m_fixedCounter += deltaTime;
-		if (m_fixedCounter > PhysicsSystem::Instance()->GetFixedDeltaTime())
+		float fixedStep = PhysicsSystem::Instance()->GetFixedDeltaTime();
+
+		if (fixedStep <= 0.0001f) {
+			FE_CORE_ASSERT(false, "Physics FixedDeltaTime is too small or zero!");
+			return;
+		}
+
+		if (m_fixedCounter > fixedStep)
 		{
-			m_fixedCounter -= PhysicsSystem::Instance()->GetFixedDeltaTime();
+			m_fixedCounter -= fixedStep;
 			PhysicsSystem::Instance()->Update();
 		}
 	}
@@ -33,39 +41,62 @@ namespace FalkonEngine
 	{
 		for (size_t i = 0; i < m_gameObjects.size(); i++)
 		{
-			m_gameObjects[i]->Render();
+			if (m_gameObjects[i]) 
+			{
+				m_gameObjects[i]->Render();
+			}
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::LateUpdate()
 	{
-		for (int i = static_cast<int>(m_markedToDestroyGameObjects.size()) - 1; i >= 0; i--)
+		if (!m_markedToDestroyGameObjects.empty())
 		{
-			DestroyGameObjectImmediate(m_markedToDestroyGameObjects[i]);
+			FE_APP_TRACE("LateUpdate: Destroying " + std::to_string(m_markedToDestroyGameObjects.size()) + " marked objects.");
+
+			for (int i = static_cast<int>(m_markedToDestroyGameObjects.size()) - 1; i >= 0; i--)
+			{
+				DestroyGameObjectImmediate(m_markedToDestroyGameObjects[i]);
+			}
+			m_markedToDestroyGameObjects.clear();
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::DestroyGameObject(GameObject* gameObject)
 	{
-		m_markedToDestroyGameObjects.push_back(gameObject);
+		if (!gameObject) 
+		{
+			return;
+		}
+
+		auto it = std::find(m_markedToDestroyGameObjects.begin(), m_markedToDestroyGameObjects.end(), gameObject);
+
+		if (it == m_markedToDestroyGameObjects.end())
+		{
+			m_markedToDestroyGameObjects.push_back(gameObject);
+			FE_APP_TRACE("GameObject '" + gameObject->GetName() + "' marked for destruction.");
+		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::Clear()
 	{
-		size_t i = m_gameObjects.size();
-		while(i > 0)
+		FE_CORE_INFO("Clearing GameWorld...");
+
+		for (int i = static_cast<int>(m_gameObjects.size()) - 1; i >= 0; i--)
 		{
-			i--;
-			if (m_gameObjects[i] == nullptr)
+			if (m_gameObjects[i] == nullptr) 
 			{
 				continue;
 			}
 
-			if (m_gameObjects[i]->GetComponent<TransformComponent>()->GetParent() == nullptr)
+			auto transform = m_gameObjects[i]->GetComponent<TransformComponent>();
+			if (transform && transform->GetParent() == nullptr)
 			{
 				DestroyGameObjectImmediate(m_gameObjects[i]);
 			}
 		}
+		m_gameObjects.clear();
+		m_markedToDestroyGameObjects.clear();
 		m_fixedCounter = 0.0f;
 	}
 	//-----------------------------------------------------------------------------------------------------------
@@ -86,9 +117,11 @@ namespace FalkonEngine
 	//-----------------------------------------------------------------------------------------------------------
 	void GameWorld::DestroyGameObjectImmediate(GameObject* gameObject)
 	{
-		
 		if (!gameObject) return;
-		
+
+		std::string objName = gameObject->GetName();
+		uint32_t objId = gameObject->GetID();
+
 		GameEvent confirmEv;
 		confirmEv.type = FalkonEngine::GameEventType::ObjectRemoved;
 		confirmEv.sender = this;
@@ -101,6 +134,8 @@ namespace FalkonEngine
 		}
 
 		std::vector<TransformComponent*> allTransforms = gameObject->GetComponentsInChildren<TransformComponent>();
+
+		FE_APP_TRACE("Immediate destruction of '" + objName + "' and its " + std::to_string(allTransforms.size() - 1) + " children.");
 
 		for (auto* t : allTransforms) {
 			GameObject* obj = t->GetGameObject();

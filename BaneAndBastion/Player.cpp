@@ -10,10 +10,11 @@ namespace BaneAndBastion
 	{
 		auto playerCamera = m_gameObject->AddComponent<FalkonEngine::CameraComponent>();
 		playerCamera->SetWindow(&FalkonEngine::RenderSystem::Instance()->GetMainWindow());
-		playerCamera->SetBaseResolution(1027, 720);
+		playerCamera->SetBaseResolution(1024, 720);
 
 		auto playerInput = m_gameObject->AddComponent<FalkonEngine::InputComponent>();
-		if (playerInput) {
+		if (playerInput) 
+		{
 			playerInput->Subscribe(this);
 		}
 
@@ -66,6 +67,12 @@ namespace BaneAndBastion
 		{
 			auto collider = m_gameObject->GetComponent<FalkonEngine::SpriteColliderComponent>();
 			auto transform = m_gameObject->GetComponent<FalkonEngine::TransformComponent>();
+			auto rb = m_gameObject->GetComponent<FalkonEngine::RigidbodyComponent>();
+
+			if (!transform || !collider) 
+			{
+				return;
+			}
 
 			if (m_gridManager)
 			{

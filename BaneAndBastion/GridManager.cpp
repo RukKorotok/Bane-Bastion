@@ -9,7 +9,13 @@ namespace BaneAndBastion {
     //--------------------------------------------------------------------------------------------------------
     GridManager::GridManager() 
     {
-        FalkonEngine::Scene::GetActive()->GetWorld()->Subscribe(this);
+        auto activeScene = FalkonEngine::Scene::GetActive();
+        if (activeScene && activeScene->GetWorld()) {
+            activeScene->GetWorld()->Subscribe(this);
+        }
+        else {
+            FE_CORE_ERROR("GridManager: Failed to subscribe to World. Active scene or world is null!");
+        }
     }
     //--------------------------------------------------------------------------------------------------------
     FalkonEngine::Vector2Df GridManager::GridToWorld(int x, int y) const
@@ -55,8 +61,12 @@ namespace BaneAndBastion {
                 FalkonEngine::Vector2Di pos(x, y);
                 if (m_chunks.find(pos) == m_chunks.end()) 
                 {
+                    FE_APP_TRACE("GridManager: Generating new chunk at [" + std::to_string(x) + "," + std::to_string(y) + "]");
+
                     m_chunks[pos] = Chunk();
+
                     auto envObjects = EnvironmentGenerator::GenerateForChunk(pos.x, pos.y);
+
                     if (auto* scene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive())) 
                     {
                         for (auto* obj : envObjects) scene->AddToChunk(pos, obj);
@@ -69,16 +79,28 @@ namespace BaneAndBastion {
     Cell* GridManager::GetCell(int x, int y) 
     {
         FalkonEngine::Vector2Di cp = WorldToChunk(x, y);
-        auto it = m_chunks.find(cp);
-        if (it == m_chunks.end()) return nullptr;
 
+        static FalkonEngine::Vector2Di lastChunkPos = { -999, -999 };
+        static Chunk* lastChunk = nullptr;
+
+        if (cp != lastChunkPos)
+        {
+            auto it = m_chunks.find(cp);
+
+            if (it == m_chunks.end()) 
+            {
+                return nullptr;
+            }
+            lastChunk = &it->second;
+            lastChunkPos = cp;
+        }
         FalkonEngine::Vector2Di lp = WorldToLocal(x, y);
-        return &it->second.cells[lp.x][lp.y];
+        return &lastChunk->cells[lp.x][lp.y];
     }
     //--------------------------------------------------------------------------------------------------------
     bool GridManager::CheckGridCollision(const sf::FloatRect& bounds, uint32_t seekerID) 
     {
-        float epsilon = 0.2f; // For narrow passage
+        float epsilon = 0.1f; // For narrow passage
         int left = WorldToGrid(bounds.left + epsilon);
         int right = WorldToGrid(bounds.left + bounds.width - epsilon);
         int top = WorldToGrid(bounds.top + epsilon);

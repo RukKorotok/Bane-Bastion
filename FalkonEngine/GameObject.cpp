@@ -5,25 +5,28 @@ namespace FalkonEngine
 {
 	//GameObject
 	//-----------------------------------------------------------------------------------------------------------
-	GameObject::GameObject()
+	GameObject::GameObject() : m_name("GameObject"), m_id(s_nextID++)
 	{
-		m_name = "GameObject";
 		AddComponent<TransformComponent>();
-		m_id = s_nextID++;
+		FE_APP_TRACE("GameObject created: [Default Name] ID: " + std::to_string(m_id));
 	}
 	//-----------------------------------------------------------------------------------------------------------
-	GameObject::GameObject(std::string newName)
+	GameObject::GameObject(std::string newName) : m_name(newName), m_id(s_nextID++)
 	{
-		m_name = newName;
 		AddComponent<TransformComponent>();
-		m_id = s_nextID++;
+		FE_APP_TRACE("GameObject created: " + m_name + " ID: " + std::to_string(m_id));
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	GameObject::~GameObject()
 	{
+		FE_APP_TRACE("Destroying GameObject: " + m_name + " (ID: " + std::to_string(m_id) + ")");
+
 		for (auto component : m_components)
 		{
-			delete component;
+			if (component)
+			{
+				delete component;
+			}
 		}
 		m_components.clear();
 		m_children.clear();
@@ -42,30 +45,47 @@ namespace FalkonEngine
 	void GameObject::SetID(uint32_t id)
 	{
 		m_id = id;
-		if (id >= s_nextID) {
+		if (id >= s_nextID) 
+		{
 			s_nextID = id + 1;
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameObject::Print(int depth) const
 	{
-		std::cout << std::string(depth * 2, ' ') << GetName() << std::endl;
+		std::string indent(depth * 2, ' ');
+
+		FE_CORE_INFO(indent + "GameObject: " + m_name + " (ID: " + std::to_string(m_id) + ")");
+
 		for (auto& component : m_components)
 		{
-			std::cout << std::string(depth * 2, ' ') << "::" << component << std::endl;
+			FE_CORE_INFO(indent + "  ::Component [" + std::to_string(reinterpret_cast<uintptr_t>(component)) + "]");
 		}
 
 		for (GameObject* child : m_children)
 		{
-			child->Print(depth + 1);
+			if (child) 
+			{
+				child->Print(depth + 1);
+			}
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameObject::Update(float deltaTime)
 	{
-		for (auto& component : m_components)
+		for (size_t i = 0; i < m_components.size(); ++i)
 		{
-			component->Update(deltaTime);
+			try
+			{
+				if (m_components[i])
+				{
+					m_components[i]->Update(deltaTime);
+				}
+			}
+			catch (const std::exception& e)
+			{
+				FE_CORE_ERROR("Exception in Update of Component on '" + m_name + "': " + e.what());
+			}
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
@@ -73,17 +93,49 @@ namespace FalkonEngine
 	{
 		for (auto& component : m_components)
 		{
-			component->Render();
+			if (component)
+			{
+				component->Render();
+			}
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameObject::AddChild(GameObject* child)
 	{
 		m_children.push_back(child);
+
+		if (!child)
+		{
+			FE_CORE_WARN("Attempted to add a null child to GameObject: " + m_name);
+			return;
+		}
+
+		auto it = std::find(m_children.begin(), m_children.end(), child);
+		if (it != m_children.end())
+		{
+			FE_CORE_WARN("GameObject '" + child->GetName() + "' is already a child of '" + m_name + "'");
+			return;
+		}
+
+		m_children.push_back(child);
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void GameObject::RemoveChild(GameObject* child)
 	{
-		m_children.erase(std::remove_if(m_children.begin(), m_children.end(), [child](GameObject* obj) { return obj == child; }), m_children.end());
+		if (!child) 
+		{
+			return;
+		}
+
+		auto it = std::remove(m_children.begin(), m_children.end(), child);
+
+		if (it != m_children.end())
+		{
+			m_children.erase(it, m_children.end());
+		}
+		else
+		{
+			FE_CORE_WARN("Attempted to remove non-existent child '" + child->GetName() + "' from '" + m_name + "'");
+		}
 	}
 }

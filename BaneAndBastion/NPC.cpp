@@ -10,16 +10,19 @@ namespace BaneAndBastion
     //--------------------------------------------------------------------------------------------------------
     NPC::NPC(FalkonEngine::Vector2Df position, std::string name, std::string texture) : DynamicWithPhysic(position, name, texture)
     {
+        auto activeScene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive());
+        if (!activeScene)
+        {
+            FE_CORE_ERROR("NPC: Failed to create '" + name + "' - No active GameScene found.");
+            return;
+        }
+
         auto movement = m_gameObject->AddComponent<AIMoveComponent>();
         if (movement)
         {
             movement->Subscribe(this);
             movement->SetSpeed(50.0f);
-
-            if (auto* activeScene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive()))
-            {
-                movement->Subscribe(activeScene->GetGridManager());
-            }
+            movement->Subscribe(activeScene->GetGridManager());
         }
 
         auto aiComponent = m_gameObject->AddComponent<AIComponent>();
@@ -31,6 +34,10 @@ namespace BaneAndBastion
             aiComponent->Init(player, 270.0f, std::move(strategyAStar));
             aiComponent->Subscribe(this);
         }
+        else
+        {
+            FE_CORE_WARN("NPC: '" + name + "' couldn't find player to target.");
+        }
 
         auto rb = m_gameObject->GetComponent<FalkonEngine::RigidbodyComponent>();
         auto collider = m_gameObject->GetComponent<FalkonEngine::SpriteColliderComponent>();
@@ -40,6 +47,8 @@ namespace BaneAndBastion
             rb->SetLinearDamping(5.0f);
             rb->SetKinematic(false);
         }
+
+        FE_APP_TRACE("NPC: '" + name + "' spawned successfully.");
 	}
     //--------------------------------------------------------------------------------------------------------
 	void NPC::OnNotify(const FalkonEngine::GameEvent& event)

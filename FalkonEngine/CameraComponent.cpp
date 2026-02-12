@@ -10,6 +10,8 @@ namespace FalkonEngine
 	{
 		m_view = new sf::View(sf::FloatRect(0.0f, 0.0f, 800.0f, -600.0f));
 		m_transform = gameObject->GetComponent<TransformComponent>();
+
+		FE_CORE_ASSERT(m_transform != nullptr, "CameraComponent added to GameObject without TransformComponent!");
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	CameraComponent::~CameraComponent()
@@ -19,6 +21,14 @@ namespace FalkonEngine
 	//-----------------------------------------------------------------------------------------------------------
 	void CameraComponent::Update(float deltaTime)
 	{
+		if (!m_window)
+		{
+			FE_CORE_WARN("Window not valid!");
+			return;
+		}
+
+		FE_CORE_ASSERT(m_transform != nullptr, "Camera Transform lost during update!");
+
 		auto position = m_transform->GetWorldPosition();
 		auto rotation = m_transform->GetWorldRotation();
 
@@ -32,25 +42,34 @@ namespace FalkonEngine
 	{
 		if (m_window == nullptr)
 		{
-			std::cout << "NULL window render." << std::endl;
+			FE_CORE_WARN("Attempted to render CameraComponent with NULL window.");
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void CameraComponent::SetBaseResolution(int width, int height)
 	{
+		if (width <= 0 || height <= 0)
+		{
+			FE_CORE_ERROR("Invalid base resolution: " + std::to_string(width) + "x" + std::to_string(height));
+			return;
+		}
 		m_view->reset(sf::FloatRect(0.0f, 0.0f, static_cast<float>(width), static_cast<float>(-height)));
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void CameraComponent::SetWindow(sf::RenderWindow* newWindow)
 	{
 		m_window = newWindow;
+		if (!m_window) 
+		{
+			FE_CORE_WARN("Camera window set to nullptr.");
+		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void CameraComponent::ZoomBy(float newZoom)
 	{
 		if (newZoom <= 0)
 		{
-			std::cout << "Not allowed zoom lesser or equal than zero." << std::endl;
+			FE_CORE_WARN("Zoom factor must be positive. Provided: " + std::to_string(newZoom));
 			return;
 		}
 		m_view->zoom(newZoom);

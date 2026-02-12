@@ -24,11 +24,12 @@ namespace FalkonEngine
 		{
 			newTexture->setSmooth(isSmooth);
 			m_textures.emplace(name, newTexture);
-			std::cout << "[ResourceSystem] Texture loaded: " << name << std::endl;
+			FE_CORE_INFO("ResourceSystem: Texture loaded [" + name + "] from " + sourcePath);
 		}
 		else
 		{
-			std::cerr << "[ResourceSystem] Failed to load texture : " << sourcePath + name << std::endl;
+			FE_CORE_ERROR("ResourceSystem: Failed to load texture from " + sourcePath);
+			delete newTexture;
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
@@ -41,22 +42,32 @@ namespace FalkonEngine
 		}
 		else
 		{
+			FE_CORE_WARN("ResourceSystem: Shared texture not found: " + name);
 			return nullptr;
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	sf::Texture* ResourceSystem::GetTextureCopy(const std::string& name) const
 	{
-		return new sf::Texture(*m_textures.find(name)->second);
+		auto it = m_textures.find(name);
+		if (it != m_textures.end())
+		{
+			return new sf::Texture(*it->second);
+		}
+		FE_CORE_ERROR("ResourceSystem: Cannot copy texture, not found: " + name);
+		return nullptr;
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void ResourceSystem::DeleteSharedTexture(const std::string& name)
 	{
-		auto texturePair = m_textures.find(name);
+		auto it = m_textures.find(name);
 
-		sf::Texture* deletingTexure = texturePair->second;
-		m_textures.erase(texturePair);
-		delete deletingTexure;
+		if (it != m_textures.end())
+		{
+			delete it->second;
+			m_textures.erase(it);
+			FE_APP_TRACE("ResourceSystem: Texture deleted: " + name);
+		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	void ResourceSystem::LoadTextureMap(const std::string& name, std::string sourcePath, sf::Vector2u elementPixelSize, int totalElements, bool isSmooth)
@@ -103,20 +114,99 @@ namespace FalkonEngine
 			}
 
 			m_textureMaps.emplace(name, textureMapElements);
+
+
+
+
+			if (m_textureMaps.find(name) != m_textureMaps.end()) 
+			{
+				return;
+			}
+
+			sf::Image sourceImage;
+			if (sourceImage.loadFromFile(sourcePath))
+			{
+				std::vector<sf::Texture*> textureMapElements;
+				auto imageSize = sourceImage.getSize();
+				int loadedElements = 0;
+
+				if (elementPixelSize.x == 0 || elementPixelSize.y == 0) {
+					FE_CORE_ERROR("ResourceSystem: Invalid element size for TextureMap " + name);
+					return;
+				}
+
+				for (unsigned int y = 0; y <= imageSize.y - elementPixelSize.y && loadedElements < totalElements; y += elementPixelSize.y)
+				{
+					for (unsigned int x = 0; x <= imageSize.x - elementPixelSize.x && loadedElements < totalElements; x += elementPixelSize.x)
+					{
+						sf::Texture* newElement = new sf::Texture();
+
+						if (newElement->loadFromImage(sourceImage, sf::IntRect(x, y, elementPixelSize.x, elementPixelSize.y)))
+						{
+							newElement->setSmooth(isSmooth);
+							textureMapElements.push_back(newElement);
+						}
+						else
+						{
+							delete newElement;
+						}
+						loadedElements++;
+					}
+				}
+				m_textureMaps.emplace(name, textureMapElements);
+				FE_CORE_INFO("ResourceSystem: TextureMap loaded [" + name + "]. Elements: " + std::to_string(textureMapElements.size()));
+			}
+			else
+			{
+				FE_CORE_ERROR("ResourceSystem: Failed to load TextureMap from " + sourcePath);
+			}
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	const sf::Texture* ResourceSystem::GetTextureMapElementShared(const std::string& name, int elementIndex) const
 	{
-		auto textureMap = m_textureMaps.find(name);
-		auto textures = textureMap->second;
-		return textures[elementIndex];
+		auto it = m_textureMaps.find(name);
+		if (it == m_textureMaps.end()) 
+		{
+			FE_CORE_ERROR("ResourceSystem: TextureMap not found: " + name);
+			return nullptr;
+		}
+
+		if (elementIndex < 0 || elementIndex >= it->second.size()) 
+		{
+			FE_CORE_WARN("ResourceSystem: Index out of bounds in TextureMap " + name);
+			return nullptr;
+		}
+
+		return it->second[elementIndex];
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	sf::Texture* ResourceSystem::GetTextureMapElementCopy(const std::string& name, int elementIndex) const
 	{
-		auto textureMap = m_textureMaps.find(name);
-		auto textures = textureMap->second;
+		auto it = m_textureMaps.find(name);
+		if (it == m_textureMaps.end())
+		{
+			FE_CORE_ERROR("ResourceSystem: Cannot copy element. TextureMap not found: " + name);
+			return nullptr;
+		}
+
+		const std::vector<sf::Texture*>& textures = it->second;
+		if (elementIndex < 0 || elementIndex >= static_cast<int>(textures.size()))
+		{
+			FE_CORE_ERROR("ResourceSystem: Index out of bounds in TextureMap '" + name +
+				"'. Index: " + std::to_string(elementIndex) +
+				", Size: " + std::to_string(textures.size()));
+			return nullptr;
+		}
+
+		if (textures[elementIndex] == nullptr)
+		{
+			FE_CORE_ERROR("ResourceSystem: Texture at index " + std::to_string(elementIndex) +
+				" in Map '" + name + "' is null!");
+			return nullptr;
+		}
+
+		FE_APP_TRACE("ResourceSystem: Created copy of TextureMap element [" + name + ":" + std::to_string(elementIndex) + "]");
 		return new sf::Texture(*textures[elementIndex]);
 	}
 	//-----------------------------------------------------------------------------------------------------------
@@ -154,11 +244,11 @@ namespace FalkonEngine
 		if (buffer->loadFromFile(sourcePath))
 		{
 			m_soundBuffers[name] = buffer;
-			std::cout << "[ResourceSystem] Sound loaded: " << name << std::endl;
+			FE_CORE_INFO("ResourceSystem: Sound loaded [" + name + "]");
 		}
 		else
 		{
-			std::cerr << "[ResourceSystem] Failed to load sound: " << sourcePath << std::endl;
+			FE_CORE_ERROR("ResourceSystem: Failed to load sound: " + sourcePath);
 			delete buffer;
 		}
 	}
@@ -198,12 +288,12 @@ namespace FalkonEngine
 		if (music->openFromFile(sourcePath))
 		{
 			m_musicTracks[name] = music;
-			std::cout << "[ResourceSystem] Music opened: " << name << std::endl;
+			FE_CORE_INFO("ResourceSystem: Music opened [" + name + "]");
 			return music;
 		}
 		else
 		{
-			std::cerr << "[ResourceSystem] Failed to open music: " << sourcePath << std::endl;
+			FE_CORE_ERROR("ResourceSystem: Failed to open music: " + sourcePath);
 			delete music;
 			return nullptr;
 		}
@@ -228,11 +318,11 @@ namespace FalkonEngine
 	//-----------------------------------------------------------------------------------------------------------
 	void ResourceSystem::Clear()
 	{
+		FE_APP_TRACE("ResourceSystem: Clearing all resources...");
 		DeleteAllTextures();
 		DeleteAllTextureMaps();
 		DeleteAllSounds();
 		DeleteAllMusic();
-		std::cout << "[ResourceSystem] All resources cleared." << std::endl;
 	}
 	//private
 	//-----------------------------------------------------------------------------------------------------------

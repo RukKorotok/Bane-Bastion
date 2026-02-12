@@ -19,6 +19,7 @@ namespace FalkonEngine
 
 		const std::array<std::array<float, 3>, 3>& GetMatrix() const;
 		Matrix2D GetInversed() const;
+		float Determinant() const;
 		void Print() const;
 	
 	private:

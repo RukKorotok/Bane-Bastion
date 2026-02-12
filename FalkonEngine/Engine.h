@@ -5,6 +5,7 @@
 #endif
 
 #include "SFML/Graphics.hpp"
+#include "Log.h"
 
 namespace FalkonEngine
 {

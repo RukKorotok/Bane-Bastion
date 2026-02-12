@@ -70,6 +70,12 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Scene\World</Filter>
     </ClCompile>
+    <ClCompile Include="ConsolSink.h">
+      <Filter>Utilites\Debug\Loger</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSink.h">
+      <Filter>Utilites\Debug\Loger</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraComponent.h">
@@ -153,6 +159,21 @@
     <ClInclude Include="GameEvents.h">
       <Filter>Core\Events</Filter>
     </ClInclude>
+    <ClInclude Include="LogParameters.h">
+      <Filter>Utilites\Debug\Loger</Filter>
+    </ClInclude>
+    <ClInclude Include="Sink.h">
+      <Filter>Utilites\Debug\Loger</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Utilites\Debug\Loger</Filter>
+    </ClInclude>
+    <ClInclude Include="LoggerRegistry.h">
+      <Filter>Utilites\Debug\Loger</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Utilites\Debug\Loger</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -211,6 +232,12 @@
     </Filter>
     <Filter Include="Core\Events">
       <UniqueIdentifier>{9d36159e-d7b0-4898-b7de-06b82a6e9541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilites\Debug">
+      <UniqueIdentifier>{d191c38e-e912-42f5-9947-2083f2658b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilites\Debug\Loger">
+      <UniqueIdentifier>{89b172a3-6326-4dba-b2b2-a17565ddc63c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

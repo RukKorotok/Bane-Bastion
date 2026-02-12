@@ -10,6 +10,9 @@ namespace BaneAndBastion
     std::vector<EnvironmentObject*> EnvironmentGenerator::GenerateForChunk(int cx, int cy) 
     {
         std::vector<EnvironmentObject*> objects;
+        unsigned int seed = std::hash<int>{}(cx) ^ (std::hash<int>{}(cy) << 1);
+        std::mt19937 gen(seed);
+        std::uniform_int_distribution<int> dist(0, 100);
 
         for (int lx = 0; lx < GameSettings::ChunkSize; ++lx) 
         {
@@ -18,7 +21,7 @@ namespace BaneAndBastion
                 float worldX = (cx * GameSettings::ChunkSize + lx) * GameSettings::PixelsPerUnit + GameSettings::PixelsPerUnit * 0.5f;
                 float worldY = (cy * GameSettings::ChunkSize + ly) * GameSettings::PixelsPerUnit + GameSettings::PixelsPerUnit * 0.5f;
 
-                int roll = random<int>(0, 100);
+                int roll = dist(gen);
 
                 if (roll < 10) // 10% chance per wall
                 {
@@ -26,6 +29,8 @@ namespace BaneAndBastion
                 }
             }
         }
+        FE_APP_TRACE("Generator: Chunk [" + std::to_string(cx) + "," + std::to_string(cy) + "] generated with " + std::to_string(objects.size()) + " objects.");
+
         return objects;
     }
 }

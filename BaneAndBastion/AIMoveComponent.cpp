@@ -1,4 +1,6 @@
+#include "pch.h"
 #include "AIMoveComponent.h"
+#include <string>
 
 namespace BaneAndBastion
 {
@@ -46,6 +48,8 @@ namespace BaneAndBastion
             ev.type = FalkonEngine::GameEventType::MovementFinished;
             ev.sender = this;
             this->Notify(ev);
+
+            FE_APP_TRACE("AIMoveComponent: Target reached by entity " + std::to_string(ev.entityID));
         }
     }
 }

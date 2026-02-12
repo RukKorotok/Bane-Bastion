@@ -23,20 +23,23 @@ namespace FalkonEngine
 	//-----------------------------------------------------------------------------------------------------------
 	Matrix2D::Matrix2D(Vector2Df position, float angle, Vector2Df scale)
 	{
-		m_matrix[0][2] = position.x;
-		m_matrix[1][2] = position.y;
+		float radians = angle * (PI / 180.0f);
+		float cosA = cos(radians);
+		float sinA = sin(radians);
 
-		float cosA = cos(angle * PI / 180.0f);
-		float sinA = sin(angle * PI / 180.0f);
 		m_matrix[0][0] = cosA * scale.x;
-		m_matrix[0][1] = sinA;
-		m_matrix[1][0] = -sinA;
+		m_matrix[0][1] = -sinA * scale.y;
+		m_matrix[0][2] = position.x;
+
+		m_matrix[1][0] = sinA * scale.x;
 		m_matrix[1][1] = cosA * scale.y;
+		m_matrix[1][2] = position.y;
 
 		m_matrix[2][0] = 0.0f;
 		m_matrix[2][1] = 0.0f;
 		m_matrix[2][2] = 1.0f;
-		
+
+		FE_APP_TRACE("Matrix2D: Transform matrix created for position (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ")");
 	}
 	//-----------------------------------------------------------------------------------------------------------
 	Matrix2D Matrix2D::operator*(const Matrix2D& other) const
@@ -63,11 +66,13 @@ namespace FalkonEngine
 	Matrix2D Matrix2D::GetInversed() const
 	{
 		
-		float det = m_matrix[0][0] * (m_matrix[1][1] * m_matrix[2][2] - m_matrix[1][2] * m_matrix[2][1]) -
-			m_matrix[0][1] * (m_matrix[1][0] * m_matrix[2][2] - m_matrix[1][2] * m_matrix[2][0]) +
-			m_matrix[0][2] * (m_matrix[1][0] * m_matrix[2][1] - m_matrix[1][1] * m_matrix[2][0]);
+		float det = Determinant();
 
-		if (std::abs(det) < 1e-6f) return Matrix2D();
+		if (std::abs(det) < 1e-6f)
+		{
+			FE_CORE_ERROR("Attempted to invert a singular matrix (Determinant is 0)!");
+			return Matrix2D();
+		}
 
 		float invDet = 1.0f / det;
 		Matrix2D res;
@@ -87,17 +92,27 @@ namespace FalkonEngine
 		return res;
 	}
 	//-----------------------------------------------------------------------------------------------------------
+	float Matrix2D::Determinant() const
+	{
+		{
+			return m_matrix[0][0] * (m_matrix[1][1] * m_matrix[2][2] - m_matrix[1][2] * m_matrix[2][1]) -
+				m_matrix[0][1] * (m_matrix[1][0] * m_matrix[2][2] - m_matrix[1][2] * m_matrix[2][0]) +
+				m_matrix[0][2] * (m_matrix[1][0] * m_matrix[2][1] - m_matrix[1][1] * m_matrix[2][0]);
+		}
+	}
+	//-----------------------------------------------------------------------------------------------------------
 	void Matrix2D::Print() const
 	{
+		std::string output = "\n";
 		for (int row = 0; row < 3; ++row)
 		{
-			std::cout << "|";
+			output += "| ";
 			for (int col = 0; col < 3; ++col)
 			{
-				std::cout << m_matrix[row][col] << " ";
+				output += std::to_string(m_matrix[row][col]) + " ";
 			}
-			std::cout << "|\n";
+			output += "|\n";
 		}
-		std::cout << "\n";
+		FE_CORE_INFO("Matrix2D Content: " + output);
 	}
 }

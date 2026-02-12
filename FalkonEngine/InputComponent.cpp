@@ -1,11 +1,15 @@
 #include "pch.h"
 #include "InputComponent.h"
+#include "GameObject.h"
 
 namespace FalkonEngine
 {
 	//InputComponent
 	//-----------------------------------------------------------------------------------------------------------
-	InputComponent::InputComponent(GameObject* gameObject) : Component(gameObject) {}
+	InputComponent::InputComponent(GameObject* gameObject) : Component(gameObject) 
+	{
+		FE_APP_TRACE("InputComponent initialized for: " + p_gameObject->GetName());
+	}
 	//-----------------------------------------------------------------------------------------------------------
 	void InputComponent::Update(float deltaTime)
 	{
@@ -34,19 +38,32 @@ namespace FalkonEngine
 			m_verticalAxis = currentVertical;
 			m_horizontalAxis = currentHorizontal;
 
-			FalkonEngine::GameEvent event;
-			event.type = FalkonEngine::GameEventType::InputDirectionChanged;
-			event.sender = this;
-			event.direction = { m_horizontalAxis, m_verticalAxis }; // x = Horizontal, y = Vertical
+			std::string debugMsg = "Input changed on '" + p_gameObject->GetName() +
+				"': H=" + std::to_string(m_horizontalAxis) +
+				", V=" + std::to_string(m_verticalAxis);
 
-			Notify(event);
+			FE_APP_TRACE(debugMsg);
+
+			try
+			{
+				FalkonEngine::GameEvent event;
+				event.type = FalkonEngine::GameEventType::InputDirectionChanged;
+				event.sender = this;
+				event.direction = { m_horizontalAxis, m_verticalAxis };
+
+				Notify(event);
+			}
+			catch (const std::exception& e)
+			{
+				std::string errorMsg = "Exception during Input Notification on '" +
+					p_gameObject->GetName() + "': " + e.what();
+
+				FE_CORE_ERROR(errorMsg);
+			}
 		}
 	}
 	//-----------------------------------------------------------------------------------------------------------
-	void InputComponent::Render()
-	{
-
-	}
+	void InputComponent::Render(){}
 	//-----------------------------------------------------------------------------------------------------------
 	float InputComponent::GetHorizontalAxis() const
 	{

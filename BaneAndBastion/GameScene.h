@@ -17,6 +17,8 @@ namespace BaneAndBastion
 	class GameScene : public Scene
 	{
 	public:
+		GameScene(const std::string& name);
+		~GameScene();
 		void Start() override;
 		void Restart() override;
 		void Stop() override;

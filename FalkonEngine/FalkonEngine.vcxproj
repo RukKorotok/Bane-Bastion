@@ -157,6 +157,11 @@
     <ClInclude Include="GameWorld.h" />
     <ClInclude Include="IDelayedAction.h" />
     <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="LoggerRegistry.h" />
+    <ClInclude Include="Sink.h" />
+    <ClInclude Include="LogParameters.h" />
     <ClInclude Include="Matrix2D.h" />
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="pch.h" />
@@ -179,8 +184,10 @@
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ConsolSink.h" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.h" />
+    <ClCompile Include="FileSink.h" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="InputComponent.cpp" />
