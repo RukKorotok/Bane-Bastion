@@ -54,6 +54,8 @@ namespace BaneAndBastion
 
         void OnNotify(const FalkonEngine::GameEvent& event) override;
 
+        FalkonEngine::Vector2Df GetNearestPassablePoint(const FalkonEngine::Vector2Df& targetWorldPos, uint32_t seekerID);
+
     private:
         std::unordered_map<FalkonEngine::Vector2Di, Chunk, FalkonEngine::Vector2DiHasher> m_chunks;
 

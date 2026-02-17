@@ -1,23 +1,34 @@
 #pragma once
 
 #include "IPathfindingStrategy.h"
+#include "AStarUtilits.h"
+#include "GameScene.h"
+#include "GridManager.h"
 
-namespace BaneAndBastion 
+namespace BaneAndBastion
 {
-    struct Node
-    {
-        FalkonEngine::Vector2Di pos;
-        int g, h;
-        Node* parent;
-        int f() const { return g + h; }
-    };
-
     class PathfindingAStar : public IPathfindingStrategy
     {
     public:
-        FalkonEngine::Vector2Df GetNextStep(FalkonEngine::Vector2Df start, FalkonEngine::Vector2Df target) override;
+        std::vector<FalkonEngine::Vector2Df> GetPath(FalkonEngine::Vector2Df start, FalkonEngine::Vector2Df target)
+        {
+            auto scene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive());
+            auto gm = scene->GetGridManager();
 
-    private:
-        std::vector<FalkonEngine::Vector2Di> PerformAStar(FalkonEngine::Vector2Di start, FalkonEngine::Vector2Di target);
+            auto gridPath = AStarUtils::FindPath(
+                { gm->WorldToGrid(start.x), gm->WorldToGrid(start.y) },
+                { gm->WorldToGrid(target.x), gm->WorldToGrid(target.y) }
+            );
+
+            std::vector<FalkonEngine::Vector2Df> worldPath;
+            worldPath.reserve(gridPath.size());
+
+            for (const auto& pos : gridPath) 
+            {
+                worldPath.push_back(gm->GridToWorld(pos.x, pos.y));
+            }
+
+            return worldPath;
+        }
     };
 }

@@ -22,8 +22,21 @@ namespace FalkonEngine
 			return;
 		}
 
-		m_transform->MoveBy(m_linearVelocity * deltaTime);
-		m_transform->RotateBy(m_angleVelocity * deltaTime);
+		FalkonEngine::GameEvent moveEv;
+		moveEv.type = FalkonEngine::GameEventType::HitVelocityRequest;
+		moveEv.entityID = GetGameObject()->GetID();
+		moveEv.direction = m_linearVelocity;
+		moveEv.value = deltaTime;
+		moveEv.sender = this;
+		Notify(moveEv);
+
+		FalkonEngine::GameEvent rotateEv;
+		rotateEv.type = FalkonEngine::GameEventType::HitRotationRequest;
+		rotateEv.entityID = GetGameObject()->GetID();
+		rotateEv.angle = m_angleVelocity;
+		rotateEv.value = deltaTime;
+		rotateEv.sender = this;
+		Notify(rotateEv);
 
 		float linearDrag = 1.f - m_linearDamping * deltaTime;
 		float angleDrag = 1.f - m_angleDamping * deltaTime;

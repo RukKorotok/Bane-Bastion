@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Vector.h"
+
 namespace FalkonEngine
 {
     class GameObject;
@@ -7,11 +9,16 @@ namespace FalkonEngine
     enum class GameEventType
     {
         InputDirectionChanged = 0,
+        MouseMoved,
         MovementRequested,
+        HitVelocityRequest,
+        HitRotationRequest,
         PositionChanged,
-        HealthChanged,
+        StatChanged,
         ActionTriggered,
         ObjectRemoved,
+        ObjectSpawned,
+        SceneComponentSpawned,
         MovementFinished,
         SubObjectSpawned
     };
@@ -21,11 +28,12 @@ namespace FalkonEngine
         GameEventType type;
         void* sender;
         int entityID;
+        Vector2Df direction;
+        float angle;
+        int actionID;
         union {
-            struct { float x, y; } direction;
             struct { float x, y, width, height; } area;
             float value;
-            int actionID;
             GameObject* object;
         };
     };

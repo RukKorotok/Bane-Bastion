@@ -1,10 +1,11 @@
 #pragma once
 #include "GameWorld.h"
 #include <string>
+#include "SubScriptionSystem.h"
 
 namespace FalkonEngine
 {
-	class Scene
+	class Scene : public Observer
 	{
 	public:
 		Scene(const std::string& name);
@@ -12,6 +13,7 @@ namespace FalkonEngine
 		static Scene* GetActive();
 		GameWorld* GetWorld() const;
 		std::string GetName();
+		void OnNotify(const GameEvent& event) override;
 
 		virtual void Start() = 0;
 		virtual void Restart() = 0;

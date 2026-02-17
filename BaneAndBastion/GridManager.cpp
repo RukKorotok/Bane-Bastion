@@ -10,7 +10,8 @@ namespace BaneAndBastion {
     GridManager::GridManager() 
     {
         auto activeScene = FalkonEngine::Scene::GetActive();
-        if (activeScene && activeScene->GetWorld()) {
+        if (activeScene && activeScene->GetWorld()) 
+        {
             activeScene->GetWorld()->Subscribe(this);
         }
         else {
@@ -233,5 +234,36 @@ namespace BaneAndBastion {
                 }
             }
         }
+    }
+    //--------------------------------------------------------------------------------------------------------
+    FalkonEngine::Vector2Df GridManager::GetNearestPassablePoint(const FalkonEngine::Vector2Df& targetWorldPos, uint32_t seekerID)
+    {
+        int startX = WorldToGrid(targetWorldPos.x);
+        int startY = WorldToGrid(targetWorldPos.y);
+
+        const int maxSearchRadius = 20;
+
+        for (int radius = 0; radius <= maxSearchRadius; ++radius)
+        {
+            for (int x = -radius; x <= radius; ++x)
+            {
+                for (int y = -radius; y <= radius; ++y)
+                {
+                    if (radius == 0 || std::abs(x) == radius || std::abs(y) == radius)
+                    {
+                        int curX = startX + x;
+                        int curY = startY + y;
+
+                        Cell* cell = GetCell(curX, curY);
+
+                        if (cell && cell->CanBeOccupiedBy(seekerID))
+                        {
+                            return GridToWorld(curX, curY);
+                        }
+                    }
+                }
+            }
+        }
+        return targetWorldPos;
     }
 }

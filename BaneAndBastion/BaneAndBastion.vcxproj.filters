@@ -23,14 +23,11 @@
     <ClCompile Include="EnvironmentGenerator.cpp">
       <Filter>Core\GridManager</Filter>
     </ClCompile>
-    <ClCompile Include="PathfindingAStar.cpp">
+    <ClCompile Include="AStarUtilits.cpp">
       <Filter>Core\AI\PathFinding</Filter>
     </ClCompile>
     <ClCompile Include="AIComponent.cpp">
       <Filter>GamePlay\SceneObjects\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
     </ClCompile>
     <ClCompile Include="NPC.cpp">
       <Filter>GamePlay\SceneObjects\Dynamic</Filter>
@@ -46,6 +43,27 @@
     </ClCompile>
     <ClCompile Include="PlayerMoveComponent.cpp">
       <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GamePlay\SceneObjects\Dynamic\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Bane.cpp">
+      <Filter>GamePlay\SceneObjects\Dynamic\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Bastion.cpp">
+      <Filter>GamePlay\SceneObjects\Dynamic\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BaneMoveComponent.cpp">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="StatsComponent.cpp">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DamageComponent.cpp">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -77,14 +95,11 @@
     <ClInclude Include="IPathfindingStrategy.h">
       <Filter>Core\AI\PathFinding</Filter>
     </ClInclude>
-    <ClInclude Include="PathfindingAStar.h">
+    <ClInclude Include="AStarUtilits.h">
       <Filter>Core\AI\PathFinding</Filter>
     </ClInclude>
     <ClInclude Include="AIComponent.h">
       <Filter>GamePlay\SceneObjects\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
     </ClInclude>
     <ClInclude Include="NPC.h">
       <Filter>GamePlay\SceneObjects\Dynamic</Filter>
@@ -99,6 +114,36 @@
       <Filter>GamePlay\SceneObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="DynamicActor.h">
+      <Filter>GamePlay\SceneObjects\Dynamic</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GamePlay\SceneObjects\Dynamic\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Bane.h">
+      <Filter>GamePlay\SceneObjects\Dynamic\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Bastion.h">
+      <Filter>GamePlay\SceneObjects\Dynamic\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="IChainAnchor.h">
+      <Filter>GamePlay\SceneObjects\Dynamic\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="BaneMoveComponent.h">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PathfindingAStar.h">
+      <Filter>Core\AI\PathFinding</Filter>
+    </ClInclude>
+    <ClInclude Include="Stats.h">
+      <Filter>GamePlay\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="StatsComponent.h">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageComponent.h">
+      <Filter>GamePlay\SceneObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
       <Filter>GamePlay\SceneObjects\Dynamic</Filter>
     </ClInclude>
   </ItemGroup>
@@ -135,6 +180,12 @@
     </Filter>
     <Filter Include="GamePlay\SceneObjects\Dynamic">
       <UniqueIdentifier>{d8b1d666-b703-4c92-9b08-7d8b7981ded7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GamePlay\SceneObjects\Dynamic\Player">
+      <UniqueIdentifier>{15d34809-7f38-47da-a6a6-1468eaec728a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GamePlay\Stats">
+      <UniqueIdentifier>{1c9bd2bb-00ae-49aa-b8b4-7f2cd785119c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

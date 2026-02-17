@@ -10,15 +10,15 @@ namespace BaneAndBastion
 	//-----------------------------------------------------------------------------------------------------------
 	BaneAndBastion::DynamicWithPhysic::DynamicWithPhysic(FalkonEngine::Vector2Df position, std::string name, std::string texture) : DynamicActor(position, name, texture)
 	{
-		auto collider = m_gameObject->AddComponent<FalkonEngine::SpriteColliderComponent>();
-		auto rb = m_gameObject->AddComponent<FalkonEngine::RigidbodyComponent>();
+		auto collider = p_gameObject->AddComponent<FalkonEngine::SpriteColliderComponent>();
+		auto rb = p_gameObject->AddComponent<FalkonEngine::RigidbodyComponent>();
 
 		if (collider && rb)
 		{
 			collider->SubscribeCollision([this](const FalkonEngine::Collision& collision)
 				{
 
-					auto otherCollider = (collision.GetFirst() == m_gameObject->GetComponent<FalkonEngine::SpriteColliderComponent>())
+					auto otherCollider = (collision.GetFirst() == p_gameObject->GetComponent<FalkonEngine::SpriteColliderComponent>())
 						? collision.GetSecond()
 						: collision.GetFirst();
 
@@ -35,19 +35,19 @@ namespace BaneAndBastion
 
 					if (otherGO->GetComponent<FalkonEngine::RigidbodyComponent>() != nullptr)
 					{
-						auto myRB = m_gameObject->GetComponent<FalkonEngine::RigidbodyComponent>();
+						auto myRB = p_gameObject->GetComponent<FalkonEngine::RigidbodyComponent>();
 						if (myRB)
 						{
 							FalkonEngine::Vector2Df dir = collision.GetKnockbackDirection();
 
-							if (collision.GetSecond()->GetGameObject() == m_gameObject)
+							if (collision.GetSecond()->GetGameObject() == p_gameObject)
 							{
 								dir = { -dir.x, -dir.y };
 							}
 
 							myRB->ApplyImpulse(dir, 500.f);
-
-							FE_APP_TRACE("DynamicWithPhysic: '" + m_gameObject->GetName() +
+							HitAction(*otherGO);
+							FE_APP_TRACE("DynamicWithPhysic: '" + p_gameObject->GetName() +
 								"' bounced off '" + otherGO->GetName() + "'");
 						}
 					}

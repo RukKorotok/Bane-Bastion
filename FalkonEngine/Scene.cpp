@@ -17,6 +17,7 @@ namespace FalkonEngine
 		try
 		{
 			m_world = new GameWorld();
+			m_world->Subscribe(this);
 		}
 		catch (const std::exception& e)
 		{
@@ -54,8 +55,14 @@ namespace FalkonEngine
 
 		return m_world;
 	}
+	//-----------------------------------------------------------------------------------------------------------
 	std::string Scene::GetName()
 	{
 		return m_name;
+	}
+	//-----------------------------------------------------------------------------------------------------------
+	void Scene::OnNotify(const GameEvent& event)
+	{
+		FE_APP_TRACE("Scene '" + m_name + "': Notified of object removal.");
 	}
 }

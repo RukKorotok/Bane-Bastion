@@ -2,12 +2,12 @@
 
 #include "CameraComponent.h"
 #include "InputComponent.h"
-#include "DynamicWithPhysic.h"
+#include "Character.h"
 #include "PlayerMoveComponent.h"
 
 namespace BaneAndBastion
 {
-	class Player : public DynamicWithPhysic
+	class Player : public Character
 	{
 	public:
 		Player(FalkonEngine::Vector2Df position, std::string name, std::string texture);

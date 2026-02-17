@@ -10,6 +10,6 @@ namespace BaneAndBastion
     public:
         virtual ~IPathfindingStrategy() = default;
 
-        virtual FalkonEngine::Vector2Df GetNextStep(FalkonEngine::Vector2Df start, FalkonEngine::Vector2Df target) = 0;
+        virtual std::vector<FalkonEngine::Vector2Df> GetPath(FalkonEngine::Vector2Df start, FalkonEngine::Vector2Df target) = 0;
     };
 }

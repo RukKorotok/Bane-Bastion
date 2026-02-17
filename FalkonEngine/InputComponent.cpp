@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "InputComponent.h"
 #include "GameObject.h"
+#include "RenderSystem.h"
 
 namespace FalkonEngine
 {
@@ -52,6 +53,36 @@ namespace FalkonEngine
 				event.direction = { m_horizontalAxis, m_verticalAxis };
 
 				Notify(event);
+			}
+			catch (const std::exception& e)
+			{
+				std::string errorMsg = "Exception during Input Notification on '" +
+					p_gameObject->GetName() + "': " + e.what();
+
+				FE_CORE_ERROR(errorMsg);
+			}
+		}
+
+		auto& window = RenderSystem::Instance()->GetMainWindow();
+		sf::Vector2i pixelPos = sf::Mouse::getPosition(window);
+
+		sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
+		FalkonEngine::Vector2Df currentMousePos = { worldPos.x, worldPos.y };
+
+		float dx = currentMousePos.x - m_lastMousePos.x;
+		float dy = currentMousePos.y - m_lastMousePos.y;
+
+		if ((dx * dx + dy * dy) > 0.5f)
+		{
+			m_lastMousePos = currentMousePos;
+			try
+			{
+				FalkonEngine::GameEvent mouseEvent;
+				mouseEvent.type = FalkonEngine::GameEventType::MouseMoved;
+				mouseEvent.sender = this;
+				mouseEvent.direction = { currentMousePos.x, currentMousePos.y };
+
+				Notify(mouseEvent);
 			}
 			catch (const std::exception& e)
 			{

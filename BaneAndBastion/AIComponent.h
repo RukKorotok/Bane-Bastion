@@ -14,7 +14,7 @@ namespace BaneAndBastion
     public:
         AIComponent(FalkonEngine::GameObject* gameObject);
         void Init(FalkonEngine::GameObject* target, float range, std::unique_ptr<IPathfindingStrategy> strategy);
-
+        void UpdateTarget(FalkonEngine::GameObject* target);
         void Update(float deltaTime) override;
         void Render() override {}
 

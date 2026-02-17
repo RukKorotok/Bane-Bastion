@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Component.h"
-#include <SFML/Window.hpp> 
+#include "Vector.h"
+#include <SFML/Window.hpp>
 
 namespace FalkonEngine
 {
@@ -18,8 +19,11 @@ namespace FalkonEngine
 
 		//** Get vertical axis value */
 		float GetVerticalAxis() const;
+
 	private:
 		float m_horizontalAxis = 0.f;
 		float m_verticalAxis = 0.f;
+		Vector2Df m_lastMousePos;
+
 	};
 }

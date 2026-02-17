@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "DynamicActor.h"
+#include <string>
 
 namespace BaneAndBastion
 {
@@ -11,17 +12,18 @@ namespace BaneAndBastion
 		auto activeScene = FalkonEngine::Scene::GetActive();
 		if (auto* gameScene = dynamic_cast<GameScene*>(activeScene))
 		{
-			m_gridManager = gameScene->GetGridManager();
+			p_gridManager = gameScene->GetGridManager();
+			activeScene->GetWorld()->Subscribe(this);
 		}
 		else
 		{
 			FE_CORE_ERROR("DynamicActor: Active scene is null or not a GameScene! Actor '" + name + "' will not have a GridManager.");
-			m_gridManager = nullptr;
+			p_gridManager = nullptr;
 		}
 
 		if (activeScene && activeScene->GetWorld())
 		{
-			m_gameObject = activeScene->GetWorld()->CreateGameObject<FalkonEngine::Entity>(name);
+			p_gameObject = activeScene->GetWorld()->CreateGameObject<FalkonEngine::Entity>(name);
 		}
 		else
 		{
@@ -29,7 +31,7 @@ namespace BaneAndBastion
 			return;
 		}
 
-		auto playerRenderer = m_gameObject->AddComponent<FalkonEngine::SpriteRendererComponent>();
+		auto playerRenderer = p_gameObject->AddComponent<FalkonEngine::SpriteRendererComponent>();
 		auto sharedTexture = FalkonEngine::ResourceSystem::Instance()->GetTextureShared(texture);
 
 		if (sharedTexture)
@@ -43,7 +45,7 @@ namespace BaneAndBastion
 
 		playerRenderer->SetPixelSize(GameSettings::PixelsPerUnit * 0.5f, GameSettings::PixelsPerUnit * 0.5f);
 
-		auto transform = m_gameObject->GetComponent<FalkonEngine::TransformComponent>();
+		auto transform = p_gameObject->GetComponent<FalkonEngine::TransformComponent>();
 		if (transform)
 		{
 			transform->SetWorldPosition(position);
@@ -52,8 +54,25 @@ namespace BaneAndBastion
 		FE_APP_TRACE("DynamicActor: '" + name + "' initialized at position (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ")");
 	}
 	//-----------------------------------------------------------------------------------------------------------
+	void DynamicActor::Destroy()
+	{
+		auto activeScene = FalkonEngine::Scene::GetActive();
+		if (auto* gameScene = dynamic_cast<GameScene*>(activeScene))
+		{
+			gameScene->GetWorld()->DestroyGameObject(p_gameObject);
+		}
+
+		if (m_isDestroyed) 
+		{
+			return;
+		}
+		m_isDestroyed = true;
+
+		FE_APP_INFO("CharacterManager: Entity '" + p_gameObject->GetName() + "' is destroyed.");
+	}
+	//-----------------------------------------------------------------------------------------------------------
 	FalkonEngine::GameObject* DynamicActor::GetGameObject() const
 	{
-		return m_gameObject;
+		return p_gameObject;
 	}
 }
