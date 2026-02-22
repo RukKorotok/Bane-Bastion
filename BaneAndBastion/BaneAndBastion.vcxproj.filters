@@ -20,9 +20,6 @@
     <ClCompile Include="EnvironmentObject.cpp">
       <Filter>GamePlay\SceneObjects</Filter>
     </ClCompile>
-    <ClCompile Include="EnvironmentGenerator.cpp">
-      <Filter>Core\GridManager</Filter>
-    </ClCompile>
     <ClCompile Include="AStarUtilits.cpp">
       <Filter>Core\AI\PathFinding</Filter>
     </ClCompile>
@@ -65,6 +62,18 @@
     <ClCompile Include="Character.cpp">
       <Filter>GamePlay\SceneObjects\Dynamic</Filter>
     </ClCompile>
+    <ClCompile Include="IEnvironmentGenerator.cpp">
+      <Filter>Core\GridManager\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="ForestGenerator.cpp">
+      <Filter>Core\GridManager\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="MazeGenerator.cpp">
+      <Filter>Core\GridManager\Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="NPCSpawner.cpp">
+      <Filter>Core\GridManager\Spawner</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSettings.h" />
@@ -88,9 +97,6 @@
     </ClInclude>
     <ClInclude Include="EnvironmentObject.h">
       <Filter>GamePlay\SceneObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="EnvironmentGenerator.h">
-      <Filter>Core\GridManager</Filter>
     </ClInclude>
     <ClInclude Include="IPathfindingStrategy.h">
       <Filter>Core\AI\PathFinding</Filter>
@@ -146,6 +152,24 @@
     <ClInclude Include="Character.h">
       <Filter>GamePlay\SceneObjects\Dynamic</Filter>
     </ClInclude>
+    <ClInclude Include="IEnvironmentGenerator.h">
+      <Filter>Core\GridManager\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="ForestGenerator.h">
+      <Filter>Core\GridManager\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeGenerator.h">
+      <Filter>Core\GridManager\Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCSpawner.h">
+      <Filter>Core\GridManager\Spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeNPCSpawner.h">
+      <Filter>Core\GridManager\Spawner</Filter>
+    </ClInclude>
+    <ClInclude Include="CellRegistry.h">
+      <Filter>Core\GridManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="UI">
@@ -186,6 +210,12 @@
     </Filter>
     <Filter Include="GamePlay\Stats">
       <UniqueIdentifier>{1c9bd2bb-00ae-49aa-b8b4-7f2cd785119c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\GridManager\Generators">
+      <UniqueIdentifier>{e0637c40-eecb-48b1-981c-290b5660fe76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\GridManager\Spawner">
+      <UniqueIdentifier>{c47a1623-f3f3-476f-8f40-2e1fa4af75e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

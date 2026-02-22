@@ -32,9 +32,18 @@ namespace FalkonEngine
 				continue;
 			}
 
+			auto catA = m_colliders[i]->GetCategory();
+
 			for (size_t j = 0; j < m_colliders.size(); j++)
 			{
 				if (i == j || !m_colliders[j]) 
+				{
+					continue;
+				}
+
+				auto catB = m_colliders[j]->GetCategory();
+
+				if (!CollisionRegistry::ShouldCollide(catA, catB))
 				{
 					continue;
 				}

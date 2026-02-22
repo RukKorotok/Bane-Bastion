@@ -22,11 +22,7 @@ namespace BaneAndBastion
         void applyChainConstraint();
 
         std::weak_ptr <IChainAnchor> m_anchor;
-        Vector2Di m_lastTargetGrid;
-
-
-        // Храним стратегии как поля, чтобы не создавать их каждый раз
-        std::unique_ptr<IPathfindingStrategy> m_defaultStrategy;
+        FalkonEngine::Vector2Df m_lastRawTarget;
 
     };
 }

@@ -10,7 +10,7 @@ namespace BaneAndBastion
 	class Player : public Character
 	{
 	public:
-		Player(FalkonEngine::Vector2Df position, std::string name, std::string texture);
+		Player(FalkonEngine::Vector2Df position, const std::string& name, const std::string& texture, FalkonEngine::CollisionCategory collision);
 		void OnNotify(const FalkonEngine::GameEvent& event) override;
 
 	};

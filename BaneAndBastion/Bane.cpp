@@ -6,29 +6,30 @@
 
 namespace BaneAndBastion
 {
-    Bane::Bane(FalkonEngine::Vector2Df pos, std::shared_ptr<IChainAnchor> anchor) : Player(pos, "Bane", "knight"), m_anchor(anchor)
+    Bane::Bane(FalkonEngine::Vector2Df pos, std::shared_ptr<IChainAnchor> anchor)
+        : Player(pos, "Bane", "knight", FalkonEngine::CollisionCategory::Player), m_anchor(anchor)
     {
-        m_defaultStrategy = std::make_unique<PathfindingAStar>();
-        // Инициализируем компонент перемещения
+        // 1. Setup Movement: Attach specialized BaneMoveComponent for mouse-seeking logic
         auto movement = p_gameObject->AddComponent<BaneMoveComponent>();
         movement->Subscribe(this);
-        movement->SetSpeed(1000.0f);
+        movement->SetSpeed(400.0f);
 
+        // Register with GridManager for tile-based collision resolution
         if (auto* activeScene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive()))
         {
             movement->Subscribe(activeScene->GetGridManager());
         }
 
+        // 2. Setup Physics: Configure Rigidbody with lower damping for "slippery" movement
         auto rb = p_gameObject->GetComponent<FalkonEngine::RigidbodyComponent>();
-
         if (rb)
         {
             rb->SetLinearDamping(5.0f);
             rb->SetKinematic(false);
         }
 
+        // 3. Setup Stats: Bane has higher strength but the same base health as the anchor
         auto stats = p_gameObject->GetComponent<StatsComponent>();
-
         if (stats)
         {
             stats->InitStats({
@@ -39,6 +40,7 @@ namespace BaneAndBastion
                 });
         }
 
+        // 4. Setup Combat: Higher hit rate (0.5s) compared to standard NPCs
         auto attack = p_gameObject->AddComponent<DamageComponent>();
         if (attack && stats)
         {
@@ -51,45 +53,46 @@ namespace BaneAndBastion
 
     void Bane::OnNotify(const FalkonEngine::GameEvent& event)
     {
-        // 1. Отрабатываем базовую логику (физика/сетка из Player)
-       // Player::OnNotify(event);
-
         switch (event.type)
         {
         case FalkonEngine::GameEventType::MouseMoved:
         {
-            FalkonEngine::Vector2Df currentPos = p_gameObject->GetComponent<FalkonEngine::TransformComponent>()->GetWorldPosition();
             auto movement = p_gameObject->GetComponent<BaneMoveComponent>();
+            if (!movement) break;
 
-            uint32_t myID = GetGameObject()->GetID();
-            FalkonEngine::Vector2Df correctedTarget = p_gridManager->GetNearestPassablePoint(event.direction, myID);
+            // Validate if the intended mouse target is within the allowed chain radius
+            if (!isMovementAllowed(event.direction)) break;
 
-            float ppu = static_cast<float>(GameSettings::PixelsPerUnit);
-            int targetGridX = p_gridManager->WorldToGrid(correctedTarget.x);
-            int targetGridY = p_gridManager->WorldToGrid(correctedTarget.y);
-            if (!isMovementAllowed(event.direction))
+            FalkonEngine::Vector2Df mousePos = event.direction;
+            FalkonEngine::Vector2Df currentPos = p_gameObject->GetComponent<FalkonEngine::TransformComponent>()->GetWorldPosition();
+
+            // Precision check: Stop movement if within a 20px radius of the target
+            float distSq = std::pow(mousePos.x - currentPos.x, 2) + std::pow(mousePos.y - currentPos.y, 2);
+            if (distSq < 40.0f)
             {
+                movement->Stop();
                 break;
             }
-            // Пересчитываем путь ТОЛЬКО если целевая КЛЕТКА изменилась
-            if (targetGridX != m_lastTargetGrid.x || targetGridY != m_lastTargetGrid.y)
+
+            // Optimization: Only update pathing if the mouse has moved more than 5px
+            float deltaTargetSq = std::pow(mousePos.x - m_lastRawTarget.x, 2) + std::pow(mousePos.y - m_lastRawTarget.y, 2);
+            if (deltaTargetSq > 5.0f)
             {
-                m_lastTargetGrid.x = targetGridX;
-                m_lastTargetGrid.y = targetGridY;
-                movement->LaunchToTarget(currentPos, event.direction, m_defaultStrategy.get());
+                m_lastRawTarget = mousePos;
+                movement->LaunchToTarget(currentPos, mousePos);
             }
             break;
         }
 
         case FalkonEngine::GameEventType::PositionChanged:
         {
-            // Каждый раз, когда тра
-                Player::OnNotify(event);
-                //applyChainConstraint();
+            // Forward movement delta to base Player class for grid-based collision checks
+            Player::OnNotify(event);
             break;
         }
         case FalkonEngine::GameEventType::MovementRequested:
         {
+            // Enforce tether constraints before the final transformation
             applyChainConstraint();
             break;
         }
@@ -104,24 +107,21 @@ namespace BaneAndBastion
     bool Bane::isMovementAllowed(const FalkonEngine::Vector2Df& targetPos) const
     {
         auto anchor = m_anchor.lock();
-        if (!anchor)
-        {
-            return true;
-        }
+        if (!anchor) return true;
 
         FalkonEngine::Vector2Df anchorPos = anchor->GetAnchorPosition();
         float maxDist = anchor->GetMaxChainDistance();
 
+        // Calculate distance between intended target and the anchor point
         float targetDist = (targetPos - anchorPos).GetLength();
 
-        // Разрешаем только если цель ВНУТРИ круга
+        // Allow movement only if target is within the allowed spherical/circular constraint
         return (targetDist <= maxDist);
     }
 
     void Bane::applyChainConstraint()
     {
         auto anchor = m_anchor.lock();
-
         if (!anchor) return;
 
         FalkonEngine::Vector2Df anchorPos = anchor->GetAnchorPosition();
@@ -133,13 +133,13 @@ namespace BaneAndBastion
         FalkonEngine::Vector2Df offset = currentPos - anchorPos;
         float currentDist = offset.GetLength();
 
-        // Если Бастион уходит и "тащит" нас за собой
+        // "Leash" Logic: If current position exceeds max distance, pull Bane back to the constraint edge
         if (currentDist > maxDist)
         {
             FalkonEngine::Vector2Df direction = offset;
-            direction.Normalize(); // Твой метод
+            direction.Normalize();
 
-            // Ставим Bane на привязь
+            // Set world position exactly at the constraint boundary
             FalkonEngine::Vector2Df constrainedPos = anchorPos + (direction * maxDist);
             transform->SetWorldPosition(constrainedPos);
         }

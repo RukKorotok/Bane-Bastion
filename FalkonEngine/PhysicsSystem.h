@@ -5,6 +5,7 @@
 #include "ColliderComponent.h"
 #include "RigidbodyComponent.h"
 #include "Vector.h"
+#include "CollisionRegistry.h"
 
 namespace FalkonEngine
 {

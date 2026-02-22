@@ -8,7 +8,7 @@ namespace BaneAndBastion
 {
 	//BaneAndBastion
 	//-----------------------------------------------------------------------------------------------------------
-	BaneAndBastion::DynamicWithPhysic::DynamicWithPhysic(FalkonEngine::Vector2Df position, std::string name, std::string texture) : DynamicActor(position, name, texture)
+	BaneAndBastion::DynamicWithPhysic::DynamicWithPhysic(FalkonEngine::Vector2Df position, const std::string& name, const std::string& texture, FalkonEngine::CollisionCategory collision) : DynamicActor(position, name, texture, collision)
 	{
 		auto collider = p_gameObject->AddComponent<FalkonEngine::SpriteColliderComponent>();
 		auto rb = p_gameObject->AddComponent<FalkonEngine::RigidbodyComponent>();
@@ -52,6 +52,7 @@ namespace BaneAndBastion
 						}
 					}
 				});
+			collider->SetCategory(collision);
 		}
 		else
 		{

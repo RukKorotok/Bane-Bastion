@@ -3,18 +3,16 @@
 #include "GameObject.h"
 #include "Entity.h"
 #include "SubScriptionSystem.h"
+#include "Actor.h"
 
 namespace BaneAndBastion 
 {
-    class EnvironmentObject
+    class EnvironmentObject : public FalkonEngine:: Actor
     {
     public:
-        EnvironmentObject(const std::string& name, float x, float y);
+        EnvironmentObject(FalkonEngine::Vector2Df position, const std::string& name, const std::string& texture, FalkonEngine::CollisionCategory collision);
         virtual ~EnvironmentObject() = default;
+        void OnNotify(const FalkonEngine::GameEvent& event) override {};
 
-        FalkonEngine::GameObject* GetGameObject() const { return m_gameObject; }
-
-    protected:
-        FalkonEngine::GameObject* m_gameObject = nullptr;
     };
 }

@@ -7,6 +7,6 @@ namespace BaneAndBastion {
     class Wall : public EnvironmentObject 
     {
     public:
-        Wall(float x, float y);
+        Wall(FalkonEngine::Vector2Df position);
     };
 }

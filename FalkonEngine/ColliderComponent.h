@@ -7,6 +7,7 @@
 #include "Collision.h"
 #include "Trigger.h"
 #include "PhysicsSystem.h"
+#include "CollisionCategories.h"
 
 namespace FalkonEngine
 {
@@ -18,6 +19,8 @@ namespace FalkonEngine
 		virtual void Update(float deltaTime) = 0;
 		virtual void Render() = 0;
 
+		void SetCategory(CollisionCategory category);
+		CollisionCategory GetCategory() const;
 
 		void SetTrigger(bool newIsTrigger);
 
@@ -53,5 +56,7 @@ namespace FalkonEngine
 		std::vector<std::function<void(Collision)>> p_onCollisionActions;
 		std::vector<std::function<void(Trigger)>> p_onTriggerEnterActions;
 		std::vector<std::function<void(Trigger)>> p_onTriggerExitActions;
+
+		CollisionCategory m_cateogory = CollisionCategory::None;
 	};
 }

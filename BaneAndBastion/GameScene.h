@@ -26,7 +26,7 @@ namespace BaneAndBastion
 		void Stop() override;
 		void OnNotify(const GameEvent& event) override;
 
-		void AddToChunk(FalkonEngine::Vector2Di chunkPos, BaneAndBastion::EnvironmentObject* obj);
+		void AddToChunk(FalkonEngine::Vector2Di chunkPos, FalkonEngine::Actor* obj);
 		void ClearChunk(FalkonEngine::Vector2Di chunkPos);
 
 		GridManager* GetGridManager() const;
@@ -34,8 +34,8 @@ namespace BaneAndBastion
 	private:
 		std::shared_ptr<Bastion> m_bastion;
 		std::shared_ptr<Bane> m_bane;
-		std::shared_ptr<NPC> m_npc;
+		std::vector <std::shared_ptr<NPC>> m_npcs;
 		GridManager* m_gridManager;
-		std::map<FalkonEngine::Vector2Di, std::vector<EnvironmentObject*>> m_chunkContent;
+		std::map<FalkonEngine::Vector2Di, std::vector<FalkonEngine::Actor*>> m_chunkContent;
 	};
 }

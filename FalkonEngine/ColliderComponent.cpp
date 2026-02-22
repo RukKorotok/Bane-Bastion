@@ -18,6 +18,16 @@ namespace FalkonEngine
 		FE_APP_TRACE("ColliderComponent initialized for: " + p_gameObject->GetName());
 	}
 	//-----------------------------------------------------------------------------------------------------------
+	void ColliderComponent::SetCategory(CollisionCategory category)
+	{
+		m_cateogory = category;
+	}
+	//-----------------------------------------------------------------------------------------------------------
+	CollisionCategory ColliderComponent::GetCategory() const
+	{
+		return m_cateogory;
+	}
+	//-----------------------------------------------------------------------------------------------------------
 	void ColliderComponent::SetTrigger(bool newIsTrigger)
 	{
 		m_isTrigger = newIsTrigger;

@@ -3,7 +3,7 @@
 #include "IChainAnchor.h"
 
 namespace BaneAndBastion {
-    class Bastion : public Player, public IChainAnchor, public FalkonEngine::Observable
+    class Bastion : public Player, public IChainAnchor
     {
     public:
         Bastion(FalkonEngine::Vector2Df position);

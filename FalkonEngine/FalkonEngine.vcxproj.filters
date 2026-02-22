@@ -76,6 +76,12 @@
     <ClCompile Include="FileSink.h">
       <Filter>Utilites\Debug\Loger</Filter>
     </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <Filter>Scene\World</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionRegistry.h">
+      <Filter>Utilites\Collition</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraComponent.h">
@@ -173,6 +179,12 @@
     </ClInclude>
     <ClInclude Include="Log.h">
       <Filter>Utilites\Debug\Loger</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionCategories.h">
+      <Filter>Utilites\Collition</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor.h">
+      <Filter>Scene\World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
