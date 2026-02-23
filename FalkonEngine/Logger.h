@@ -1,44 +1,42 @@
 #pragma once
 
-#include "LogParameters.h"
-#include "Sink.h"
-#include <vector>
+#include <iostream>
 #include <memory>
 #include <mutex>
-#include <iostream>
+#include <vector>
 
-namespace FalkonEngine 
-{
-    class Logger 
-    {
-    public:
-        Logger(std::string name) : m_name(std::move(name)) {}
+#include "LogParameters.h"
+#include "Sink.h"
 
-        void AddSink(std::shared_ptr<LogSink> sink) {
-            std::lock_guard<std::mutex> lock(m_logMutex);
-            m_sinks.push_back(sink);
-        }
+namespace FalkonEngine {
+class Logger {
+ public:
+  Logger(std::string name) : m_name(std::move(name)) {}
 
-        void Log(LogLevel level, const std::string& message, const char* file, int line) 
-        {
-            std::lock_guard<std::mutex> lock(m_logMutex);
-            std::string formatted = "[" + std::string(file) + ":" + std::to_string(line) + "] " +
-                "[" + m_name + "] " +
-                "[" + LogLevelToString(level) + "] " + message;
+  void AddSink(std::shared_ptr<LogSink> sink) {
+    std::lock_guard<std::mutex> lock(m_logMutex);
+    m_sinks.push_back(sink);
+  }
 
-            if (m_sinks.empty()) {
-                std::cout << formatted << std::endl;
-            }
-            else {
-                for (auto& sink : m_sinks) {
-                    sink->Log(level, formatted);
-                }
-            }
-        }
+  void Log(LogLevel level, const std::string& message, const char* file,
+           int line) {
+    std::lock_guard<std::mutex> lock(m_logMutex);
+    std::string formatted = "[" + std::string(file) + ":" +
+                            std::to_string(line) + "] " + "[" + m_name + "] " +
+                            "[" + LogLevelToString(level) + "] " + message;
 
-    private:
-        std::string m_name;
-        std::vector<std::shared_ptr<LogSink>> m_sinks;
-        std::mutex m_logMutex;
-    };
-}
+    if (m_sinks.empty()) {
+      std::cout << formatted << std::endl;
+    } else {
+      for (auto& sink : m_sinks) {
+        sink->Log(level, formatted);
+      }
+    }
+  }
+
+ private:
+  std::string m_name;
+  std::vector<std::shared_ptr<LogSink>> m_sinks;
+  std::mutex m_logMutex;
+};
+}  // namespace FalkonEngine

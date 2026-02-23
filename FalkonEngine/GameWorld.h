@@ -3,43 +3,41 @@
 #include "GameObject.h"
 #include "PhysicsSystem.h"
 
-namespace FalkonEngine
-{
-	class GameWorld : public Observable
-	{
-	public:
-		GameWorld() = default;
-		~GameWorld();
+namespace FalkonEngine {
+class GameWorld : public Observable {
+ public:
+  GameWorld() = default;
+  ~GameWorld();
 
-		GameWorld(GameWorld const&) = delete;
-		GameWorld& operator= (GameWorld const&) = delete;
+  GameWorld(GameWorld const&) = delete;
+  GameWorld& operator=(GameWorld const&) = delete;
 
-		void Update(float deltaTime);
-		void FixedUpdate(float deltaTime);
-		void Render();
-		void LateUpdate();
+  void Update(float deltaTime);
+  void FixedUpdate(float deltaTime);
+  void Render();
+  void LateUpdate();
 
-		template<typename T, typename... Args>
-		T* CreateGameObject(Args&&... args) 
-		{
-			static_assert(std::is_base_of<GameObject, T>::value, "T must derive from GameObject");
+  template <typename T, typename... Args>
+  T* CreateGameObject(Args&&... args) {
+    static_assert(std::is_base_of<GameObject, T>::value,
+                  "T must derive from GameObject");
 
-			T* newObject = new T(std::forward<Args>(args)...);
-			m_gameObjects.push_back(newObject);
-			return newObject;
-		}
+    T* newObject = new T(std::forward<Args>(args)...);
+    m_gameObjects.push_back(newObject);
+    return newObject;
+  }
 
-		void DestroyGameObject(GameObject* gameObject);
-		void Clear();
+  void DestroyGameObject(GameObject* gameObject);
+  void Clear();
 
-		void Print() const;
-	private:
+  void Print() const;
 
-		float m_fixedCounter = 0.f;
+ private:
+  float m_fixedCounter = 0.f;
 
-		std::vector<GameObject*> m_gameObjects = {};
-		std::vector<GameObject*> m_markedToDestroyGameObjects = {};
+  std::vector<GameObject*> m_gameObjects = {};
+  std::vector<GameObject*> m_markedToDestroyGameObjects = {};
 
-		void DestroyGameObjectImmediate(GameObject* gameObject);
-	};
-}
+  void DestroyGameObjectImmediate(GameObject* gameObject);
+};
+}  // namespace FalkonEngine

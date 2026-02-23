@@ -1,34 +1,34 @@
 #pragma once
 
-#include <map>
 #include <iostream>
+#include <map>
+
 #include "ColliderComponent.h"
+#include "CollisionRegistry.h"
 #include "RigidbodyComponent.h"
 #include "Vector.h"
-#include "CollisionRegistry.h"
 
-namespace FalkonEngine
-{
-	class PhysicsSystem
-	{
-	public:
-		static PhysicsSystem* Instance();
+namespace FalkonEngine {
+class PhysicsSystem {
+ public:
+  static PhysicsSystem* Instance();
 
-		void Update();
+  void Update();
 
-		float GetFixedDeltaTime() const;
-		void Subscribe(ColliderComponent* collider);
-		void Unsubscribe(ColliderComponent* collider);
-	private:
-		PhysicsSystem() {}
-		~PhysicsSystem() {}
+  float GetFixedDeltaTime() const;
+  void Subscribe(ColliderComponent* collider);
+  void Unsubscribe(ColliderComponent* collider);
 
-		PhysicsSystem(PhysicsSystem const&) = delete;
-		PhysicsSystem& operator= (PhysicsSystem const&) = delete;
+ private:
+  PhysicsSystem() {}
+  ~PhysicsSystem() {}
 
-		std::vector<ColliderComponent*> m_colliders;
-		std::map<ColliderComponent*, ColliderComponent*> m_triggersEnteredPair;
+  PhysicsSystem(PhysicsSystem const&) = delete;
+  PhysicsSystem& operator=(PhysicsSystem const&) = delete;
 
-		float m_fixedDeltaTime = 0.02f;
-	};
-}
+  std::vector<ColliderComponent*> m_colliders;
+  std::map<ColliderComponent*, ColliderComponent*> m_triggersEnteredPair;
+
+  float m_fixedDeltaTime = 0.02f;
+};
+}  // namespace FalkonEngine

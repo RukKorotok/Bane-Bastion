@@ -1,28 +1,25 @@
 #pragma once
 
-#include "Player.h"
-#include "IChainAnchor.h"
 #include "BaneMoveComponent.h"
+#include "IChainAnchor.h"
 #include "PathfindingAStar.h"
+#include "Player.h"
 #include "Vector.h"
 
-namespace BaneAndBastion
-{
-    class Bane : public Player
-    {
-    public:
-        Bane(FalkonEngine::Vector2Df position, std::shared_ptr<IChainAnchor> anchor);
-        virtual ~Bane() = default;
+namespace BaneAndBastion {
+class Bane : public Player {
+ public:
+  Bane(FalkonEngine::Vector2Df position, std::shared_ptr<IChainAnchor> anchor);
+  virtual ~Bane() = default;
 
-        // Главный узел обработки логики
-        void OnNotify(const FalkonEngine::GameEvent& event) override;
+  // Главный узел обработки логики
+  void OnNotify(const FalkonEngine::GameEvent& event) override;
 
-    private:
-        bool isMovementAllowed(const FalkonEngine::Vector2Df& targetPos) const;
-        void applyChainConstraint();
+ private:
+  bool isMovementAllowed(const FalkonEngine::Vector2Df& targetPos) const;
+  void applyChainConstraint();
 
-        std::weak_ptr <IChainAnchor> m_anchor;
-        FalkonEngine::Vector2Df m_lastRawTarget;
-
-    };
-}
+  std::weak_ptr<IChainAnchor> m_anchor;
+  FalkonEngine::Vector2Df m_lastRawTarget;
+};
+}  // namespace BaneAndBastion
