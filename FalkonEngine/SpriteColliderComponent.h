@@ -1,27 +1,27 @@
 #pragma once
 
-#include "ColliderComponent.h"
-#include "SpriteRendererComponent.h"
-#include "RenderSystem.h"
 #include <SFML/Graphics/Sprite.hpp>
 
-namespace FalkonEngine
-{
-	class SpriteColliderComponent : public ColliderComponent
-	{
-	public:
-		SpriteColliderComponent(GameObject* gameObject);
-		~SpriteColliderComponent();
-		const sf::FloatRect& GetBounds() const;
+#include "ColliderComponent.h"
+#include "RenderSystem.h"
+#include "SpriteRendererComponent.h"
 
-		/** * @brief Get objectSize by grid size.
-		 * @param ppu Pixels Per Unit.
-		 */
-		Vector2Df GetSizeInUnits(float ppu) const;
+namespace FalkonEngine {
+class SpriteColliderComponent : public ColliderComponent {
+ public:
+  SpriteColliderComponent(GameObject* gameObject);
+  ~SpriteColliderComponent();
+  const sf::FloatRect& GetBounds() const;
 
-		void Update(float deltaTime) override;
-		void Render() override;
-	private:
-		const sf::Sprite* m_sprite;
-	};
-}
+  /** * @brief Get objectSize by grid size.
+   * @param ppu Pixels Per Unit.
+   */
+  Vector2Df GetSizeInUnits(float ppu) const;
+
+  void Update(float deltaTime) override;
+  void Render() override;
+
+ private:
+  const sf::Sprite* m_sprite;
+};
+}  // namespace FalkonEngine

@@ -1,42 +1,33 @@
+#include "EnvironmentObject.h"
+
+#include "GameScene.h"
+#include "SpriteColliderComponent.h"
+#include "TransformComponent.h"
 #include "pch.h"
 
-#include "EnvironmentObject.h"
-#include "Scene.h"
-#include "TransformComponent.h"
-
 namespace BaneAndBastion {
-    EnvironmentObject::EnvironmentObject(const std::string& name, float x, float y) 
-    {
-        auto activeScene = FalkonEngine::Scene::GetActive();
-        if (!activeScene)
-        {
-            FE_CORE_ERROR("EnvironmentObject: Cannot create '" + name + "' because no active scene was found!");
-            return;
-        }
+EnvironmentObject::EnvironmentObject(FalkonEngine::Vector2Df position,
+                                     const std::string& name,
+                                     const std::string& texture,
+                                     FalkonEngine::CollisionCategory collision)
+    : FalkonEngine::Actor(position, name, texture, collision) {
+  auto sprite =
+      p_gameObject->GetComponent<FalkonEngine::SpriteRendererComponent>();
+  auto textureResource =
+      FalkonEngine::ResourceSystem::Instance()->GetTextureShared(texture);
 
-        auto world = activeScene->GetWorld();
-        if (!world)
-        {
-            FE_CORE_ERROR("EnvironmentObject: World is null in active scene while creating '" + name + "'");
-            return;
-        }
+  float ppu = GameSettings::PixelsPerUnit;
 
-        m_gameObject = world->CreateGameObject<FalkonEngine::Entity>(name);
+  if (textureResource) {
+    sprite->SetTexture(*textureResource);
+    sprite->SetPixelSize(int(ppu), int(ppu));
+  } else {
+    FE_CORE_ERROR("Wall: Texture 'wall' not found! Wall at (" +
+                  std::to_string(position.x) + ", " +
+                  std::to_string(position.y) + ") will be invisible.");
+  }
 
-        if (!m_gameObject)
-        {
-            FE_CORE_ERROR("EnvironmentObject: Failed to create GameObject for '" + name + "'");
-            return;
-        }
-
-        if (auto t = m_gameObject->GetComponent<FalkonEngine::TransformComponent>())
-        {
-            t->SetWorldPosition(x, y);
-            FE_APP_TRACE("EnvironmentObject: '" + name + "' created at (" + std::to_string(x) + ", " + std::to_string(y) + ")");
-        }
-        else
-        {
-            FE_CORE_WARN("EnvironmentObject: '" + name + "' created without TransformComponent. Position not set!");
-        }
-    }
+  auto col =
+      p_gameObject->AddComponent<FalkonEngine::SpriteColliderComponent>();
 }
+}  // namespace BaneAndBastion

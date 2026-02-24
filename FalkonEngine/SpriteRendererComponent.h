@@ -1,33 +1,33 @@
 #pragma once
 
-#include "TransformComponent.h"
-#include "Vector.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
 
-namespace FalkonEngine
-{
-	class SpriteRendererComponent : public Component
-	{
-	public:
-		SpriteRendererComponent(GameObject* gameObject);
-		~SpriteRendererComponent();
+#include "TransformComponent.h"
+#include "Vector.h"
 
-		void Update(float deltaTime) override;
-		void Render() override;
+namespace FalkonEngine {
+class SpriteRendererComponent : public Component {
+ public:
+  SpriteRendererComponent(GameObject* gameObject);
+  ~SpriteRendererComponent();
 
-		const sf::Sprite* GetSprite() const;
-		void SetTexture(const sf::Texture& newTexture);
-		void SetPixelSize(int newWidth, int newHeight);
+  void Update(float deltaTime) override;
+  void Render() override;
 
-		void FlipX(bool flip);
-		void FlipY(bool flip);
-	private:
-		Vector2Df m_scale;
-		sf::Sprite* m_sprite;
-		TransformComponent* m_transform;
+  const sf::Sprite* GetSprite() const;
+  void SetTexture(const sf::Texture& newTexture);
+  void SetPixelSize(int newWidth, int newHeight);
 
-		bool m_isFlipX = false;
-		bool m_isFlipY = false;
-	};
-}
+  void FlipX(bool flip);
+  void FlipY(bool flip);
+
+ private:
+  Vector2Df m_scale;
+  sf::Sprite* m_sprite;
+  TransformComponent* m_transform;
+
+  bool m_isFlipX = false;
+  bool m_isFlipY = false;
+};
+}  // namespace FalkonEngine

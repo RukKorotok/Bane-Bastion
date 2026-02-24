@@ -171,6 +171,7 @@
     <ClInclude Include="Bane.h" />
     <ClInclude Include="BaneMoveComponent.h" />
     <ClInclude Include="Bastion.h" />
+    <ClInclude Include="CellRegistry.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="DamageComponent.h" />
     <ClInclude Include="DynamicActor.h">
@@ -179,32 +180,39 @@
     </ClInclude>
     <ClCompile Include="DynamicWithPhysic.cpp" />
     <ClCompile Include="EnvironmentObject.cpp" />
+    <ClCompile Include="ForestGenerator.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GridManager.cpp" />
+    <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="MoveComponent.cpp" />
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="AStarUtilits.cpp" />
+    <ClCompile Include="NPCSpawner.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="PlayerMoveComponent.cpp" />
     <ClCompile Include="StatsComponent.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Wall.cpp" />
-    <ClCompile Include="EnvironmentGenerator.cpp" />
+    <ClCompile Include="IEnvironmentGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="AIMoveComponent.h" />
     <ClInclude Include="DynamicWithPhysic.h" />
     <ClInclude Include="EnvironmentObject.h" />
+    <ClInclude Include="ForestGenerator.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GridManager.h" />
     <ClInclude Include="GridStructures.h" />
     <ClInclude Include="IChainAnchor.h" />
+    <ClInclude Include="MazeGenerator.h" />
+    <ClInclude Include="MazeNPCSpawner.h" />
     <ClInclude Include="MoveComponent.h" />
     <ClInclude Include="IPathfindingStrategy.h" />
     <ClInclude Include="NPC.h" />
     <ClInclude Include="AStarUtilits.h" />
+    <ClInclude Include="NPCSpawner.h" />
     <ClInclude Include="PathfindingAStar.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="GameSettings.h" />
@@ -213,7 +221,7 @@
     <ClInclude Include="StatsComponent.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Wall.h" />
-    <ClInclude Include="EnvironmentGenerator.h" />
+    <ClInclude Include="IEnvironmentGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FalkonEngine\FalkonEngine.vcxproj">

@@ -146,9 +146,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="ColliderComponent.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionCategories.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="framework.h" />
@@ -180,9 +182,11 @@
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CollisionRegistry.h" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="ConsolSink.h" />
     <ClCompile Include="Engine.cpp" />

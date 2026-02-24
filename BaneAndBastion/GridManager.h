@@ -1,67 +1,144 @@
 #pragma once
 
-#include "SpriteColliderComponent.h"
-#include "GridStructures.h"
-#include "GameSettings.h"
 #include <unordered_map>
-#include "Vector.h"
-#include "SubscriptionSystem.h"
+
+#include "CollisionCategories.h"
 #include "GameObject.h"
-#include "EnvironmentGenerator.h"
+#include "GameSettings.h"
+#include "GridStructures.h"
+#include "SpriteColliderComponent.h"
+#include "SubscriptionSystem.h"
+#include "Vector.h"
 
-namespace BaneAndBastion
-{
-    struct ChunkLoadedMessage
-    {
-        int x = 0;
-        int y = 0;
-    };
+namespace BaneAndBastion {
+class IEnvironmentGenerator;
+class NPCSpawner;
 
-    class GridManager : public FalkonEngine::Observer
-    {
-    public:
-        GridManager();
-        FalkonEngine::Vector2Df GridToWorld(int x, int y) const;
-        int WorldToGrid(float coord);
-        /**
-         * @brief Check and create chunks in view area.
-         * @param playerPos global position.
-         * @param viewDistance (1 =  3x3 chunk).
-         */
-        void UpdateVisibleArea(const FalkonEngine::Vector2Df& playerPos, int viewDistance);
+/**
+ * @brief Core manager for the tile-based grid system.
+ * * Handles infinite chunk generation, coordinate conversion, and collision
+ * queries. Acts as an Observer to respond to world events (like object
+ * removal).
+ */
+class GridManager : public FalkonEngine::Observer {
+ public:
+  /**
+   * @brief Constructs the GridManager with specific generation strategies.
+   * @param generator Strategy for creating environment obstacles.
+   * @param spawner Strategy for spawning NPCs within chunks.
+   */
+  GridManager(std::unique_ptr<IEnvironmentGenerator> generator,
+              std::unique_ptr<NPCSpawner> spawner);
 
-        /**
-         * @brief get cell in world coord.
-         * @return ptr on Cell or @p nullptr.
-         * @warning Not suitable for caching if the chunk can be modified.
-         */
-        Cell* GetCell(int worldX, int worldY);
+  virtual ~GridManager() = default;
 
-        /**
-        * @brief Mark occupy cell by entity.
-        * @param worldPos center position in world coord.
-        * @param size ( 2.0f for ogr).
-        */
-        void OccupyArea(const FalkonEngine::Vector2Df& worldPos, const FalkonEngine::Vector2Df& size, std::uint32_t entityID);
+  /**
+   * @brief Converts grid coordinates (indices) to world-space coordinates.
+   * @return Vector2Df representing the center of the tile in the world.
+   */
+  FalkonEngine::Vector2Df GridToWorld(int x, int y) const;
 
-        void UnregisterEntity(uint32_t id, const FalkonEngine::Vector2Df& pos, FalkonEngine::SpriteColliderComponent* col);
+  /**
+   * @brief Converts a single world-space coordinate to a grid index.
+   */
+  int WorldToGrid(float coord);
 
-        // --- (Debug) ---
-        void DrawLogicDebug(const FalkonEngine::Vector2Df& playerPos);
-        void RenderDebug(sf::RenderWindow& window);
+  /**
+   * @brief Checks and creates chunks in the player's view area.
+   * @param playerPos The current global position of the player.
+   * @param viewDistance Radius of chunks to keep loaded (e.g., 1 = 3x3 grid
+   * around player).
+   */
+  void UpdateVisibleArea(const FalkonEngine::Vector2Df& playerPos,
+                         int viewDistance);
 
-        bool CheckGridCollision(const sf::FloatRect& bounds, uint32_t seekerID);
+  /**
+   * @brief Hot-swaps the environment generator strategy.
+   */
+  void ChangeGenerator(std::unique_ptr<IEnvironmentGenerator> newGen);
 
-        void OnNotify(const FalkonEngine::GameEvent& event) override;
+  /**
+   * @brief Hot-swaps the NPC spawner strategy.
+   */
+  void ChangeNPCSpawner(std::unique_ptr<NPCSpawner> spawner);
 
-        FalkonEngine::Vector2Df GetNearestPassablePoint(const FalkonEngine::Vector2Df& targetWorldPos, uint32_t seekerID);
+  /**
+   * @brief Retrieves a pointer to the cell at the given grid coordinates.
+   * @return Pointer to Cell or nullptr if the chunk is not loaded.
+   * @warning Not suitable for long-term caching if chunks can be unloaded.
+   */
+  Cell* GetCell(int worldX, int worldY);
 
-    private:
-        std::unordered_map<FalkonEngine::Vector2Di, Chunk, FalkonEngine::Vector2DiHasher> m_chunks;
+  /**
+   * @brief Marks a rectangular area in the grid as occupied by a specific
+   * category.
+   * @param worldPos Center of the area in world coordinates.
+   * @param size Dimensions of the area.
+   * @param category The collision category to add to the blocking mask.
+   */
+  void OccupyArea(const FalkonEngine::Vector2Df& worldPos,
+                  const FalkonEngine::Vector2Df& size,
+                  FalkonEngine::CollisionCategory category);
 
-        FalkonEngine::Vector2Di WorldToChunk(int x, int y);
-        FalkonEngine::Vector2Di WorldToLocal(int x, int y);
-        sf::FloatRect m_lastCheckBounds;
+  /**
+   * @brief Removes a specific category from the blocking mask in a rectangular
+   * area.
+   */
+  void UnregisterEntity(const FalkonEngine::Vector2Df& pos,
+                        const FalkonEngine::Vector2Df& size,
+                        FalkonEngine::CollisionCategory category);
 
-    };
-}
+  /**
+   * @brief Prints grid statistics and bitmasks to the console.
+   */
+  void DrawLogicDebug(const FalkonEngine::Vector2Df& playerPos);
+
+  /**
+   * @brief Draws a visual representation of the grid and collisions in the
+   * window.
+   */
+  void RenderDebug(sf::RenderWindow& window);
+
+  /**
+   * @brief Checks if a bounding box overlaps with any blocking tiles for a
+   * given category.
+   * @return true if collision detected.
+   */
+  bool CheckGridCollision(const sf::FloatRect& bounds,
+                          FalkonEngine::CollisionCategory category);
+
+  /**
+   * @brief Handles events from the World (e.g., clearing grid data when an
+   * object is destroyed).
+   */
+  void OnNotify(const FalkonEngine::GameEvent& event) override;
+
+  /**
+   * @brief Finds the nearest tile that is not blocked for the given seeker.
+   * Useful for resolving stuck entities or finding valid spawn points.
+   */
+  FalkonEngine::Vector2Df GetNearestPassablePoint(
+      const FalkonEngine::Vector2Df& targetWorldPos, uint32_t seekerID);
+
+ private:
+  /// Container for all loaded chunks, indexed by their chunk-space coordinates.
+  std::unordered_map<FalkonEngine::Vector2Di, Chunk,
+                     FalkonEngine::Vector2DiHasher>
+      m_chunks;
+
+  std::unique_ptr<IEnvironmentGenerator> m_generator;
+  std::unique_ptr<NPCSpawner> m_npcSpawner;
+
+  sf::FloatRect m_lastCheckBounds;
+
+  /**
+   * @brief Converts global grid coordinates to chunk-space coordinates.
+   */
+  FalkonEngine::Vector2Di WorldToChunk(int x, int y);
+
+  /**
+   * @brief Converts global grid coordinates to local indices within a chunk.
+   */
+  FalkonEngine::Vector2Di WorldToLocal(int x, int y);
+};
+}  // namespace BaneAndBastion

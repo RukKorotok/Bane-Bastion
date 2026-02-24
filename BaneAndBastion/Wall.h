@@ -4,9 +4,8 @@
 #include "EnvironmentObject.h"
 
 namespace BaneAndBastion {
-    class Wall : public EnvironmentObject 
-    {
-    public:
-        Wall(float x, float y);
-    };
-}
+class Wall : public EnvironmentObject {
+ public:
+  Wall(FalkonEngine::Vector2Df position);
+};
+}  // namespace BaneAndBastion

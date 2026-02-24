@@ -1,29 +1,23 @@
 #pragma once
 
-#include "GameScene.h"
-#include "SpriteRendererComponent.h"
+#include "Actor.h"
+#include "Entity.h"
 #include "MoveComponent.h"
 #include "ResourceSystem.h"
-#include "Entity.h"
+#include "SpriteRendererComponent.h"
 #include "Vector.h"
 
-namespace BaneAndBastion
-{
-	class DynamicActor : public FalkonEngine::Observer
-	{
-	public:
-		DynamicActor(FalkonEngine::Vector2Df position, std::string name, std::string texture);
-		void Destroy();
-		FalkonEngine::GameObject* GetGameObject() const;
-		void OnNotify(const FalkonEngine::GameEvent& event) override {};
+namespace BaneAndBastion {
+class GridManager;
 
-	protected:
-		FalkonEngine::GameObject* p_gameObject = nullptr;
-		GridManager* p_gridManager = nullptr;
-		std::string p_name;
+class DynamicActor : public FalkonEngine::Actor {
+ public:
+  DynamicActor(FalkonEngine::Vector2Df position, const std::string& name,
+               const std::string& texture,
+               FalkonEngine::CollisionCategory collision);
+  void OnNotify(const FalkonEngine::GameEvent& event) override {}
 
-	private:
-		bool m_isDestroyed = false;
-
-	};
-}
+ protected:
+  GridManager* p_gridManager = nullptr;
+};
+}  // namespace BaneAndBastion

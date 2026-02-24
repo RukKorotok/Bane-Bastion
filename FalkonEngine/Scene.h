@@ -1,30 +1,28 @@
 #pragma once
-#include "GameWorld.h"
 #include <string>
+
+#include "GameWorld.h"
 #include "SubScriptionSystem.h"
 
-namespace FalkonEngine
-{
-	class Scene : public Observer
-	{
-	public:
-		Scene(const std::string& name);
-		virtual ~Scene();
-		static Scene* GetActive();
-		GameWorld* GetWorld() const;
-		std::string GetName();
-		void OnNotify(const GameEvent& event) override;
+namespace FalkonEngine {
+class Scene : public Observer {
+ public:
+  Scene(const std::string& name);
+  virtual ~Scene();
+  static Scene* GetActive();
+  GameWorld* GetWorld() const;
+  std::string GetName();
+  void OnNotify(const GameEvent& event) override;
 
-		virtual void Start() = 0;
-		virtual void Restart() = 0;
-		virtual void Stop() = 0;
+  virtual void Start() = 0;
+  virtual void Restart() = 0;
+  virtual void Stop() = 0;
 
-	protected:
-		GameWorld* m_world = nullptr;
+ protected:
+  GameWorld* m_world = nullptr;
 
-	private:
-		static inline Scene* s_activeScene = nullptr;
-		std::string m_name;
-
-	};
-}
+ private:
+  static inline Scene* s_activeScene = nullptr;
+  std::string m_name;
+};
+}  // namespace FalkonEngine

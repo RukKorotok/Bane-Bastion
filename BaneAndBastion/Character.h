@@ -3,13 +3,13 @@
 #include "DynamicWithPhysic.h"
 #include "StatsComponent.h"
 
-namespace BaneAndBastion
-{
-	class Character : public DynamicWithPhysic
+namespace BaneAndBastion {
+class Character : public DynamicWithPhysic
 
-	{
-	public:
-		Character(FalkonEngine::Vector2Df position, std::string name, std::string texture);
-		void OnNotify(const FalkonEngine::GameEvent& event) override {};
-	};
-}
+{
+ public:
+  Character(FalkonEngine::Vector2Df position, std::string name,
+            std::string texture, FalkonEngine::CollisionCategory collision);
+  void OnNotify(const FalkonEngine::GameEvent& event) override {};
+};
+}  // namespace BaneAndBastion
