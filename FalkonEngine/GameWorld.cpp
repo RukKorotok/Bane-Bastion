@@ -13,7 +13,9 @@ GameWorld::~GameWorld() {
 //-----------------------------------------------------------------------------------------------------------
 void GameWorld::Update(float deltaTime) {
   for (size_t i = 0; i < m_gameObjects.size(); i++) {
-    m_gameObjects[i]->Update(deltaTime);
+    if (m_gameObjects[i]) {
+      m_gameObjects[i]->Update(deltaTime);
+    }
   }
 }
 //-----------------------------------------------------------------------------------------------------------

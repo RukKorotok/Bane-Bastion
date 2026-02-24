@@ -128,20 +128,16 @@ void PhysicsSystem::Subscribe(ColliderComponent* collider) {
 }
 //-----------------------------------------------------------------------------------------------------------
 void PhysicsSystem::Unsubscribe(ColliderComponent* collider) {
-  std::cout << "Unsubscribe " << collider << std::endl;
+  if (!collider) return;
 
-  m_colliders.erase(std::remove_if(m_colliders.begin(), m_colliders.end(),
-                                   [collider](ColliderComponent* obj) {
-                                     return obj == collider;
-                                   }),
-                    m_colliders.end());
-
+  // 1. Чистим основной список коллайдеров (один проход вместо двух)
   auto it = std::remove(m_colliders.begin(), m_colliders.end(), collider);
   if (it != m_colliders.end()) {
     m_colliders.erase(it, m_colliders.end());
-    FE_APP_TRACE("PhysicsSystem: Collider unsubscribed");
   }
 
+  // 2. Чистим пары триггеров
+  // Используем современный подход, чтобы не запутаться в итераторах
   for (auto tIt = m_triggersEnteredPair.begin();
        tIt != m_triggersEnteredPair.end();) {
     if (tIt->first == collider || tIt->second == collider) {

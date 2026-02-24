@@ -22,7 +22,6 @@ class Scene : public Observer {
   GameWorld* m_world = nullptr;
 
  private:
-  static inline Scene* s_activeScene = nullptr;
   std::string m_name;
 };
 }  // namespace FalkonEngine

@@ -82,6 +82,9 @@
     <ClCompile Include="CollisionRegistry.h">
       <Filter>Utilites\Collition</Filter>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scene\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraComponent.h">
@@ -184,6 +187,9 @@
       <Filter>Utilites\Collition</Filter>
     </ClInclude>
     <ClInclude Include="Actor.h">
+      <Filter>Scene\World</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
       <Filter>Scene\World</Filter>
     </ClInclude>
   </ItemGroup>

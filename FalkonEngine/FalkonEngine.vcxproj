@@ -162,6 +162,7 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="LoggerRegistry.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Sink.h" />
     <ClInclude Include="LogParameters.h" />
     <ClInclude Include="Matrix2D.h" />
@@ -210,6 +211,7 @@
     <ClCompile Include="Scene.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteColliderComponent.cpp" />
     <ClCompile Include="SpriteRendererComponent.cpp" />

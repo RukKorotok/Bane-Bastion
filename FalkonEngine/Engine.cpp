@@ -10,14 +10,17 @@
 #include "FileSink.h"
 #include "LoggerRegistry.h"
 #include "RenderSystem.h"
-#include "Scene.h"
+#include "SceneManager.h"
 
 namespace FalkonEngine {
+// Engine
+//--------------------------------------------------------------------------------------------------------
 Engine* Engine::Instance() {
   static Engine instance;
   return &instance;
 }
 
+//--------------------------------------------------------------------------------------------------------
 Engine::Engine() {
   std::string logDirectory = "Logs";
   std::string logFileName = logDirectory + "/engine_log.txt";
@@ -50,6 +53,7 @@ Engine::Engine() {
   FE_CORE_INFO("Seed initialized: " + std::to_string(seed));
 }
 
+//--------------------------------------------------------------------------------------------------------
 void Engine::Run() {
   FE_CORE_INFO("Engine::Run() started.");
 
@@ -64,7 +68,7 @@ void Engine::Run() {
     sf::Time dt = gameClock.restart();
     float deltaTime = dt.asSeconds();
 
-    while (RenderSystem::Instance()->GetMainWindow().pollEvent(event)) {
+    while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
         FE_CORE_INFO("Close event received from OS.");
         window.close();
@@ -77,24 +81,10 @@ void Engine::Run() {
 
     window.clear();
 
-    Scene* activeScene = Scene::GetActive();
+    SceneManager::Instance().Update(deltaTime);
+    SceneManager::Instance().Render();
 
-    if (activeScene) {
-      GameWorld* world = activeScene->GetWorld();
-      if (world) {
-        world->Update(deltaTime);
-        world->FixedUpdate(deltaTime);
-        world->Render();
-        world->LateUpdate();
-      } else {
-        FE_CORE_WARN("Active scene '" + activeScene->GetName() +
-                     "' has no GameWorld!");
-      }
-    } else {
-      FE_CORE_WARN("No scene is currently active. Nothing to render.");
-    }
-
-    RenderSystem::Instance()->GetMainWindow().display();
+    window.display();
   }
   FE_CORE_INFO("Engine run loop finished gracefully.");
 }
