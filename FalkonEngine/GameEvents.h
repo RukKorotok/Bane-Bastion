@@ -13,20 +13,30 @@ class GameObject;
  * Categorizes messages to allow Observers to quickly filter relevant data.
  */
 enum class GameEventType {
+  //input
   InputDirectionChanged = 0,  ///< Keyboard/Joystick vector updates.
   MouseMoved,                 ///< Screen/World space mouse coordinates.
+  //Movement
   MovementRequested,      ///< Sent by AI/Input to trigger physics translation.
+  MovementFinished,       ///< Destination reached (AI/Launch).
+  PositionChanged,        ///< Broadcast after a successful transform update.
+  //Physic
   HitVelocityRequest,     ///< Knockback forces applied to an entity.
   HitRotationRequest,     ///< Angular impulses (e.g., impact spin).
-  PositionChanged,        ///< Broadcast after a successful transform update.
+  //Game events
   StatChanged,            ///< Attribute updates (Health, Mana, etc.).
   ActionTriggered,        ///< Interaction or ability execution.
+  //Scene objects events
   ObjectRemoved,          ///< Entity destruction notification.
   ObjectSpawned,          ///< Base GameObject instantiation.
   ActorSpawned,           ///< Specialized Actor class instantiation.
   SceneComponentSpawned,  ///< Logic-only component instantiation.
-  MovementFinished,       ///< Destination reached (AI/Launch).
-  SubObjectSpawned        ///< Child entity or projectile creation.
+  SubObjectSpawned,        ///< Child entity or projectile creation.
+  //SceneManagment
+  SceneLoadRequest,    // Запрос на полную смену сцены
+  ScenePushRequest,    // Запрос на открытие паузы/окна
+  ScenePopRequest,     // Запрос на закрытие текущего окна
+  SceneRestartRequest  // Запрос на перезапуск уровня
 };
 
 /**

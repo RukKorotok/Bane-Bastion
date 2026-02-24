@@ -2,10 +2,10 @@
 #include <SFML/Graphics.hpp>
 
 #include "Engine.h"
-#include "GameScene.h"
 #include "Matrix2D.h"
 #include "Player.h"
 #include "ResourceSystem.h"
+#include "SceneManager.h"
 
 using namespace BaneAndBastion;
 
@@ -13,18 +13,13 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(1280, 720), "Bane & Bastion");
   FalkonEngine::RenderSystem::Instance()->SetMainWindow(&window);
 
-  auto* resources = FalkonEngine::ResourceSystem::Instance();
-  resources->LoadTexture("monster", "Resources/Textures/monster.png");
-  resources->LoadTexture("wall", "Resources/Textures/wall.png");
-  resources->LoadTexture("knight", "Resources/Textures/knight.png");
+  auto& sm = FalkonEngine::SceneManager::Instance();
 
-  if (!resources->LoadMusic("NeverSurrender",
-                            "Resources/Music/NeverSurrender.wav")) {
-    FE_CORE_WARN("Main: Initial music not loaded, but continuing...");
-  }
+  sm.RegisterScene("TestLevel", []() {
+    return std::make_unique<BaneAndBastion::GameScene>("TestLevel");
+  });
 
-  auto developerLevel = std::make_shared<GameScene>("TestLevel");
-  developerLevel->Start();
+  sm.ApplyLoadScene("TestLevel");
 
   FE_CORE_INFO("Bane & Bastion: Engine is ready to run.");
 
@@ -34,6 +29,12 @@ int main() {
     FE_CORE_ERROR("CRITICAL ENGINE ERROR: " + std::string(e.what()));
     return -1;
   }
+
+  FE_CORE_INFO("Main: Initiating graceful shutdown...");
+
+  SceneManager::Instance().Clear();
+
+  FE_CORE_INFO("Main: Shutdown complete. Exiting.");
 
   return 0;
 }

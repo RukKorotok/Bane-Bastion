@@ -1,5 +1,6 @@
-#include "GameScene.h"
+#include "pch.h"
 
+#include "GameScene.h"
 #include "Bane.h"
 #include "Bastion.h"
 #include "ForestGenerator.h"
@@ -7,7 +8,6 @@
 #include "MazeNPCSpawner.h"
 #include "NPC.h"
 #include "Scene.h"
-#include "pch.h"
 
 using namespace FalkonEngine;
 
@@ -40,6 +40,16 @@ GameScene::~GameScene() {
 
 // -----------------------------------------------------------------------------------------------------------
 void GameScene::Start() {
+  auto* resources = FalkonEngine::ResourceSystem::Instance();
+  resources->LoadTexture("monster", "Resources/Textures/monster.png");
+  resources->LoadTexture("wall", "Resources/Textures/wall.png");
+  resources->LoadTexture("knight", "Resources/Textures/knight.png");
+
+  if (!resources->LoadMusic("NeverSurrender",
+                            "Resources/Music/NeverSurrender.wav")) {
+    FE_CORE_WARN("Main: Initial music not loaded, but continuing...");
+  }
+
   FE_CORE_INFO("Starting GameScene: " + GetName());
 
   // 1. Procedural World Setup: Initialize the maze generator and NPC spawner
