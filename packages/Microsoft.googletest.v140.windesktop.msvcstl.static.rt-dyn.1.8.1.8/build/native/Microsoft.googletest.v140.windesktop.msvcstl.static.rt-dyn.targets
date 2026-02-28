@@ -1,5 +1,5 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition="'$(Force-Enable-Microsoft-googletest-v140-windesktop-msvcstl-static-rt-dyn)' == '' And (('$(PlatformToolset)' != 'v143' And '$(PlatformToolset)' != 'v142' And '$(PlatformToolset)' != 'v141' And '$(PlatformToolset)' != 'v140') Or '$(ApplicationType)' != '')">
+  <PropertyGroup Condition="'$(Force-Enable-Microsoft-googletest-v140-windesktop-msvcstl-static-rt-dyn)' == '' And (('$(PlatformToolset)' != 'v145' AND '$(PlatformToolset)' != 'v143' And '$(PlatformToolset)' != 'v142' And '$(PlatformToolset)' != 'v141' And '$(PlatformToolset)' != 'v140') Or '$(ApplicationType)' != '')">
     <Disable-Microsoft-googletest-v140-windesktop-msvcstl-static-rt-dyn>true</Disable-Microsoft-googletest-v140-windesktop-msvcstl-static-rt-dyn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Force-Disable-Microsoft-googletest-v140-windesktop-msvcstl-static-rt-dyn)' != ''">

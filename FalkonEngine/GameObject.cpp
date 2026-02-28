@@ -7,20 +7,16 @@ namespace FalkonEngine {
 //-----------------------------------------------------------------------------------------------------------
 GameObject::GameObject() : m_name("GameObject"), m_id(s_nextID++) {
   AddComponent<TransformComponent>();
-  FE_APP_TRACE("GameObject created: [Default Name] ID: " +
-               std::to_string(m_id));
+  FE_APP_TRACE("GameObject created: [Default Name] ID: " + std::to_string(m_id));
 }
 //-----------------------------------------------------------------------------------------------------------
-GameObject::GameObject(std::string newName)
-    : m_name(newName), m_id(s_nextID++) {
+GameObject::GameObject(std::string newName) : m_name(newName), m_id(s_nextID++) {
   AddComponent<TransformComponent>();
-  FE_APP_TRACE("GameObject created: " + m_name +
-               " ID: " + std::to_string(m_id));
+  FE_APP_TRACE("GameObject created: " + m_name + " ID: " + std::to_string(m_id));
 }
 //-----------------------------------------------------------------------------------------------------------
 GameObject::~GameObject() {
-  FE_APP_TRACE("Destroying GameObject: " + m_name +
-               " (ID: " + std::to_string(m_id) + ")");
+  FE_APP_TRACE("Destroying GameObject: " + m_name + " (ID: " + std::to_string(m_id) + ")");
 
   for (auto component : m_components) {
     if (component) {
@@ -45,12 +41,10 @@ void GameObject::SetID(uint32_t id) {
 void GameObject::Print(int depth) const {
   std::string indent(depth * 2, ' ');
 
-  FE_CORE_INFO(indent + "GameObject: " + m_name +
-               " (ID: " + std::to_string(m_id) + ")");
+  FE_CORE_INFO(indent + "GameObject: " + m_name + " (ID: " + std::to_string(m_id) + ")");
 
   for (auto& component : m_components) {
-    FE_CORE_INFO(indent + "  ::Component [" +
-                 std::to_string(reinterpret_cast<uintptr_t>(component)) + "]");
+    FE_CORE_INFO(indent + "  ::Component [" + std::to_string(reinterpret_cast<uintptr_t>(component)) + "]");
   }
 
   for (GameObject* child : m_children) {
@@ -59,6 +53,7 @@ void GameObject::Print(int depth) const {
     }
   }
 }
+
 //-----------------------------------------------------------------------------------------------------------
 void GameObject::Update(float deltaTime) {
   for (size_t i = 0; i < m_components.size(); ++i) {
@@ -67,11 +62,11 @@ void GameObject::Update(float deltaTime) {
         m_components[i]->Update(deltaTime);
       }
     } catch (const std::exception& e) {
-      FE_CORE_ERROR("Exception in Update of Component on '" + m_name +
-                    "': " + e.what());
+      FE_CORE_ERROR("Exception in Update of Component on '" + m_name + "': " + e.what());
     }
   }
 }
+
 //-----------------------------------------------------------------------------------------------------------
 void GameObject::Render() {
   for (auto& component : m_components) {
@@ -80,9 +75,24 @@ void GameObject::Render() {
     }
   }
 }
+
+//-----------------------------------------------------------------------------------------------------------
+void GameObject::Awake() {
+    SetLayer(RenderLayer::World);
+}
+
+//-----------------------------------------------------------------------------------------------------------
+RenderLayer GameObject::GetLayer() const {
+    return m_layer;
+}
+
+//-----------------------------------------------------------------------------------------------------------
+void GameObject::SetLayer(RenderLayer layer) {
+    m_layer = layer;
+}
+
 //-----------------------------------------------------------------------------------------------------------
 void GameObject::AddChild(GameObject* child) {
-  m_children.push_back(child);
 
   if (!child) {
     FE_CORE_WARN("Attempted to add a null child to GameObject: " + m_name);
@@ -90,14 +100,25 @@ void GameObject::AddChild(GameObject* child) {
   }
 
   auto it = std::find(m_children.begin(), m_children.end(), child);
-  if (it != m_children.end()) {
-    FE_CORE_WARN("GameObject '" + child->GetName() +
-                 "' is already a child of '" + m_name + "'");
-    return;
-  }
+  if (it == m_children.end()) {
+    m_children.push_back(child);
+    auto childTransform = child->GetComponent<TransformComponent>();
+    auto parentTransform = GetComponent<TransformComponent>();
 
-  m_children.push_back(child);
+    if (childTransform && parentTransform) {
+      // Это свяжет иерархию внутри TransformComponent
+      childTransform->SetParent(parentTransform);
+    }
+  } else {
+    FE_CORE_WARN("GameObject '" + child->GetName() + "' is already a child of '" + m_name + "'");
+  }
 }
+
+//-----------------------------------------------------------------------------------------------------------
+std::vector<GameObject*> GameObject::GetChildren() {
+    return m_children;
+}
+
 //-----------------------------------------------------------------------------------------------------------
 void GameObject::RemoveChild(GameObject* child) {
   if (!child) {
@@ -109,8 +130,7 @@ void GameObject::RemoveChild(GameObject* child) {
   if (it != m_children.end()) {
     m_children.erase(it, m_children.end());
   } else {
-    FE_CORE_WARN("Attempted to remove non-existent child '" + child->GetName() +
-                 "' from '" + m_name + "'");
+    FE_CORE_WARN("Attempted to remove non-existent child '" + child->GetName() + "' from '" + m_name + "'");
   }
 }
 }  // namespace FalkonEngine

@@ -1,11 +1,11 @@
 #include "pch.h"
 
-#include "SceneManager.h"
 #include "ResourceSystem.h"
+#include "SceneManager.h"
 
 namespace FalkonEngine {
 
-// SceneManager
+// SceneManager --- Singleton instance for navigation and scene lifetime management ---
 //--------------------------------------------------------------------------------------------------------
 SceneManager& SceneManager::Instance() {
   static SceneManager instance;
@@ -13,8 +13,7 @@ SceneManager& SceneManager::Instance() {
 }
 
 //--------------------------------------------------------------------------------------------------------
-void SceneManager::RegisterScene(const std::string& name,
-                                 SceneFactory factory) {
+void SceneManager::RegisterScene(const std::string& name, SceneFactory factory) {
   m_factories[name] = factory;
   FE_CORE_INFO("SceneManager: Registered factory for '" + name + "'");
 }
@@ -23,9 +22,8 @@ void SceneManager::RegisterScene(const std::string& name,
 void SceneManager::OnNotify(const GameEvent& event) {
   switch (event.type) {
     case GameEventType::SceneLoadRequest:
-      // В твоем GameEvent можно использовать union или расширить структуру для
-      // передачи имени Допустим, мы передаем имя через вспомогательное поле или
-      // строку ApplyLoadScene(event.name);
+      // FUTURE: Handle scene name passing via event data (e.g., event.message)
+      // ApplyLoadScene(event.message);
       break;
 
     case GameEventType::ScenePopRequest:
@@ -54,23 +52,22 @@ void SceneManager::Clear() {
 void SceneManager::ChangeSceneInternal(std::unique_ptr<Scene> newScene) {
   m_isLoading = true;
 
-  // 1. Останавливаем старые сцены
+  // 1. LIFECYCLE: Stop and destroy all current scenes in the stack.
   while (!m_sceneStack.empty()) {
     m_sceneStack.top()->Stop();
     m_sceneStack.pop();
-    // ВАЖНО: Мы сразу удаляем сцену здесь.
-    // Когда уникальный указатель m_sceneStack.pop() уничтожается,
-    // срабатывает деструктор Сцены -> Мира -> Объектов.
+    // IMPORTANT: pop() destroys the unique_ptr, triggering
+    // Scene -> World -> GameObjects destruction sequence.
   }
 
-  // 2. ТЕПЕРЬ, когда все старые объекты ГАРАНТИРОВАННО мертвы
-  // и больше не используют текстуры, мы чистим память.
+  // 2. MEMORY: Now that all old objects are guaranteed dead and textures are unused,
+  // we can safely purge the resource cache.
   ResourceSystem::Instance()->Clear();
 
-  // 3. И только теперь создаем и запускаем новую сцену.
+  // 3. INITIALIZATION: Move and start the new scene.
   if (newScene) {
     m_sceneStack.push(std::move(newScene));
-    m_sceneStack.top()->Start();  // Здесь загрузятся НОВЫЕ текстуры
+    m_sceneStack.top()->Start();  // New textures are loaded here
   }
 
   m_isLoading = false;
@@ -80,22 +77,18 @@ void SceneManager::ChangeSceneInternal(std::unique_ptr<Scene> newScene) {
 void SceneManager::ApplyPushScene(const std::string& name) {
   auto it = m_factories.find(name);
   if (it == m_factories.end()) {
-    FE_CORE_ERROR("SceneManager: Cannot push scene. Factory for '" + name +
-                  "' not found!");
+    FE_CORE_ERROR("SceneManager: Cannot push scene. Factory for '" + name + "' not found!");
     return;
   }
 
   FE_CORE_INFO("SceneManager: Pushing overlay scene '" + name + "'");
 
-  // ВАЖНО: Мы НЕ очищаем ресурсы и НЕ удаляем текущую сцену.
-  // Мы просто создаем новую и кладем её на вершину стека.
-
+  // OVERLAY LOGIC: We do NOT clear resources or pop the current scene.
+  // The new scene is layered on top, allowing for UI menus or pauses.
   std::unique_ptr<Scene> overlayScene = it->second();
   overlayScene->Start();
 
   m_sceneStack.push(std::move(overlayScene));
-
-  // Теперь в Update() будет обновляться только эта новая сцена.
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -109,7 +102,7 @@ void SceneManager::ApplyPopScene() {
 //--------------------------------------------------------------------------------------------------------
 void SceneManager::Update(float deltaTime) {
   if (!m_sceneStack.empty() && !m_isLoading) {
-    // Обновляем только верхнюю сцену (реализация паузы)
+    // PAUSE LOGIC: Only the top-most scene receives update ticks.
     auto* world = m_sceneStack.top()->GetWorld();
     if (world) {
       world->Update(deltaTime);
@@ -122,17 +115,16 @@ void SceneManager::Update(float deltaTime) {
 //--------------------------------------------------------------------------------------------------------
 void SceneManager::Render() {
   if (m_sceneStack.empty()) {
-    // Если это вылетит в лог - значит сцена не доехала до стека
     FE_CORE_ERROR("Render: Stack is empty!");
     return;
   }
 
   if (m_isLoading) {
-    // Если экран черный и висит это сообщение - значит Start() завис
     FE_CORE_WARN("Render: Still loading...");
     return;
   }
 
+  // RENDERING: Draw the current active scene.
   auto* activeScene = m_sceneStack.top().get();
   if (activeScene && activeScene->GetWorld()) {
     activeScene->GetWorld()->Render();
@@ -140,8 +132,6 @@ void SceneManager::Render() {
 }
 
 //--------------------------------------------------------------------------------------------------------
-Scene* SceneManager::GetActiveScene() const {
-  return m_sceneStack.empty() ? nullptr : m_sceneStack.top().get();
-}
+Scene* SceneManager::GetActiveScene() const { return m_sceneStack.empty() ? nullptr : m_sceneStack.top().get(); }
 
 }  // namespace FalkonEngine

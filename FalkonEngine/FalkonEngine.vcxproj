@@ -162,6 +162,8 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="LoggerRegistry.h" />
+    <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="RectTransformComponent.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Sink.h" />
     <ClInclude Include="LogParameters.h" />
@@ -180,6 +182,21 @@
     <ClInclude Include="SubScriptionSystem.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="Trigger.h" />
+    <ClInclude Include="UIBoundText.h" />
+    <ClInclude Include="UIButton.h" />
+    <ClInclude Include="UICheckBox.h" />
+    <ClInclude Include="UICommandRegistry.h" />
+    <ClInclude Include="UIImage.h" />
+    <ClInclude Include="UIImageComponent.h" />
+    <ClInclude Include="UIInteractable.h" />
+    <ClInclude Include="UIManager.h" />
+    <ClInclude Include="UIObject.h" />
+    <ClInclude Include="UIPanel.h" />
+    <ClInclude Include="UIProgressBar.h" />
+    <ClInclude Include="UISelectable.h" />
+    <ClInclude Include="UISlider.h" />
+    <ClInclude Include="UIText.h" />
+    <ClInclude Include="UITextComponent.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +222,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PhysicsSystem.cpp" />
+    <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="UIBoundText.cpp" />
+    <ClCompile Include="UIProgressBar.cpp" />
+    <ClCompile Include="RectTransformComponent.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="ResourceSystem.cpp" />
     <ClCompile Include="RigidbodyComponent.cpp" />
@@ -218,6 +239,18 @@
     <ClCompile Include="SubscriptionSystem.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="Trigger.cpp" />
+    <ClCompile Include="UIButton.cpp" />
+    <ClCompile Include="UICheckBox.cpp" />
+    <ClCompile Include="UICommandRegistry.cpp" />
+    <ClCompile Include="UIImage.cpp" />
+    <ClCompile Include="UIImageComponent.cpp" />
+    <ClCompile Include="UIInteractable.cpp" />
+    <ClCompile Include="UIManager.cpp" />
+    <ClCompile Include="UIObject.cpp" />
+    <ClCompile Include="UISelectable.cpp" />
+    <ClCompile Include="UISlider.cpp" />
+    <ClCompile Include="UIText.cpp" />
+    <ClCompile Include="UITextComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,6 +8,11 @@
 namespace FalkonEngine {
 class TransformComponent;
 
+enum class RenderLayer {
+    World,
+    UI
+};
+
 class GameObject : public Observer {
  public:
   GameObject();
@@ -19,8 +24,16 @@ class GameObject : public Observer {
   void SetID(uint32_t id);
   void Print(int depth = 0) const;
 
+  void AddChild(GameObject* child);
+  std::vector<GameObject*> GetChildren();
+
   void Update(float deltaTime);
   void Render();
+
+  virtual void Awake();
+
+  RenderLayer GetLayer() const;
+  void SetLayer(RenderLayer layer);
 
   template <typename T>
   T* AddComponent() {
@@ -107,16 +120,16 @@ class GameObject : public Observer {
     return result;
   }
 
-  void OnNotify(const GameEvent& event) override { HandleEvent(event); }
+  void OnNotify(const GameEvent& event) override { 
+      HandleEvent(event); }
 
   friend class GameWorld;
   friend class TransformComponent;
 
  protected:
-  virtual void HandleEvent(const GameEvent& event) = 0;
+  virtual void HandleEvent(const GameEvent& event) {};
 
  private:
-  void AddChild(GameObject* child);
   void RemoveChild(GameObject* child);
 
   std::vector<Component*> m_components = {};
@@ -124,5 +137,6 @@ class GameObject : public Observer {
   std::string m_name;
   uint32_t m_id;
   inline static uint32_t s_nextID = 1;
+  RenderLayer m_layer = RenderLayer::World;
 };
 }  // namespace FalkonEngine

@@ -9,11 +9,13 @@
 #include "ConsolSink.h"
 #include "FileSink.h"
 #include "LoggerRegistry.h"
+#include "PlayerController.h"
 #include "RenderSystem.h"
 #include "SceneManager.h"
 
 namespace FalkonEngine {
-// Engine
+
+// Engine --- Core Singleton management and main loop execution ---
 //--------------------------------------------------------------------------------------------------------
 Engine* Engine::Instance() {
   static Engine instance;
@@ -25,6 +27,7 @@ Engine::Engine() {
   std::string logDirectory = "Logs";
   std::string logFileName = logDirectory + "/engine_log.txt";
 
+  // FILESYSTEM: Initialize logging directory and handle potential access errors
   try {
     if (!std::filesystem::exists(logDirectory)) {
       std::filesystem::create_directories(logDirectory);
@@ -33,8 +36,9 @@ Engine::Engine() {
     fprintf(stderr, "Could not create Logs directory: %s\n", e.what());
     logFileName = "engine_log.txt";
   }
-  auto& registry = LoggerRegistry::GetInstance();
 
+  // LOGGING: Register sinks for Core and App loggers to handle console and file output
+  auto& registry = LoggerRegistry::GetInstance();
   auto consoleSink = std::make_shared<ConsolSink>();
   auto fileSink = std::make_shared<FileSink>(logFileName);
 
@@ -48,6 +52,7 @@ Engine::Engine() {
 
   FE_CORE_INFO("--- FalkonEngine Startup ---");
 
+  // RANDOMIZER: Global seed initialization for procedural logic and physics
   unsigned int seed = (unsigned int)time(nullptr);
   srand(seed);
   FE_CORE_INFO("Seed initialized: " + std::to_string(seed));
@@ -57,35 +62,45 @@ Engine::Engine() {
 void Engine::Run() {
   FE_CORE_INFO("Engine::Run() started.");
 
-  FE_CORE_ASSERT(RenderSystem::Instance() != nullptr,
-                 "RenderSystem instance is null!");
+  // SAFETY CHECK: Ensure rendering context is established before entering the loop
+  FE_CORE_ASSERT(RenderSystem::Instance() != nullptr, "RenderSystem instance is null!");
 
   sf::RenderWindow& window = RenderSystem::Instance()->GetMainWindow();
   sf::Clock gameClock;
   sf::Event event;
 
+  // MAIN GAME LOOP: Event handling, state updates, and frame rendering
   while (window.isOpen()) {
     sf::Time dt = gameClock.restart();
     float deltaTime = dt.asSeconds();
 
+    // EVENT PROCESSING: OS events and input redirection
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
         FE_CORE_INFO("Close event received from OS.");
         window.close();
       }
+
+      // Input handling via PlayerController
+      PlayerController::Instance()->HandleRawEvent(event);
     }
 
+    // Final window check before processing graphics
     if (!window.isOpen()) {
       break;
     }
 
+    // FRAME CYCLE: Clear, Update logic, Render objects, and Display result
     window.clear();
 
     SceneManager::Instance().Update(deltaTime);
     SceneManager::Instance().Render();
+    PlayerController::Instance()->Update();
 
     window.display();
   }
+
   FE_CORE_INFO("Engine run loop finished gracefully.");
 }
+
 }  // namespace FalkonEngine
