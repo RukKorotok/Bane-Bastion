@@ -3,13 +3,13 @@
 #include "ColliderComponent.h"
 
 namespace FalkonEngine {
-// ColliderComponent
-//-----------------------------------------------------------------------------------------------------------
-ColliderComponent::ColliderComponent(GameObject* gameObject)
-    : Component(gameObject) {
-  FE_CORE_ASSERT(p_gameObject != nullptr,
-                 "ColliderComponent created without a valid GameObject!");
 
+// ColliderComponent --- Base logic for physical interactions and event dispatching ---
+//-----------------------------------------------------------------------------------------------------------
+ColliderComponent::ColliderComponent(GameObject* gameObject) : Component(gameObject) {
+  FE_CORE_ASSERT(p_gameObject != nullptr, "ColliderComponent created without a valid GameObject!");
+
+  // NOTIFICATION: Signal the engine that a new physical sub-object has spawned
   GameEvent event;
   event.type = FalkonEngine::GameEventType::SubObjectSpawned;
   event.sender = this;
@@ -18,34 +18,35 @@ ColliderComponent::ColliderComponent(GameObject* gameObject)
 
   FE_APP_TRACE("ColliderComponent initialized for: " + p_gameObject->GetName());
 }
+
 //-----------------------------------------------------------------------------------------------------------
-void ColliderComponent::SetCategory(CollisionCategory category) {
-  m_cateogory = category;
-}
+void ColliderComponent::SetCategory(CollisionCategory category) { m_cateogory = category; }
+
 //-----------------------------------------------------------------------------------------------------------
 CollisionCategory ColliderComponent::GetCategory() const { return m_cateogory; }
+
 //-----------------------------------------------------------------------------------------------------------
 void ColliderComponent::SetTrigger(bool newIsTrigger) {
   m_isTrigger = newIsTrigger;
-  FE_CORE_INFO("Collider on '" + p_gameObject->GetName() +
-               "' set as trigger: " + (m_isTrigger ? "True" : "False"));
+  FE_CORE_INFO("Collider on '" + p_gameObject->GetName() + "' set as trigger: " + (m_isTrigger ? "True" : "False"));
 }
-// -- (Subscribes) ---
+
+// -- Subscriptions: Managing event listeners for collisions and triggers ---
+
 //-----------------------------------------------------------------------------------------------------------
-void ColliderComponent::SubscribeCollision(
-    std::function<void(Collision)> onCollisionAction) {
+void ColliderComponent::SubscribeCollision(std::function<void(Collision)> onCollisionAction) {
   if (onCollisionAction) {
     p_onCollisionActions.push_back(onCollisionAction);
   } else {
-    FE_CORE_WARN(
-        "Attempted to subscribe an empty function to OnCollision in: " +
-        p_gameObject->GetName());
+    FE_CORE_WARN("Attempted to subscribe an empty function to OnCollision in: " + p_gameObject->GetName());
   }
 }
+
 //-----------------------------------------------------------------------------------------------------------
-void ColliderComponent::UnsubscribeCollision(
-    std::function<void(Collision)> onCollisionAction) {
+void ColliderComponent::UnsubscribeCollision(std::function<void(Collision)> onCollisionAction) {
   auto targetPtr = onCollisionAction.target<void(Collision)>();
+
+  // NOTE: Unsubscription via target() only works for plain functions or non-capturing lambdas
   if (!targetPtr) {
     FE_CORE_WARN(
         "UnsubscribeCollision failed: target comparison impossible (possibly a "
@@ -54,58 +55,52 @@ void ColliderComponent::UnsubscribeCollision(
     return;
   }
 
-  p_onCollisionActions.erase(
-      std::remove_if(p_onCollisionActions.begin(), p_onCollisionActions.end(),
-                     [targetPtr](const std::function<void(Collision)>& action) {
-                       return action.target<void(Collision)>() == targetPtr;
-                     }),
-      p_onCollisionActions.end());
+  p_onCollisionActions.erase(std::remove_if(p_onCollisionActions.begin(), p_onCollisionActions.end(),
+                                            [targetPtr](const std::function<void(Collision)>& action) {
+                                              return action.target<void(Collision)>() == targetPtr;
+                                            }),
+                             p_onCollisionActions.end());
 }
+
 //-----------------------------------------------------------------------------------------------------------
-void ColliderComponent::SubscribeTriggerEnter(
-    std::function<void(Trigger)> onTriggerEnterAction) {
-  {
-    if (onTriggerEnterAction)
-      p_onTriggerEnterActions.push_back(onTriggerEnterAction);
+void ColliderComponent::SubscribeTriggerEnter(std::function<void(Trigger)> onTriggerEnterAction) {
+  if (onTriggerEnterAction) {
+    p_onTriggerEnterActions.push_back(onTriggerEnterAction);
   }
 }
+
 //-----------------------------------------------------------------------------------------------------------
-void ColliderComponent::UnsubscribeTriggerEnter(
-    std::function<void(Trigger)> onTriggerEnterAction) {
+void ColliderComponent::UnsubscribeTriggerEnter(std::function<void(Trigger)> onTriggerEnterAction) {
   auto targetPtr = onTriggerEnterAction.target<void(Trigger)>();
   if (!targetPtr) return;
 
-  p_onTriggerEnterActions.erase(
-      std::remove_if(p_onTriggerEnterActions.begin(),
-                     p_onTriggerEnterActions.end(),
-                     [targetPtr](const std::function<void(Trigger)>& action) {
-                       return action.target<void(Trigger)>() == targetPtr;
-                     }),
-      p_onTriggerEnterActions.end());
+  p_onTriggerEnterActions.erase(std::remove_if(p_onTriggerEnterActions.begin(), p_onTriggerEnterActions.end(),
+                                               [targetPtr](const std::function<void(Trigger)>& action) {
+                                                 return action.target<void(Trigger)>() == targetPtr;
+                                               }),
+                                p_onTriggerEnterActions.end());
 }
+
 //-----------------------------------------------------------------------------------------------------------
-void ColliderComponent::SubscribeTriggerExit(
-    std::function<void(Trigger)> onTriggerExitAction) {
-  {
-    if (onTriggerExitAction)
-      p_onTriggerExitActions.push_back(onTriggerExitAction);
+void ColliderComponent::SubscribeTriggerExit(std::function<void(Trigger)> onTriggerExitAction) {
+  if (onTriggerExitAction) {
+    p_onTriggerExitActions.push_back(onTriggerExitAction);
   }
 }
+
 //-----------------------------------------------------------------------------------------------------------
-void ColliderComponent::UnsubscribeTriggerExit(
-    std::function<void(Trigger)> onTriggerExitAction) {
+void ColliderComponent::UnsubscribeTriggerExit(std::function<void(Trigger)> onTriggerExitAction) {
   auto targetPtr = onTriggerExitAction.target<void(Trigger)>();
   if (!targetPtr) return;
 
-  p_onTriggerExitActions.erase(
-      std::remove_if(p_onTriggerExitActions.begin(),
-                     p_onTriggerExitActions.end(),
-                     [targetPtr](const std::function<void(Trigger)>& action) {
-                       return action.target<void(Trigger)>() == targetPtr;
-                     }),
-      p_onTriggerExitActions.end());
+  p_onTriggerExitActions.erase(std::remove_if(p_onTriggerExitActions.begin(), p_onTriggerExitActions.end(),
+                                              [targetPtr](const std::function<void(Trigger)>& action) {
+                                                return action.target<void(Trigger)>() == targetPtr;
+                                              }),
+                               p_onTriggerExitActions.end());
 }
-// protected
+
+// Protected: Event Dispatching
 //-----------------------------------------------------------------------------------------------------------
 void ColliderComponent::OnCollision(Collision collision) {
   for (size_t i = 0; i < p_onCollisionActions.size(); ++i) {
@@ -114,11 +109,11 @@ void ColliderComponent::OnCollision(Collision collision) {
         p_onCollisionActions[i](collision);
       }
     } catch (const std::exception& e) {
-      FE_CORE_ERROR("Exception in OnCollision for '" + p_gameObject->GetName() +
-                    "': " + e.what());
+      FE_CORE_ERROR("Exception in OnCollision for '" + p_gameObject->GetName() + "': " + e.what());
     }
   }
 }
+
 //-----------------------------------------------------------------------------------------------------------
 void ColliderComponent::OnTriggerEnter(Trigger trigger) {
   for (size_t i = 0; i < p_onTriggerEnterActions.size(); ++i) {
@@ -127,11 +122,11 @@ void ColliderComponent::OnTriggerEnter(Trigger trigger) {
         p_onTriggerEnterActions[i](trigger);
       }
     } catch (const std::exception& e) {
-      FE_CORE_ERROR("Exception in OnTriggerEnter for '" +
-                    p_gameObject->GetName() + "': " + e.what());
+      FE_CORE_ERROR("Exception in OnTriggerEnter for '" + p_gameObject->GetName() + "': " + e.what());
     }
   }
 }
+
 //-----------------------------------------------------------------------------------------------------------
 void ColliderComponent::OnTriggerExit(Trigger trigger) {
   for (size_t i = 0; i < p_onTriggerExitActions.size(); ++i) {
@@ -140,9 +135,9 @@ void ColliderComponent::OnTriggerExit(Trigger trigger) {
         p_onTriggerExitActions[i](trigger);
       }
     } catch (const std::exception& e) {
-      FE_CORE_ERROR("Exception in OnTriggerExit for '" +
-                    p_gameObject->GetName() + "': " + e.what());
+      FE_CORE_ERROR("Exception in OnTriggerExit for '" + p_gameObject->GetName() + "': " + e.what());
     }
   }
 }
+
 }  // namespace FalkonEngine

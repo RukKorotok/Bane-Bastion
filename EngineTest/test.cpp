@@ -1,5 +1,6 @@
-#include "Vector.h"
 #include "pch.h"
+
+#include "Vector.h"
 
 TEST(VectorTests, ZeroContructor) {
   FalkonEngine::Vector2D<float> vector;

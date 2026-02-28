@@ -275,6 +275,43 @@ void ResourceSystem::DeleteMusic(const std::string& name) {
     m_musicTracks.erase(it);
   }
 }
+// Font subsystem
+//-----------------------------------------------------------------------------------------------------------
+void ResourceSystem::LoadFont(const std::string& name, const std::string& sourcePath) {
+  if (m_fonts.find(name) != m_fonts.end()) {
+    return;
+  }
+
+  sf::Font* newFont = new sf::Font();
+  if (newFont->loadFromFile(sourcePath)) {
+    m_fonts.emplace(name, newFont);
+    FE_CORE_INFO("ResourceSystem: Font loaded [" + name + "] from " + sourcePath);
+  } else {
+    FE_CORE_ERROR("ResourceSystem: Failed to load font from " + sourcePath);
+    delete newFont;
+  }
+}
+
+//-----------------------------------------------------------------------------------------------------------
+const sf::Font* ResourceSystem::GetFontShared(const std::string& name) const {
+  auto it = m_fonts.find(name);
+  if (it != m_fonts.end()) {
+    return it->second;
+  } else {
+    FE_CORE_WARN("ResourceSystem: Shared font not found: " + name);
+    return nullptr;
+  }
+}
+
+//-----------------------------------------------------------------------------------------------------------
+void ResourceSystem::DeleteSharedFont(const std::string& name) {
+  auto it = m_fonts.find(name);
+  if (it != m_fonts.end()) {
+    delete it->second;
+    m_fonts.erase(it);
+    FE_APP_TRACE("ResourceSystem: Font deleted: " + name);
+  }
+}
 // msc
 //-----------------------------------------------------------------------------------------------------------
 void ResourceSystem::Clear() {
@@ -283,6 +320,7 @@ void ResourceSystem::Clear() {
   DeleteAllTextureMaps();
   DeleteAllSounds();
   DeleteAllMusic();
+  DeleteAllFonts();
 }
 // private
 //-----------------------------------------------------------------------------------------------------------
@@ -322,5 +360,12 @@ void ResourceSystem::DeleteAllMusic() {
     delete pair.second;
   }
   m_musicTracks.clear();
+}
+//-----------------------------------------------------------------------------------------------------------
+void ResourceSystem::DeleteAllFonts() {
+  for (auto& pair : m_fonts) {
+    delete pair.second;
+  }
+  m_fonts.clear();
 }
 }  // namespace FalkonEngine

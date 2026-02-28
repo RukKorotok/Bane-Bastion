@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>Scene\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Scene\Components</Filter>
     </ClCompile>
@@ -12,9 +9,6 @@
     </ClCompile>
     <ClCompile Include="GameWorld.cpp">
       <Filter>Scene\World</Filter>
-    </ClCompile>
-    <ClCompile Include="InputComponent.cpp">
-      <Filter>Scene\Components</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Platform</Filter>
@@ -28,14 +22,8 @@
     <ClCompile Include="Sprite.cpp">
       <Filter>Utilites\Visual</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteRendererComponent.cpp">
-      <Filter>Scene\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Matrix2D.cpp">
       <Filter>Utilites\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="ColliderComponent.cpp">
-      <Filter>Scene\Components</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>Utilites\Collition</Filter>
@@ -46,23 +34,11 @@
     <ClCompile Include="PhysicsSystem.cpp">
       <Filter>Systems\Physic</Filter>
     </ClCompile>
-    <ClCompile Include="RigidbodyComponent.cpp">
-      <Filter>Scene\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="SpriteColliderComponent.cpp">
-      <Filter>Scene\Components</Filter>
-    </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Scene\Components\ObjectMobility</Filter>
     </ClCompile>
     <ClCompile Include="SubscriptionSystem.cpp">
       <Filter>Messaging</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Scene\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Entity.h">
-      <Filter>Scene\Entities</Filter>
     </ClCompile>
     <ClCompile Include="MusicPlayer.cpp">
       <Filter>Systems\Resource</Filter>
@@ -85,11 +61,80 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Scene\World</Filter>
     </ClCompile>
+    <ClCompile Include="Entity.h">
+      <Filter>Scene\Entities\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Scene\Entities\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="UIObject.cpp">
+      <Filter>Scene\Entities\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImage.cpp">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerController.cpp">
+      <Filter>Systems\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>Systems\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderComponent.cpp">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="RectTransformComponent.cpp">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidbodyComponent.cpp">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteColliderComponent.cpp">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRendererComponent.cpp">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="UIImageComponent.cpp">
+      <Filter>Scene\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIInteractable.cpp">
+      <Filter>Scene\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIButton.cpp">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="UICommandRegistry.cpp">
+      <Filter>Systems\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UISelectable.cpp">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="UICheckBox.cpp">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="UISlider.cpp">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="UIProgressBar.cpp">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="UITextComponent.cpp">
+      <Filter>Scene\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIText.cpp">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBoundText.cpp">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CameraComponent.h">
-      <Filter>Scene\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Scene\Components</Filter>
     </ClInclude>
@@ -101,9 +146,6 @@
     </ClInclude>
     <ClInclude Include="GameWorld.h">
       <Filter>Scene\World</Filter>
-    </ClInclude>
-    <ClInclude Include="InputComponent.h">
-      <Filter>Scene\Components</Filter>
     </ClInclude>
     <ClInclude Include="IDelayedAction.h">
       <Filter>Core\Interfaces</Filter>
@@ -126,17 +168,11 @@
     <ClInclude Include="Sprite.h">
       <Filter>Utilites\Visual</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteRendererComponent.h">
-      <Filter>Scene\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Vector.h">
       <Filter>Utilites\Math</Filter>
     </ClInclude>
     <ClInclude Include="Matrix2D.h">
       <Filter>Utilites\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="ColliderComponent.h">
-      <Filter>Scene\Components</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Utilites\Collition</Filter>
@@ -147,20 +183,11 @@
     <ClInclude Include="PhysicsSystem.h">
       <Filter>Systems\Physic</Filter>
     </ClInclude>
-    <ClInclude Include="RigidbodyComponent.h">
-      <Filter>Scene\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="SpriteColliderComponent.h">
-      <Filter>Scene\Components</Filter>
-    </ClInclude>
     <ClInclude Include="TransformComponent.h">
       <Filter>Scene\Components\ObjectMobility</Filter>
     </ClInclude>
     <ClInclude Include="SubScriptionSystem.h">
       <Filter>Messaging</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Scene\Entities</Filter>
     </ClInclude>
     <ClInclude Include="MusicPlayer.h">
       <Filter>Systems\Resource</Filter>
@@ -191,6 +218,78 @@
     </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>Scene\World</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Scene\Entities\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPanel.h">
+      <Filter>Scene\Entities\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIObject.h">
+      <Filter>Scene\Entities\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIImage.h">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerController.h">
+      <Filter>Systems\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>Systems\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderComponent.h">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="RectTransformComponent.h">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidbodyComponent.h">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteColliderComponent.h">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRendererComponent.h">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="UIImageComponent.h">
+      <Filter>Scene\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIInteractable.h">
+      <Filter>Scene\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIButton.h">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="UICommandRegistry.h">
+      <Filter>Systems\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UISelectable.h">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="UICheckBox.h">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="UISlider.h">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="UIProgressBar.h">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="UITextComponent.h">
+      <Filter>Scene\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIText.h">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="UIBoundText.h">
+      <Filter>Scene\Entities\UI\Templates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +355,27 @@
     </Filter>
     <Filter Include="Utilites\Debug\Loger">
       <UniqueIdentifier>{89b172a3-6326-4dba-b2b2-a17565ddc63c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Entities\Game">
+      <UniqueIdentifier>{06035af4-4368-423c-b413-6728b992ed7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Entities\UI">
+      <UniqueIdentifier>{cecb61b9-e5ec-4939-a4fc-36da76cbc6c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Entities\UI\Templates">
+      <UniqueIdentifier>{e0083b57-cd45-4a76-aae6-71614bb38794}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems\Input">
+      <UniqueIdentifier>{1928ab98-1f5a-4605-be39-88f0796c613b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems\UI">
+      <UniqueIdentifier>{b934023b-e595-4eb6-83d3-94512d2978d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Components\UI">
+      <UniqueIdentifier>{96f64f55-11a6-4415-8b7d-eb063a394258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Components\GameObjects">
+      <UniqueIdentifier>{8f4f4a10-f236-47d5-8b63-94c8210d5185}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

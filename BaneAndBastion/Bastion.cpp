@@ -83,7 +83,7 @@ void Bastion::HitAction(FalkonEngine::GameObject& gameObject) {
 void Bastion::OnNotify(const FalkonEngine::GameEvent& event) {
   // Central event dispatcher for player-specific behaviors
   switch (event.type) {
-    case FalkonEngine::GameEventType::InputDirectionChanged: {
+    case FalkonEngine::GameEventType::InputChanged: {
       // Bridge between the Input system and the Movement component
       if (auto move = p_gameObject->GetComponent<PlayerMoveComponent>()) {
         move->SetTargetDirection({event.direction.x, event.direction.y});
