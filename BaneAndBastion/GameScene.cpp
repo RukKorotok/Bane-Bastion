@@ -50,6 +50,9 @@ void GameScene::Start() {
     resources->LoadTexture("wall", "Resources/Textures/wall.png");
     resources->LoadTexture("knight", "Resources/Textures/knight.png");
 
+    resources->LoadTexture("monster_idle", "Resources/Textures/player_tilesheetr.png");
+    resources->LoadTexture("monster_walk", "Resources/Textures/soldier_tilesheet.png");
+
     if (!resources->LoadMusic("NeverSurrender", "Resources/Music/NeverSurrender.wav")) {
         FE_CORE_WARN("Main: Initial music not loaded, but continuing...");
     }

@@ -133,6 +133,15 @@
     <ClCompile Include="UIBoundText.cpp">
       <Filter>Scene\Entities\UI\Templates</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimState.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -291,6 +300,15 @@
     <ClInclude Include="UIBoundText.h">
       <Filter>Scene\Entities\UI\Templates</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimState.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -376,6 +394,9 @@
     </Filter>
     <Filter Include="Scene\Components\GameObjects">
       <UniqueIdentifier>{8f4f4a10-f236-47d5-8b63-94c8210d5185}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{06334b4b-0671-47fc-b82c-a47289ffb492}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
