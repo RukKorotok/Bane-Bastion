@@ -69,10 +69,19 @@ class SpriteRendererComponent : public Component {
    */
   void FlipY(bool flip);
 
+  /**
+   * @brief Forces recalculation of the sprite's scale based on the target pixel size.
+   * Crucial for maintaining consistent dimensions when the sprite's texture rect changes (e.g., during animation).
+   */
+  void ApplyCurrentPixelSize();
+
  private:
   Vector2Df m_scale;                ///< Current scale of the sprite.
   sf::Sprite* m_sprite;             ///< Internal SFML sprite object.
   TransformComponent* m_transform;  ///< Cached pointer to the owner's transform.
+
+  sf::Vector2f m_targetPixelSize = {0.0f, 0.0f};  ///< Desired size in world pixels.
+  bool m_useTargetSize = false;                   ///< Flag to enable automatic size synchronization.
 
   bool m_isFlipX = false;  ///< Horizontal flip state.
   bool m_isFlipY = false;  ///< Vertical flip state.

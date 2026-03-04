@@ -12,7 +12,7 @@ namespace FalkonEngine {
 SpriteRendererComponent::SpriteRendererComponent(GameObject* gameObject) : Component(gameObject) {
   m_sprite = new sf::Sprite();
 
-  // Default scale with Y-axis inversion to match engine coordinate standards
+  // COORDINATE STANDARDS: Default scale with Y-axis inversion
   m_scale = {1.0f, -1.0f};
 
   m_transform = gameObject->GetComponent<TransformComponent>();
@@ -49,13 +49,13 @@ void SpriteRendererComponent::Render() {
 
     Vector2Df transformScale = m_transform->GetWorldScale();
 
-    // Combine component-specific scale (flipping/sizing) with global transform scale
+    // TRANSFORMATION: Combine local scale (flipping/sizing) with global world scale
     m_sprite->setScale({m_scale.x * transformScale.x, m_scale.y * transformScale.y});
 
-    // Submission to the global rendering queue
+    // SUBMISSION: Dispatch to the global rendering queue
     RenderSystem::Instance()->Render(*m_sprite);
   } else if (m_sprite != nullptr && m_sprite->getTexture() == nullptr) {
-    // ERROR TRACKING: Prevent console spam by only warning when the object changes
+    // ERROR TRACKING: Prevent console spam by only warning when the assignment state changes
     static std::string lastWarnedObject = "";
     if (lastWarnedObject != p_gameObject->GetName()) {
       FE_CORE_WARN("SpriteRenderer on '" + p_gameObject->GetName() + "' has no texture assigned. Skipping render.");
@@ -74,30 +74,24 @@ void SpriteRendererComponent::SetTexture(const sf::Texture& newTexture) {
   }
   m_sprite->setTexture(newTexture);
 
-  // AUTO-PIVOT: Center the origin based on new texture dimensions
-  sf::Vector2u textureSize = newTexture.getSize();
-  m_sprite->setOrigin({0.5f * textureSize.x, 0.5f * textureSize.y});
+  // AUTO-PIVOT: Calculate origin based on current texture rect or full texture size
+  sf::IntRect currentRect = m_sprite->getTextureRect();
 
-  FE_CORE_INFO("Texture set for '" + p_gameObject->GetName() + "'. Size: " + std::to_string(textureSize.x) + "x" +
-               std::to_string(textureSize.y));
+  float width = (currentRect.width > 0) ? (float)currentRect.width : (float)newTexture.getSize().x;
+  float height = (currentRect.height > 0) ? (float)currentRect.height : (float)newTexture.getSize().y;
+
+  m_sprite->setOrigin({0.5f * width, 0.5f * height});
+
+  FE_CORE_INFO("Texture set for '" + p_gameObject->GetName() + "'. Size: " + std::to_string(width) + "x" +
+               std::to_string(height));
 }
 
 //-----------------------------------------------------------------------------------------------------------
 void SpriteRendererComponent::SetPixelSize(int newWidth, int newHeight) {
-  if (m_sprite == nullptr || m_sprite->getTexture() == nullptr) {
-    FE_CORE_ERROR("Cannot SetPixelSize: Sprite or Texture is null on " + p_gameObject->GetName());
-    return;
-  }
-
-  auto originalSize = m_sprite->getTexture()->getSize();
-
-  if (originalSize.x == 0 || originalSize.y == 0) {
-    FE_CORE_ERROR("SetPixelSize failed: Texture size is zero on " + p_gameObject->GetName());
-    return;
-  }
-
-  // SCALING: Calculate ratio between original texture and desired pixel dimensions
-  m_scale = {(float)newWidth / (float)originalSize.x, -(float)newHeight / (float)originalSize.y};
+  // REQUEST STORAGE: Store target dimensions and trigger recalculation
+  m_targetPixelSize = {(float)newWidth, (float)newHeight};
+  m_useTargetSize = true;
+  ApplyCurrentPixelSize();
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -114,6 +108,33 @@ void SpriteRendererComponent::FlipY(bool flip) {
     m_scale.y = -m_scale.y;
     m_isFlipY = flip;
   }
+}
+
+//-----------------------------------------------------------------------------------------------------------
+void SpriteRendererComponent::ApplyCurrentPixelSize() {
+  if (!m_useTargetSize || !m_sprite || !m_sprite->getTexture()) {
+    FE_CORE_ERROR("ApplyCurrentPixelSize failed: Component state or texture invalid on " + p_gameObject->GetName());
+    return;
+  }
+
+  sf::IntRect rect = m_sprite->getTextureRect();
+
+  // DYNAMIC SCALING: Use current frame rect or fall back to full texture dimensions
+  float frameW = (rect.width > 0) ? (float)rect.width : (float)m_sprite->getTexture()->getSize().x;
+  float frameH = (rect.height > 0) ? (float)rect.height : (float)m_sprite->getTexture()->getSize().y;
+
+  if (frameW == 0 || frameH == 0) {
+    FE_CORE_ERROR("ApplyCurrentPixelSize: Source dimensions are zero on " + p_gameObject->GetName());
+    return;
+  }
+
+  // CALCULATION: Ratio between desired pixel size and actual source pixels
+  float scaleX = m_targetPixelSize.x / frameW;
+  float scaleY = m_targetPixelSize.y / frameH;
+
+  // Apply scale with Y-axis correction and update pivot point
+  m_scale = {scaleX, -scaleY};
+  m_sprite->setOrigin(frameW * 0.5f, frameH * 0.5f);
 }
 
 }  // namespace FalkonEngine

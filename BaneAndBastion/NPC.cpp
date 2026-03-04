@@ -4,6 +4,7 @@
 #include "PathfindingAStar.h"
 #include "Player.h"
 #include "pch.h"
+#include "AnimationComponent.h"
 
 namespace BaneAndBastion {
 // NPC Implementation
@@ -11,6 +12,7 @@ namespace BaneAndBastion {
 NPC::NPC(FalkonEngine::Vector2Df position)
     : Character(position, "NPC", "monster",
                 FalkonEngine::CollisionCategory::Enemy) {
+
   auto activeScene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive());
   if (!activeScene) {
     FE_CORE_ERROR("NPC: Failed to create 'NPC' - No active GameScene found.");
@@ -63,6 +65,39 @@ NPC::NPC(FalkonEngine::Vector2Df position)
     attack->SetHitRate(1.0f);
   }
 
+  //6. Set anim cpmponent
+
+  auto idleTex = FalkonEngine::ResourceSystem::Instance()->GetTextureShared("monster_idle");
+  auto walkTex = FalkonEngine::ResourceSystem::Instance()->GetTextureShared("monster_walk");
+
+  auto animComp = p_gameObject->AddComponent<FalkonEngine::AnimationComponent>();
+  auto renderer = p_gameObject->GetComponent<FalkonEngine::SpriteRendererComponent>();
+
+  if (animComp && renderer) {
+    // 1. Настройка Idle (использует первую текстуру)
+    FalkonEngine::Animation idleAnim;
+    // Допустим, idle_atlas.png имеет сетку 64x64
+    //idleAnim.AddFramesLine(0, 0, 80, 110, 9, 0.05f);
+    idleAnim.AddFramesLine(0, 110, 80, 80, 9, 0.05f);
+    idleAnim.AddFramesLine(0, 220, 80, 80, 6, 0.05f);
+    animComp->AddState("Idle", std::make_shared<FalkonEngine::AnimState>(idleAnim, idleTex, true));
+    //renderer->SetPixelSize(512, 512);
+    renderer->SetPixelSize(GameSettings::PixelsPerUnit * 0.5f, GameSettings::PixelsPerUnit * 0.5f);
+
+    // 2. Настройка Walk (использует вторую текстуру)
+    FalkonEngine::Animation walkAnim;
+    // Допустим, walk_atlas.png имеет сетку 64x64
+   // walkAnim.AddFramesLine(0, 0, 80, 110, 9, 0.05f);
+    walkAnim.AddFramesLine(0, 110, 80, 80, 9, 0.05f);
+    walkAnim.AddFramesLine(0, 220, 80, 80, 6, 0.05f);
+    animComp->AddState("Walk", std::make_shared<FalkonEngine::AnimState>(walkAnim, walkTex, true));
+    //renderer->SetPixelSize(512, 512);
+    renderer->SetPixelSize(GameSettings::PixelsPerUnit * 0.5f, GameSettings::PixelsPerUnit * 0.5f);
+
+    // Устанавливаем начальное состояние
+    animComp->SetState("Idle");
+  }
+
   FE_APP_TRACE("NPC: spawned successfully.");
 }
 
@@ -89,11 +124,28 @@ void NPC::OnNotify(const FalkonEngine::GameEvent& event) {
     case GameEventType::MovementRequested: {
       // Triggered when AI pathfinding decides on a new target coordinate
       auto moveComp = p_gameObject->GetComponent<AIMoveComponent>();
+      auto animComp = p_gameObject->GetComponent<FalkonEngine::AnimationComponent>();
+      auto renderer = p_gameObject->GetComponent<FalkonEngine::SpriteRendererComponent>();
+
       auto transform =
           p_gameObject->GetComponent<FalkonEngine::TransformComponent>();
-      if (moveComp && transform) {
+      if (moveComp && transform && renderer) {
         moveComp->MoveTowards(transform->GetWorldPosition(),
                               {event.direction.x, event.direction.y});
+
+        float moveLenSq = event.direction.x * event.direction.x + event.direction.y * event.direction.y;
+
+        if (moveLenSq > 0.001f) {
+          // Переключаем на ходьбу, если еще не в этом состоянии
+          animComp->SetState("Walk");
+
+          float moveSpeed = std::sqrt(moveLenSq);
+          animComp->SetCurrentSpeed(moveSpeed / 2000.0f);
+
+        } else {
+          animComp->SetState("Idle");
+          animComp->SetCurrentSpeed(1.0f);  // Сбрасываем скорость на стандартную
+        }
       }
       break;
     }
