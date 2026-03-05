@@ -145,6 +145,12 @@
     <ClCompile Include="SoundComponent.cpp">
       <Filter>Scene\Components\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="UIAnimationComponent.cpp">
+      <Filter>Scene\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIAnimate.cpp">
+      <Filter>Scene\Entities\UI\Templates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -314,6 +320,12 @@
     </ClInclude>
     <ClInclude Include="SoundComponent.h">
       <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="UIAnimationComponent.h">
+      <Filter>Scene\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIAnimate.h">
+      <Filter>Scene\Entities\UI\Templates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

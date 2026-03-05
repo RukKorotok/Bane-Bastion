@@ -29,6 +29,11 @@ class UISelectable : public UIImage {
    */
   void HandleEvent(const GameEvent& event) override;
 
+  /**
+   * @brief CONFIGURATION: Assigns a unique action identifier for command registry execution.
+   */
+  void SetActionID(const std::string& id);
+
  protected:
   // --- (Pointer Callbacks: To be overridden by derived classes) ---
 

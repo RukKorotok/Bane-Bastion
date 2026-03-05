@@ -32,6 +32,7 @@ enum class GameEventType {
   StatChanged,      ///< Attribute updates (Health, Mana, etc.).
   ActionTriggered,  ///< Interaction or ability execution.
   ActionReleased,   ///< Interaction end.
+  UpdatedAnimation, ///< Animation updated
 
   // Scene objects events
   ObjectRemoved,          ///< Entity destruction notification.

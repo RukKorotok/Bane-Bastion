@@ -45,4 +45,7 @@ void UISelectable::HandleEvent(const GameEvent& event) {
   }
 }
 
+//-----------------------------------------------------------------------------------------------------------
+void UISelectable::SetActionID(const std::string& id) { p_actionID = id; }
+
 }  // namespace FalkonEngine
