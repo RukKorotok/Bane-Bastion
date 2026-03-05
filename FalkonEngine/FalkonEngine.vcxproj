@@ -179,6 +179,7 @@
     <ClInclude Include="ResourceSystem.h" />
     <ClInclude Include="RigidbodyComponent.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SoundComponent.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteColliderComponent.h" />
     <ClInclude Include="SpriteRendererComponent.h" />
@@ -229,6 +230,7 @@
     </ClCompile>
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="SoundComponent.cpp" />
     <ClCompile Include="UIBoundText.cpp" />
     <ClCompile Include="UIProgressBar.cpp" />
     <ClCompile Include="RectTransformComponent.cpp" />
