@@ -2,6 +2,7 @@
 
 #include "CameraComponent.h"
 #include "TransformComponent.h"
+#include <SFML/Audio.hpp>
 
 namespace FalkonEngine {
 
@@ -33,6 +34,10 @@ void CameraComponent::Update(float deltaTime) {
 
   m_view->setCenter(Convert<sf::Vector2f, Vector2Df>(position));
   m_view->setRotation(rotation);
+
+  // Set sound listener
+  sf::Listener::setPosition(position.x, position.y, 0.f);
+  sf::Listener::setDirection(0.f, 0.f, -1.f);
 
   // APPLICATION: Set the window to use this camera's projection
   m_window->setView(*m_view);

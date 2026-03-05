@@ -142,6 +142,9 @@
     <ClCompile Include="AnimationComponent.cpp">
       <Filter>Scene\Components\GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="SoundComponent.cpp">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -307,6 +310,9 @@
       <Filter>Animation</Filter>
     </ClInclude>
     <ClInclude Include="AnimationComponent.h">
+      <Filter>Scene\Components\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundComponent.h">
       <Filter>Scene\Components\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "pch.h"
 #include "AnimationComponent.h"
+#include "SoundComponent.h"
 
 namespace BaneAndBastion {
 // NPC Implementation
@@ -98,6 +99,13 @@ NPC::NPC(FalkonEngine::Vector2Df position)
     animComp->SetState("Idle");
   }
 
+  // 7. AUDIO: Initialize SoundComponent for spatial stereo feedback
+    auto soundComp = p_gameObject->AddComponent<FalkonEngine::SoundComponent>();
+  if (soundComp) {
+    // Регистрация не нужна, так как мы управляем звуками напрямую через OnNotify
+    FE_APP_TRACE("NPC: SoundComponent attached.");
+  }
+
   FE_APP_TRACE("NPC: spawned successfully.");
 }
 
@@ -120,6 +128,8 @@ void NPC::HitAction(FalkonEngine::GameObject& gameObject) {
 // --------------------------------------------------------------------------------------------------------
 void NPC::OnNotify(const FalkonEngine::GameEvent& event) {
   // Centralized Event Bus: Handling internal component communication
+
+    auto soundComp = p_gameObject->GetComponent<FalkonEngine::SoundComponent>();
   switch (event.type) {
     case GameEventType::MovementRequested: {
       // Triggered when AI pathfinding decides on a new target coordinate
@@ -141,6 +151,9 @@ void NPC::OnNotify(const FalkonEngine::GameEvent& event) {
 
           float moveSpeed = std::sqrt(moveLenSq);
           animComp->SetCurrentSpeed(moveSpeed / 2000.0f);
+          if (soundComp) {
+            soundComp->Play("monster_run", 0, 20.0f, 1.2f);
+          }
 
         } else {
           animComp->SetState("Idle");

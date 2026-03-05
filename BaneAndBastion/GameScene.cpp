@@ -53,6 +53,9 @@ void GameScene::Start() {
     resources->LoadTexture("monster_idle", "Resources/Textures/player_tilesheetr.png");
     resources->LoadTexture("monster_walk", "Resources/Textures/soldier_tilesheet.png");
 
+    resources->LoadSound("monster_run", "Resources/Sounds/AppleEat.wav");
+
+
     if (!resources->LoadMusic("NeverSurrender", "Resources/Music/NeverSurrender.wav")) {
         FE_CORE_WARN("Main: Initial music not loaded, but continuing...");
     }
