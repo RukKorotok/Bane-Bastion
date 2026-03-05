@@ -74,6 +74,9 @@
     <ClCompile Include="NPCSpawner.cpp">
       <Filter>Core\GridManager\Spawner</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSettings.h" />
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="CellRegistry.h">
       <Filter>Core\GridManager</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

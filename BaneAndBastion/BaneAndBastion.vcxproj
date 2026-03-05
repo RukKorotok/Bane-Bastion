@@ -183,6 +183,7 @@
     <ClCompile Include="ForestGenerator.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GridManager.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="MoveComponent.cpp" />
     <ClCompile Include="NPC.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="GridManager.h" />
     <ClInclude Include="GridStructures.h" />
     <ClInclude Include="IChainAnchor.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="MazeNPCSpawner.h" />
     <ClInclude Include="MoveComponent.h" />

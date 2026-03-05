@@ -186,6 +186,8 @@
     <ClInclude Include="SubScriptionSystem.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="Trigger.h" />
+    <ClInclude Include="UIAnimate.h" />
+    <ClInclude Include="UIAnimationComponent.h" />
     <ClInclude Include="UIBoundText.h" />
     <ClInclude Include="UIButton.h" />
     <ClInclude Include="UICheckBox.h" />
@@ -231,6 +233,8 @@
     <ClCompile Include="PhysicsSystem.cpp" />
     <ClCompile Include="PlayerController.cpp" />
     <ClCompile Include="SoundComponent.cpp" />
+    <ClCompile Include="UIAnimate.cpp" />
+    <ClCompile Include="UIAnimationComponent.cpp" />
     <ClCompile Include="UIBoundText.cpp" />
     <ClCompile Include="UIProgressBar.cpp" />
     <ClCompile Include="RectTransformComponent.cpp" />
