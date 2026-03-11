@@ -31,7 +31,7 @@ class UIObject : public GameObject {
   /**
    * @brief Virtual destructor.
    */
-  virtual ~UIObject() {};
+  virtual ~UIObject() {}
 
   /**
    * @brief Initializes the UIObject and ensures a RectTransformComponent is attached.

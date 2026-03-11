@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DynamicActor.h"
-#include "GameScene.h"
+#include "ForestScene.h"
 
 namespace BaneAndBastion {
 class DynamicWithPhysic : public DynamicActor {

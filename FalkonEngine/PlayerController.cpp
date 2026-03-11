@@ -22,6 +22,9 @@ PlayerController::PlayerController() {
   BindAxis(sf::Keyboard::Right, "Horizontal", 1.0f);
   BindAxis(sf::Keyboard::Left, "Horizontal", -1.0f);
 
+  //Pause action
+  BindAxis(sf::Keyboard::Escape, "Pause", 1.0f);
+
   FE_CORE_INFO("PlayerController: WSAD and Arrow keys bound to axes.");
 }
 
@@ -66,11 +69,29 @@ void PlayerController::Update() {
   // 1. AXIS SAMPLING: Accumulate values for continuous movement (e.g., W + Up = 2.0)
   std::map<std::string, float> activeAxes;
   for (auto const& [key, actions] : m_bindings) {
-    if (sf::Keyboard::isKeyPressed(key)) {
+    bool isDown = sf::Keyboard::isKeyPressed(key);
+    bool wasDown = m_keyWasDown[key];
+
+    if (isDown) {
       for (auto const& action : actions) {
-        activeAxes[action.name] += action.value;
+        GameEvent event;
+        event.sender = this;
+
+        // Если нажали только что -> Triggered
+        if (!wasDown) {
+          event.type = GameEventType::ActionTriggered;
+          event.input[action.name] = action.value;
+          Notify(event);
+        }
+        // Если продолжаем держать -> Held (если нужно)
+        else {
+          event.type = GameEventType::InputChanged;  // или свой тип ActionHeld
+          event.input[action.name] = action.value;
+          Notify(event);
+        }
       }
     }
+    m_keyWasDown[key] = isDown;
   }
 
   // 2. MOUSE COORDINATE MAPPING: Convert screen pixels to world coordinates

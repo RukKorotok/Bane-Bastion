@@ -16,6 +16,7 @@ namespace Details {
 struct SubscriptionNode {
   class Observable* subject;  ///< The object being watched.
   class Observer* observer;   ///< The object listening for events.
+  bool isDead = false;
 
   // Links for the Observable's list (all observers subscribed to one subject)
   SubscriptionNode* nextInSub = nullptr;
@@ -38,6 +39,9 @@ class Observer {
    */
   virtual ~Observer();
 
+  void UnsubscribeFromAll();
+
+  void MarkDead();
   /**
    * @brief Pure virtual callback triggered by the Observable.
    * @param event The event packet containing message data.

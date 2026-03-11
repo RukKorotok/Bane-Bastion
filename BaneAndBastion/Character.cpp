@@ -10,7 +10,7 @@ Character::Character(FalkonEngine::Vector2Df position, std::string name,
                      std::string texture,
                      FalkonEngine::CollisionCategory collision)
     : DynamicWithPhysic(position, name, texture, collision) {
-  auto stats = p_gameObject->AddComponent<FalkonEngine::StatsComponent>();
+  auto stats = p_gameObject->AddComponent<StatsComponent>();
   stats->Subscribe(this);
 }
 }  // namespace BaneAndBastion

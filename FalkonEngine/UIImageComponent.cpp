@@ -62,6 +62,12 @@ void UIImageComponent::SetScaleToSize(Vector2Df targetSize, Vector2Df pivot) {
 }
 
 //-----------------------------------------------------------------------------------------------------------
+void UIImageComponent::SetOrigin(float x, float y) {
+    sf::FloatRect bounds = m_sprite.getLocalBounds();
+    m_sprite.setOrigin(bounds.width * x, bounds.height * y);
+  }
+
+//-----------------------------------------------------------------------------------------------------------
 sf::IntRect UIImageComponent::GetFullTextureRect() const {
   const sf::Texture* tex = m_sprite.getTexture();
   if (tex) {

@@ -5,6 +5,6 @@ struct GameSettings {
   static constexpr float PixelsPerUnit = 64.0f;
 
   static constexpr float Gravity = 9.8f;
-  const static constexpr int ChunkSize = 16;
+  const static constexpr int ChunkSize = 32;
 };
 }  // namespace BaneAndBastion

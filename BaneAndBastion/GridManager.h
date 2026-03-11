@@ -121,17 +121,8 @@ class GridManager : public FalkonEngine::Observer {
       const FalkonEngine::Vector2Df& targetWorldPos, uint32_t seekerID);
 
  private:
-  /// Container for all loaded chunks, indexed by their chunk-space coordinates.
-  std::unordered_map<FalkonEngine::Vector2Di, Chunk,
-                     FalkonEngine::Vector2DiHasher>
-      m_chunks;
 
-  std::unique_ptr<IEnvironmentGenerator> m_generator;
-  std::unique_ptr<NPCSpawner> m_npcSpawner;
-
-  sf::FloatRect m_lastCheckBounds;
-
-  /**
+   /**
    * @brief Converts global grid coordinates to chunk-space coordinates.
    */
   FalkonEngine::Vector2Di WorldToChunk(int x, int y);
@@ -140,5 +131,17 @@ class GridManager : public FalkonEngine::Observer {
    * @brief Converts global grid coordinates to local indices within a chunk.
    */
   FalkonEngine::Vector2Di WorldToLocal(int x, int y);
+
+  /// Container for all loaded chunks, indexed by their chunk-space coordinates.
+  std::unordered_map<FalkonEngine::Vector2Di, Chunk,
+                     FalkonEngine::Vector2DiHasher>
+      m_chunks;
+
+  std::unique_ptr<IEnvironmentGenerator> m_generator;
+  std::unique_ptr<NPCSpawner> m_npcSpawner;
+  Chunk* m_lastChunk = nullptr;
+  FalkonEngine::Vector2Di m_lastChunkPos = {-999, -999};
+
+  sf::FloatRect m_lastCheckBounds;
 };
 }  // namespace BaneAndBastion

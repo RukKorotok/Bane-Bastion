@@ -79,7 +79,6 @@ void GameWorld::DestroyGameObject(GameObject* gameObject) {
 
   if (it == m_markedToDestroyGameObjects.end()) {
     m_markedToDestroyGameObjects.push_back(gameObject);
-    FE_APP_TRACE("GameObject '" + gameObject->GetName() + "' marked for destruction.");
   }
 }
 
@@ -87,15 +86,22 @@ void GameWorld::DestroyGameObject(GameObject* gameObject) {
 void GameWorld::Clear() {
   FE_CORE_INFO("Clearing GameWorld...");
 
-  // Destruction from end to beginning, focusing on root objects (parent == null)
-  for (int i = static_cast<int>(m_gameObjects.size()) - 1; i >= 0; i--) {
-    if (m_gameObjects[i] == nullptr) continue;
-
-    auto transform = m_gameObjects[i]->GetComponent<TransformComponent>();
-    if (transform && transform->GetParent() == nullptr) {
-      DestroyGameObjectImmediate(m_gameObjects[i]);
+  // SAFE DESTRUCTION: Collect root objects first to prevent iteration conflicts
+  std::vector<GameObject*> rootObjects;
+  for (auto* obj : m_gameObjects) {
+    if (obj) {
+      auto transform = obj->GetComponent<TransformComponent>();
+      if (transform && transform->GetParent() == nullptr) {
+        rootObjects.push_back(obj);
+      }
     }
   }
+
+  // EXECUTION: Perform immediate destruction on the collected root objects
+  for (auto* obj : rootObjects) {
+    DestroyGameObjectImmediate(obj);
+  }
+
   m_gameObjects.clear();
   m_markedToDestroyGameObjects.clear();
   m_fixedCounter = 0.0f;
@@ -143,7 +149,6 @@ void GameWorld::DestroyGameObjectImmediate(GameObject* gameObject) {
   for (auto* t : allTransforms) {
     GameObject* obj = t->GetGameObject();
     if (!obj) continue;
-
     // Remove from all tracking registries
     m_gameObjects.erase(std::remove(m_gameObjects.begin(), m_gameObjects.end(), obj), m_gameObjects.end());
     m_markedToDestroyGameObjects.erase(

@@ -7,7 +7,7 @@
 
 namespace BaneAndBastion {
 Bane::Bane(FalkonEngine::Vector2Df pos, std::shared_ptr<IChainAnchor> anchor)
-    : Player(pos, "Bane", "knight", FalkonEngine::CollisionCategory::Player),
+    : Player(pos, "Bane", "bane", FalkonEngine::CollisionCategory::Player),
       m_anchor(anchor) {
   // 1. Setup Movement: Attach specialized BaneMoveComponent for mouse-seeking
   // logic
@@ -17,7 +17,7 @@ Bane::Bane(FalkonEngine::Vector2Df pos, std::shared_ptr<IChainAnchor> anchor)
 
   // Register with GridManager for tile-based collision resolution
   if (auto* activeScene =
-          dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive())) {
+          dynamic_cast<ForestScene*>(FalkonEngine::Scene::GetActive())) {
     movement->Subscribe(activeScene->GetGridManager());
   }
 
@@ -33,22 +33,23 @@ Bane::Bane(FalkonEngine::Vector2Df pos, std::shared_ptr<IChainAnchor> anchor)
   // anchor
   auto stats = p_gameObject->GetComponent<StatsComponent>();
   if (stats) {
-    stats->InitStats({{StatType::Health, 100.0f},
-                      {StatType::MaxHealth, 100.0f},
-                      {StatType::Defense, 5.0f},
-                      {StatType::Strength, 30.0f}});
+    stats->InitStats({{"hp", 100.0f}, 
+        {"hp_max", 100.0f}, 
+        {"def", 0.05f}, 
+        {"str", 20.0f}});
   }
 
   // 4. Setup Combat: Higher hit rate (0.5s) compared to standard NPCs
   auto attack = p_gameObject->AddComponent<DamageComponent>();
   if (attack && stats) {
-    float damage = stats->GetStat(StatType::Strength);
+    float damage = stats->GetStat("Strength");
     attack->SetBaseDamage(damage);
     attack->SetDamageType(0);
     attack->SetHitRate(0.5f);
   }
 }
 
+//------------------------------------------------------------------------------------------------------------
 void Bane::OnNotify(const FalkonEngine::GameEvent& event) {
   switch (event.type) {
     case FalkonEngine::GameEventType::MouseMoved: {
@@ -100,6 +101,7 @@ void Bane::OnNotify(const FalkonEngine::GameEvent& event) {
   }
 }
 
+//------------------------------------------------------------------------------------------------------------
 bool Bane::isMovementAllowed(const FalkonEngine::Vector2Df& targetPos) const {
   auto anchor = m_anchor.lock();
   if (!anchor) return true;

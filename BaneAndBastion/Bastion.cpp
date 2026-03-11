@@ -5,19 +5,20 @@
 #include "PlayerMoveComponent.h"
 #include "RenderSystem.h"
 #include "pch.h"
+#include "StatDefinition.h"
 
 namespace BaneAndBastion {
 // Bastion Implementation
 // --------------------------------------------------------------------------------------------------------
 Bastion::Bastion(FalkonEngine::Vector2Df position)
-    : Player(position, "Bastion", "knight",
+    : Player(position, "Bastion", "bastion",
              FalkonEngine::CollisionCategory::Player) {
   // 1. Setup Camera: Bind the main window to the player's view
   auto playerCamera =
       p_gameObject->AddComponent<FalkonEngine::CameraComponent>();
   playerCamera->SetWindow(
       &FalkonEngine::RenderSystem::Instance()->GetMainWindow());
-  playerCamera->SetBaseResolution(1024, 720);
+  playerCamera->SetBaseResolution(1280, 720);
 
   // 2. Setup Movement: Add the player-controlled movement component
   auto movement = p_gameObject->AddComponent<PlayerMoveComponent>();
@@ -27,7 +28,7 @@ Bastion::Bastion(FalkonEngine::Vector2Df position)
 
     // Register with GridManager for tile-based collision detection
     if (auto* activeScene =
-            dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive())) {
+            dynamic_cast<ForestScene*>(FalkonEngine::Scene::GetActive())) {
       movement->Subscribe(activeScene->GetGridManager());
     }
   }
@@ -43,9 +44,9 @@ Bastion::Bastion(FalkonEngine::Vector2Df position)
   // 4. Setup Stats: Initialize base health and defense values
   auto stats = p_gameObject->GetComponent<StatsComponent>();
   if (stats) {
-    stats->InitStats({{StatType::Health, 100.0f},
-                      {StatType::MaxHealth, 100.0f},
-                      {StatType::Defense, 5.0f}});
+    stats->InitStats({{"hp", 100.0f},
+        {"hp_max", 100.0f},
+        {"def", 0.05f}});
   }
 }
 
@@ -72,9 +73,12 @@ void Bastion::HitAction(FalkonEngine::GameObject& gameObject) {
     auto stats = p_gameObject->GetComponent<StatsComponent>();
 
     if (attack && stats) {
-      float damage =
-          attack->HitTrigger() * abs(1 - stats->GetStat(StatType::Defense));
-      stats->ChangeStat(StatType::Health, damage * -1.0f);
+      float defense = stats->GetStat("Defense");
+
+      float rawDamage = attack->HitTrigger();
+      float finalDamage = rawDamage * abs(1.0f - defense);
+
+      stats->ChangeStat("Health", -finalDamage);
     }
   }
 }
@@ -120,14 +124,21 @@ void Bastion::OnNotify(const FalkonEngine::GameEvent& event) {
     }
     case FalkonEngine::GameEventType::StatChanged: {
       // Monitor vitals and handle character death logic
-      StatType changedStat = static_cast<StatType>(event.actionID);
-      if (changedStat == StatType::Health) {
-        float currentHP = event.value;
+      // 1. Извлекаем имя стата из map, который ты уже используешь в SetStat
+      // В StatsComponent при отправке ты клал данные: event.input[type] = value;
+
+      // Получаем определение того, какой ключ у нас отвечает за здоровье
+      const auto& healthDef = StatRegistry::GetDefinition("Health");
+
+      // 2. Проверяем, есть ли наше изменение здоровья в input
+      if (event.input.count(healthDef.currentKey)) {
+        float currentHP = event.input.at(healthDef.currentKey);
+
         if (currentHP <= 0.0f) {
-          // Handle player death (e.g., Game Over screen or Respawn)
+          Destroy();
+          FE_APP_TRACE(p_gameObject->GetName() + " has reached 0 HP. Triggering death sequence.");
         } else {
-          FE_APP_TRACE(p_gameObject->GetName() +
-                       " HP is now: " + std::to_string(currentHP));
+          FE_APP_TRACE(p_gameObject->GetName() + " HP is now: " + std::to_string(currentHP));
         }
       }
       break;

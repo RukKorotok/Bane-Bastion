@@ -4,7 +4,7 @@
 #include <queue>
 #include <unordered_map>
 
-#include "GameScene.h"
+#include "ForestScene.h"
 #include "GridManager.h"
 #include "pch.h"
 
@@ -15,7 +15,7 @@ std::vector<FalkonEngine::Vector2Di> AStarUtils::FindPath(
     FalkonEngine::Vector2Di start, FalkonEngine::Vector2Di target,
     FalkonEngine::CollisionCategory seekerCategory) {
   // Get the GridManager instance from the active GameScene
-  auto scene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive());
+  auto scene = dynamic_cast<ForestScene*>(FalkonEngine::Scene::GetActive());
   if (!scene) return {};
   auto gm = scene->GetGridManager();
 

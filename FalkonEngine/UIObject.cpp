@@ -4,6 +4,7 @@
 #include "UIImageComponent.h"
 #include "UIManager.h"
 #include "UIObject.h"
+#include "PlayerController.h"
 
 namespace FalkonEngine {
 

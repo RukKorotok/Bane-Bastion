@@ -50,6 +50,12 @@ void DamageComponent::Update(float deltaTime) {
   if (!m_readyToHit) {
     if (m_hitCooldown < m_hitRate) {
       m_hitCooldown += deltaTime;
+      GameEvent event;
+      event.type = FalkonEngine::GameEventType::StatChanged;
+      event.actionID = 1;
+      event.input["hit"] = m_hitCooldown;
+      event.input["hit_max"] = m_hitRate;
+      Notify(event);
     } else {
       // Set to ready once the elapsed time exceeds the hit rate interval
       m_readyToHit = true;

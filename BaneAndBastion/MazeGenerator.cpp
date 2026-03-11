@@ -89,8 +89,7 @@ std::vector<EnvironmentObject*> MazeGenerator::Generate(
       if (grid[x][y] == 0) {
         objects.push_back(new Wall(FalkonEngine::Vector2Df(wx, wy)));
       } else {
-        // Optionally spawn floor tiles here
-        // objects.push_back(new DungeonFloor(wx, wy));
+        //
       }
     }
   }

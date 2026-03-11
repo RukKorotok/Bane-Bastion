@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "UIInteractable.h"
-#include "PlayerController.h"
+#include "SceneManager.h"
 #include "TransformComponent.h"
 #include "UIImage.h"
 
@@ -10,7 +10,7 @@ namespace FalkonEngine {
 //-----------------------------------------------------------------------------------------------------------
 UIInteractable::UIInteractable(GameObject* gameObject) : Component(gameObject) {
   // REGISTRATION: Subscribing this component to the PlayerController's input event stream
-  PlayerController::Instance()->Subscribe(this);
+  SceneManager::Instance().GetActiveScene()->GetPlayerController()->Subscribe(this);
 }
 
 //-----------------------------------------------------------------------------------------------------------

@@ -24,10 +24,8 @@ struct InputAction {
 class PlayerController : public Observable {
  public:
   /** @return The global instance of the PlayerController. */
-  static PlayerController* Instance() {
-    static PlayerController instance;
-    return &instance;
-  }
+  PlayerController();
+  ~PlayerController() = default;
 
   /**
    * @brief Maps a keyboard key to a named axis.
@@ -67,15 +65,15 @@ class PlayerController : public Observable {
   bool IsMouseButtonPressed(sf::Mouse::Button button) const;
 
  private:
-  PlayerController();
-  ~PlayerController() = default;
 
   /** @brief Internal helper to notify observers about mouse actions. */
   void DispatchMouseEvent(sf::Mouse::Button button, bool isPressed);
 
   // Mappings for discrete and continuous input
   std::map<sf::Keyboard::Key, std::vector<InputAction>> m_bindings;
+  std::map<sf::Keyboard::Key, bool> m_keyWasDown;
   std::map<sf::Mouse::Button, std::string> m_mouseBindings;
+
 
   Vector2Df m_lastMousePos;  ///< Cached screen position of the mouse.
 };

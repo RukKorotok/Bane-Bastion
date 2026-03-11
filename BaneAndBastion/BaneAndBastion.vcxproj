@@ -181,7 +181,8 @@
     <ClCompile Include="DynamicWithPhysic.cpp" />
     <ClCompile Include="EnvironmentObject.cpp" />
     <ClCompile Include="ForestGenerator.cpp" />
-    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="ForestScene.cpp" />
+    <ClCompile Include="GameUIBuilder.cpp" />
     <ClCompile Include="GridManager.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MazeGenerator.cpp" />
@@ -189,11 +190,13 @@
     <ClCompile Include="NPC.cpp" />
     <ClCompile Include="AStarUtilits.cpp" />
     <ClCompile Include="NPCSpawner.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="PlayerMoveComponent.cpp" />
+    <ClCompile Include="StatDefinition.cpp" />
     <ClCompile Include="StatsComponent.cpp" />
-    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="Tree.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="IEnvironmentGenerator.cpp" />
   </ItemGroup>
@@ -203,7 +206,8 @@
     <ClInclude Include="DynamicWithPhysic.h" />
     <ClInclude Include="EnvironmentObject.h" />
     <ClInclude Include="ForestGenerator.h" />
-    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="ForestScene.h" />
+    <ClInclude Include="GameUIBuilder.h" />
     <ClInclude Include="GridManager.h" />
     <ClInclude Include="GridStructures.h" />
     <ClInclude Include="IChainAnchor.h" />
@@ -216,12 +220,13 @@
     <ClInclude Include="AStarUtilits.h" />
     <ClInclude Include="NPCSpawner.h" />
     <ClInclude Include="PathfindingAStar.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="PlayerMoveComponent.h" />
-    <ClInclude Include="Stats.h" />
+    <ClInclude Include="StatDefinition.h" />
     <ClInclude Include="StatsComponent.h" />
-    <ClInclude Include="Text.h" />
+    <ClInclude Include="Tree.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="IEnvironmentGenerator.h" />
   </ItemGroup>

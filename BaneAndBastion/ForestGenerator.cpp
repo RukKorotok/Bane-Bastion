@@ -1,16 +1,15 @@
 #include "ForestGenerator.h"
 
 #include "pch.h"
-// #include "Tree.h"
+#include "Tree.h"
 #include "Wall.h"
-// #include "Grass.h"
 #include "GameSettings.h"
 
 namespace BaneAndBastion {
 ForestGenerator::ForestGenerator() {
   // Register environment assets with spawn weights
-  // RegisterAsset<Tree>(0.15f);
-  RegisterAsset<Wall>(0.02f);
+  RegisterAsset<Wall>(0.10f);
+  RegisterAsset<Tree>(0.15f);
 }
 
 std::vector<EnvironmentObject*> ForestGenerator::Generate(
