@@ -12,6 +12,7 @@
 #include "PlayerController.h"
 #include "RenderSystem.h"
 #include "SceneManager.h"
+#include "DeferredActionRegistry.h"
 
 namespace FalkonEngine {
 
@@ -82,7 +83,7 @@ void Engine::Run() {
       }
 
       // Input handling via PlayerController
-      PlayerController::Instance()->HandleRawEvent(event);
+      SceneManager::Instance().GetActiveScene()->GetPlayerController()->HandleRawEvent(event);
     }
 
     // Final window check before processing graphics
@@ -93,9 +94,10 @@ void Engine::Run() {
     // FRAME CYCLE: Clear, Update logic, Render objects, and Display result
     window.clear();
 
+    DeferredActionRegistry::Instance().ProcessAll();
     SceneManager::Instance().Update(deltaTime);
     SceneManager::Instance().Render();
-    PlayerController::Instance()->Update();
+    SceneManager::Instance().GetActiveScene()->GetPlayerController()->Update();
 
     window.display();
   }

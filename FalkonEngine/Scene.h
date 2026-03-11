@@ -2,6 +2,7 @@
 #include <string>
 
 #include "GameWorld.h"
+#include "PlayerController.h"
 #include "SubScriptionSystem.h"
 
 namespace FalkonEngine {
@@ -30,6 +31,8 @@ class Scene : public Observer {
   /** @return Pointer to the GameWorld instance belonging to this scene. */
   GameWorld* GetWorld() const;
 
+  PlayerController* GetPlayerController() const;
+
   /** @return The name identifier of the scene. */
   std::string GetName();
 
@@ -42,7 +45,7 @@ class Scene : public Observer {
   // --- (Lifecycle Methods: To be implemented by specific levels) ---
 
   /** @brief Called when the scene is loaded into the stack. Used for asset initialization. */
-  virtual void Start() = 0;
+  virtual void Start() ;
 
   /** @brief Resets the scene state without fully reloading assets. */
   virtual void Restart() = 0;
@@ -50,8 +53,12 @@ class Scene : public Observer {
   /** @brief Called before the scene is destroyed or popped from the stack. */
   virtual void Stop() = 0;
 
+  /** @brief Called before the scene is resumed. */
+  virtual void Resume() = 0;
+
  protected:
-  GameWorld* m_world = nullptr;  ///< Every scene manages its own entity-component world.
+  GameWorld* p_world = nullptr;  ///< Every scene manages its own entity-component world.
+  PlayerController* p_playerController = nullptr;
 
  private:
   std::string m_name;  ///< Internal name for debugging and identification.

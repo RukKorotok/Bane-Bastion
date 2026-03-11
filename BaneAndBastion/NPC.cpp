@@ -6,6 +6,7 @@
 #include "pch.h"
 #include "AnimationComponent.h"
 #include "SoundComponent.h"
+#include "StatDefinition.h"
 
 namespace BaneAndBastion {
 // NPC Implementation
@@ -14,7 +15,7 @@ NPC::NPC(FalkonEngine::Vector2Df position)
     : Character(position, "NPC", "monster",
                 FalkonEngine::CollisionCategory::Enemy) {
 
-  auto activeScene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive());
+  auto activeScene = dynamic_cast<ForestScene*>(FalkonEngine::Scene::GetActive());
   if (!activeScene) {
     FE_CORE_ERROR("NPC: Failed to create 'NPC' - No active GameScene found.");
     return;
@@ -51,16 +52,16 @@ NPC::NPC(FalkonEngine::Vector2Df position)
   // 4. Setup Stats: Initialize Health, Strength, and Defense
   auto stats = p_gameObject->GetComponent<StatsComponent>();
   if (stats) {
-    stats->InitStats({{StatType::Health, 100.0f},
-                      {StatType::MaxHealth, 100.0f},
-                      {StatType::Defense, 0.05f},
-                      {StatType::Strength, 10.0f}});
+    stats->InitStats({{"hp", 100.0f},
+        {"hp_max", 100.0f},
+        {"def", 0.05f},
+        {"str", 10.0f}});
   }
 
   // 5. Setup Combat: Sync DamageComponent with initialized Strength stat
   auto attack = p_gameObject->AddComponent<DamageComponent>();
   if (attack && stats) {
-    float damage = stats->GetStat(StatType::Strength);
+    float damage = stats->GetStat("Strength");
     attack->SetBaseDamage(damage);
     attack->SetDamageType(0);
     attack->SetHitRate(1.0f);
@@ -68,8 +69,7 @@ NPC::NPC(FalkonEngine::Vector2Df position)
 
   //6. Set anim cpmponent
 
-  auto idleTex = FalkonEngine::ResourceSystem::Instance()->GetTextureShared("monster_idle");
-  auto walkTex = FalkonEngine::ResourceSystem::Instance()->GetTextureShared("monster_walk");
+  auto animTex = FalkonEngine::ResourceSystem::Instance()->GetTextureShared("monster_anim");
 
   auto animComp = p_gameObject->AddComponent<FalkonEngine::AnimationComponent>();
   auto renderer = p_gameObject->GetComponent<FalkonEngine::SpriteRendererComponent>();
@@ -78,20 +78,17 @@ NPC::NPC(FalkonEngine::Vector2Df position)
     // 1. Настройка Idle (использует первую текстуру)
     FalkonEngine::Animation idleAnim;
     // Допустим, idle_atlas.png имеет сетку 64x64
-    //idleAnim.AddFramesLine(0, 0, 80, 110, 9, 0.05f);
-    idleAnim.AddFramesLine(0, 110, 80, 80, 9, 0.05f);
-    idleAnim.AddFramesLine(0, 220, 80, 80, 6, 0.05f);
-    animComp->AddState("Idle", std::make_shared<FalkonEngine::AnimState>(idleAnim, idleTex, true));
+    idleAnim.AddFramesLine(0, 0, 80, 100, 9, 0.10f);
+    animComp->AddState("Idle", std::make_shared<FalkonEngine::AnimState>(idleAnim, animTex, true));
     //renderer->SetPixelSize(512, 512);
     renderer->SetPixelSize(GameSettings::PixelsPerUnit * 0.5f, GameSettings::PixelsPerUnit * 0.5f);
 
     // 2. Настройка Walk (использует вторую текстуру)
     FalkonEngine::Animation walkAnim;
     // Допустим, walk_atlas.png имеет сетку 64x64
-   // walkAnim.AddFramesLine(0, 0, 80, 110, 9, 0.05f);
-    walkAnim.AddFramesLine(0, 110, 80, 80, 9, 0.05f);
-    walkAnim.AddFramesLine(0, 220, 80, 80, 6, 0.05f);
-    animComp->AddState("Walk", std::make_shared<FalkonEngine::AnimState>(walkAnim, walkTex, true));
+    walkAnim.AddFramesLine(0, 120, 80, 120, 9, 0.05f);
+    walkAnim.AddFramesLine(0, 240, 80, 120, 6, 0.05f);
+    animComp->AddState("Walk", std::make_shared<FalkonEngine::AnimState>(walkAnim, animTex, true));
     //renderer->SetPixelSize(512, 512);
     renderer->SetPixelSize(GameSettings::PixelsPerUnit * 0.5f, GameSettings::PixelsPerUnit * 0.5f);
 
@@ -119,8 +116,8 @@ void NPC::HitAction(FalkonEngine::GameObject& gameObject) {
     if (attack && stats) {
       // Apply damage modified by the Defense stat percentage
       float damage =
-          attack->HitTrigger() * abs(1 - stats->GetStat(StatType::Defense));
-      stats->ChangeStat(StatType::Health, damage * -1.0f);
+          attack->HitTrigger() * abs(1 - stats->GetStat("Defense"));
+      stats->ChangeStat("Health", -damage);
     }
   }
 }
@@ -196,14 +193,17 @@ void NPC::OnNotify(const FalkonEngine::GameEvent& event) {
 
     case FalkonEngine::GameEventType::StatChanged: {
       // Check for death conditions when health values are updated
-      StatType changedStat = static_cast<StatType>(event.actionID);
-      if (changedStat == StatType::Health) {
-        float currentHP = event.value;
+      const auto& healthDef = StatRegistry::GetDefinition("Health");
+
+      // 2. Проверяем, есть ли наше изменение здоровья в input
+      if (event.input.count(healthDef.currentKey)) {
+        float currentHP = event.input.at(healthDef.currentKey);
+
         if (currentHP <= 0.0f) {
-          Destroy();  // Kill the entity if health reaches zero
+          Destroy();  // Handle player death
+          FE_APP_TRACE(p_gameObject->GetName() + " has reached 0 HP. Triggering death sequence.");
         } else {
-          FE_APP_TRACE(p_gameObject->GetName() +
-                       " HP is now: " + std::to_string(currentHP));
+          FE_APP_TRACE(p_gameObject->GetName() + " HP is now: " + std::to_string(currentHP));
         }
       }
       break;

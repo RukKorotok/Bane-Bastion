@@ -2,10 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="GameMain.cpp" />
-    <ClCompile Include="Text.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
+    <ClCompile Include="ForestScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="GridManager.cpp">
@@ -77,13 +74,22 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="GameUIBuilder.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="StatDefinition.cpp">
+      <Filter>GamePlay\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="PauseMenu.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>GamePlay\SceneObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSettings.h" />
-    <ClInclude Include="Text.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
+    <ClInclude Include="ForestScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="GridStructures.h">
@@ -143,7 +149,7 @@
     <ClInclude Include="PathfindingAStar.h">
       <Filter>Core\AI\PathFinding</Filter>
     </ClInclude>
-    <ClInclude Include="Stats.h">
+    <ClInclude Include="StatDefinition.h">
       <Filter>GamePlay\Stats</Filter>
     </ClInclude>
     <ClInclude Include="StatsComponent.h">
@@ -175,6 +181,15 @@
     </ClInclude>
     <ClInclude Include="MainMenu.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUIBuilder.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenu.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>GamePlay\SceneObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

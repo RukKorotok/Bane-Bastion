@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "PlayerController.h"  // Assuming PlayerController manages subscriptions
+#include "SceneManager.h"
 #include "UIBoundText.h"
 
 namespace FalkonEngine {
@@ -17,7 +17,7 @@ void UIBoundText::Awake() {
   UIText::Awake();
 
   // REGISTRATION: Subscribe to the input/event stream (adjust to your Global Event System if different)
-  PlayerController::Instance()->Subscribe(this);
+  SceneManager::Instance().GetActiveScene()->GetPlayerController()->Subscribe(this);
 }
 
 //-----------------------------------------------------------------------------------------------------------

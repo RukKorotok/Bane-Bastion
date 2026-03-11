@@ -2,6 +2,7 @@
 
 #include "ResourceSystem.h"
 #include "SceneManager.h"
+#include "MusicPlayer.h"
 
 namespace FalkonEngine {
 
@@ -51,11 +52,13 @@ void SceneManager::Clear() {
 //--------------------------------------------------------------------------------------------------------
 void SceneManager::ChangeSceneInternal(std::unique_ptr<Scene> newScene) {
   m_isLoading = true;
+  //StopMusic
+  MusicPlayer::Instance().Stop();
 
   // 1. LIFECYCLE: Stop and destroy all current scenes in the stack.
   while (!m_sceneStack.empty()) {
-    m_sceneStack.top()->Stop();
-    m_sceneStack.pop();
+    m_sceneStack.back()->Stop();
+    m_sceneStack.pop_back();
     // IMPORTANT: pop() destroys the unique_ptr, triggering
     // Scene -> World -> GameObjects destruction sequence.
   }
@@ -66,8 +69,8 @@ void SceneManager::ChangeSceneInternal(std::unique_ptr<Scene> newScene) {
 
   // 3. INITIALIZATION: Move and start the new scene.
   if (newScene) {
-    m_sceneStack.push(std::move(newScene));
-    m_sceneStack.top()->Start();  // New textures are loaded here
+    m_sceneStack.push_back(std::move(newScene));
+    m_sceneStack.back()->Start();  // New textures are loaded here
   }
 
   m_isLoading = false;
@@ -86,16 +89,17 @@ void SceneManager::ApplyPushScene(const std::string& name) {
   // OVERLAY LOGIC: We do NOT clear resources or pop the current scene.
   // The new scene is layered on top, allowing for UI menus or pauses.
   std::unique_ptr<Scene> overlayScene = it->second();
-  overlayScene->Start();
+  m_sceneStack.push_back(std::move(overlayScene));
+  m_sceneStack.back()->Start();
 
-  m_sceneStack.push(std::move(overlayScene));
 }
 
 //--------------------------------------------------------------------------------------------------------
 void SceneManager::ApplyPopScene() {
   if (m_sceneStack.size() > 1) {
-    m_sceneStack.top()->Stop();
-    m_sceneStack.pop();
+    m_sceneStack.back()->Stop();
+    m_sceneStack.pop_back();
+    m_sceneStack.back()->Resume();
   }
 }
 
@@ -103,7 +107,7 @@ void SceneManager::ApplyPopScene() {
 void SceneManager::Update(float deltaTime) {
   if (!m_sceneStack.empty() && !m_isLoading) {
     // PAUSE LOGIC: Only the top-most scene receives update ticks.
-    auto* world = m_sceneStack.top()->GetWorld();
+    auto* world = m_sceneStack.back()->GetWorld();
     if (world) {
       world->Update(deltaTime);
       world->FixedUpdate(deltaTime);
@@ -124,14 +128,15 @@ void SceneManager::Render() {
     return;
   }
 
-  // RENDERING: Draw the current active scene.
-  auto* activeScene = m_sceneStack.top().get();
-  if (activeScene && activeScene->GetWorld()) {
-    activeScene->GetWorld()->Render();
+  // RENDERING: Draw scenes stack.
+  for (const auto& scene : m_sceneStack) {
+    if (scene && scene->GetWorld()) {
+      scene->GetWorld()->Render();
+    }
   }
 }
 
 //--------------------------------------------------------------------------------------------------------
-Scene* SceneManager::GetActiveScene() const { return m_sceneStack.empty() ? nullptr : m_sceneStack.top().get(); }
+Scene* SceneManager::GetActiveScene() const { return m_sceneStack.empty() ? nullptr : m_sceneStack.back().get(); }
 
 }  // namespace FalkonEngine

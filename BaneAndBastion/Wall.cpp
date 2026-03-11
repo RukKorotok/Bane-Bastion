@@ -1,6 +1,5 @@
 #include "Wall.h"
 
-#include "GameScene.h"
 #include "GameSettings.h"
 #include "ResourceSystem.h"
 #include "SpriteColliderComponent.h"

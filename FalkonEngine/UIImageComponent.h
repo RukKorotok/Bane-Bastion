@@ -54,6 +54,8 @@ class UIImageComponent : public Component {
    */
   void SetScaleToSize(Vector2Df targetSize, Vector2Df pivot);
 
+  void SetOrigin(float x, float y);
+
   /**
    * @return The full rectangle representing the texture dimensions.
    */

@@ -7,6 +7,7 @@
 #include "UICheckBox.h"
 #include "UISlider.h"
 #include "UIText.h"
+#include  "DeferredActionRegistry.h"
 
 using namespace FalkonEngine;
 
@@ -28,9 +29,12 @@ void MainMenu::Start() {
   const std::string startGameBind = "StartGame";
   const std::string exitGameBind = "ExitGame";
 
-  UICommandRegistry::Bind(startGameBind, []() { FalkonEngine::SceneManager::Instance().ApplyLoadScene("Level_1"); });
-  UICommandRegistry::Bind(exitGameBind, []() { FalkonEngine::RenderSystem::Instance()->GetMainWindow().close(); });
+  UICommandRegistry::Bind(startGameBind, []() {
+    FalkonEngine::DeferredActionRegistry::Instance().Push(
+        []() { FalkonEngine::SceneManager::Instance().ApplyLoadScene("Forest"); });
+  });
 
+  UICommandRegistry::Bind(exitGameBind, []() { FalkonEngine::RenderSystem::Instance()->GetMainWindow().close(); });
   // RESOURCES: Load textures, fonts, and music into the global resource system
   auto* resources = FalkonEngine::ResourceSystem::Instance();
   resources->LoadTexture("logo", "Resources/Textures/T_Logo.png");
@@ -135,8 +139,10 @@ void MainMenu::Restart() {
 void MainMenu::Stop() {
   FE_APP_TRACE("Stopping GameScene and clearing world.");
   if (GetWorld()) {
+    MusicPlayer::Instance().Stop();
     // WIPE: Clear all GameObjects from the render/physics world
     GetWorld()->Clear();
+    UICommandRegistry::Clear();
   }
 }
 

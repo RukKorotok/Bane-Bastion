@@ -1,7 +1,7 @@
 #pragma once
 
+#include "ForestScene.h"
 #include "AStarUtilits.h"
-#include "GameScene.h"
 #include "GridManager.h"
 #include "IPathfindingStrategy.h"
 
@@ -25,7 +25,7 @@ class PathfindingAStar : public IPathfindingStrategy {
   std::vector<FalkonEngine::Vector2Df> GetPath(
       FalkonEngine::Vector2Df start, FalkonEngine::Vector2Df target,
       FalkonEngine::CollisionCategory collision) override {
-    auto scene = dynamic_cast<GameScene*>(FalkonEngine::Scene::GetActive());
+    auto scene = dynamic_cast<ForestScene*>(FalkonEngine::Scene::GetActive());
     if (!scene) return {};  // Safety check for active scene
 
     auto gm = scene->GetGridManager();

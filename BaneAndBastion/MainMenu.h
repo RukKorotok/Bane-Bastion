@@ -38,6 +38,8 @@ class MainMenu : public Scene {
   /** @brief LIFECYCLE: Called before the scene is unloaded or switched. */
   void Stop() override;
 
+  void Resume() override {}
+
   /**
    * @brief NOTIFICATION: Central hub for handling engine and UI events within this scene.
    * @param event The dispatched GameEvent to be processed.

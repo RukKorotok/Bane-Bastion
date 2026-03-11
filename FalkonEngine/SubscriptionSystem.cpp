@@ -24,6 +24,33 @@ Observer::~Observer() {
 }
 
 //--------------------------------------------------------------------------------------------------------
+void Observer::UnsubscribeFromAll() {
+  Details::SubscriptionNode* curr = m_head;
+  while (curr) {
+    Details::SubscriptionNode* next = curr->nextInObs;
+
+    // Каждый узел знает, на какой Observable он подписан
+    if (curr->subject) {
+      curr->subject->_Internal_Detach(curr);
+    }
+
+    curr = next;
+  }
+  m_head = nullptr;  // Список пуст, мы свободны
+}
+
+//--------------------------------------------------------------------------------------------------------
+void Observer::MarkDead() {
+  // Бежим по списку своих подписок
+  Details::SubscriptionNode* curr = m_head;
+  while (curr) {
+    // Мы не удаляем узел! Мы просто ставим "черную метку"
+    curr->isDead = true;
+    curr = curr->nextInSub;
+  }
+}
+
+//--------------------------------------------------------------------------------------------------------
 void Observer::_Internal_Detach(Details::SubscriptionNode* node) {
   FE_CORE_ASSERT(node != nullptr, "Attempted to detach a null node in Observer.");
 
@@ -89,24 +116,28 @@ void Observable::Subscribe(Observer* obs) {
 
 //--------------------------------------------------------------------------------------------------------
 void Observable::Notify(const GameEvent& event) {
+  // 1. Создаем локальный "снимок" (snapshot) указателей на подписчиков
+  // Это гарантирует, что мы не будем зависеть от изменений в связном списке
+  std::vector<Observer*> observersToNotify;
+
+  // ВАЖНО: блокируем доступ или просто аккуратно читаем,
+  // пока никто не меняет структуру списка (если есть многопоточность)
   Details::SubscriptionNode* curr = m_head;
-  int notifyCount = 0;
-
-  // Broadcast the event to all linked observers
   while (curr) {
-    Details::SubscriptionNode* next = curr->nextInSub;
-
-    if (curr->observer) {
-      curr->observer->OnNotify(event);
-      notifyCount++;
-    } else {
-      FE_CORE_ERROR("Broken SubscriptionNode detected during Notify: Observer is null!");
+    if (!curr->isDead && curr->observer != nullptr) {
+      observersToNotify.push_back(curr->observer);
     }
-    curr = next;
+    curr = curr->nextInSub;
   }
 
-  // Detailed tracing can be enabled for deep debugging of event flow
-  // FE_APP_TRACE("Event notified to " + std::to_string(notifyCount) + " observers.");
+  // 2. Теперь мы работаем с вектором, который НИКТО не удалит из-под нас
+  for (auto* obs : observersToNotify) {
+    // Дополнительная проверка, на случай если объект умер
+    // буквально в процессе рассылки (например, другой Observer удалил его)
+    if (obs) {
+      obs->OnNotify(event);
+    }
+  }
 }
 
 //--------------------------------------------------------------------------------------------------------

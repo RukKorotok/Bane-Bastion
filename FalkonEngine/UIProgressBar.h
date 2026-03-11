@@ -36,6 +36,7 @@ class UIProgressBar : public UIImage {
    */
   void ConfigureBinding(GameEventType type, int actionID, std::string valKey, std::string maxKey);
 
+  void SetPivot(Vector2Df pivot) override;
   /**
    * @brief Processes incoming notifications and updates progress if the event matches binding.
    * @param event The GameEvent containing stat updates.
@@ -54,8 +55,8 @@ class UIProgressBar : public UIImage {
    * @param fillPath Path to the foreground/fill texture.
    * @param dir The direction in which the bar fills.
    */
-  void SetProgressBarConfig(const std::string& bgPath, const std::string& fillPath,
-                            FillDirection dir = FillDirection::LeftToRight);
+  void SetProgressBarConfig(const std::string& bgPath, const std::string& fillPath, sf::Color color = sf::Color(0, 0, 0, 255), FillDirection dir = FillDirection::LeftToRight,
+                            float topOffsetPers = 0.0f, float bottonOffsetPers = 0.0f);
 
  protected:
   /**
@@ -73,6 +74,8 @@ class UIProgressBar : public UIImage {
   std::string m_valueKey = "current";
   std::string m_maxKey = "max";
   FillDirection m_direction = FillDirection::LeftToRight;
+  float m_topOffsetPers = 0.0f;
+  float m_bottonOffsetPers = 0.0f;
 };
 
 }  // namespace FalkonEngine

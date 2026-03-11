@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "GameScene.h"
+#include "ForestScene.h"
 #include "GridManager.h"
 #include "pch.h"
 
@@ -14,7 +14,7 @@ DynamicActor::DynamicActor(FalkonEngine::Vector2Df position,
                            FalkonEngine::CollisionCategory collision)
     : FalkonEngine::Actor(position, name, texture, collision) {
   auto activeScene = FalkonEngine::Scene::GetActive();
-  if (auto* gameScene = dynamic_cast<GameScene*>(activeScene)) {
+  if (auto* gameScene = dynamic_cast<ForestScene*>(activeScene)) {
     if (p_gridManager = gameScene->GetGridManager()) {
       activeScene->GetWorld()->Subscribe(this);
     }

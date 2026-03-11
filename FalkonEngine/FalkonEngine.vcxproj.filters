@@ -151,6 +151,9 @@
     <ClCompile Include="UIAnimate.cpp">
       <Filter>Scene\Entities\UI\Templates</Filter>
     </ClCompile>
+    <ClCompile Include="DeferredActionRegistry.cpp">
+      <Filter>Systems\ActionRegistry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -327,6 +330,9 @@
     <ClInclude Include="UIAnimate.h">
       <Filter>Scene\Entities\UI\Templates</Filter>
     </ClInclude>
+    <ClInclude Include="DeferredActionRegistry.h">
+      <Filter>Systems\ActionRegistry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Core">
@@ -415,6 +421,9 @@
     </Filter>
     <Filter Include="Animation">
       <UniqueIdentifier>{06334b4b-0671-47fc-b82c-a47289ffb492}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Systems\ActionRegistry">
+      <UniqueIdentifier>{add88d2a-d4da-48e5-9541-c12f7d9cd53d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

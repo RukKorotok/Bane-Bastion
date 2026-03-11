@@ -59,6 +59,12 @@ class SceneManager : public Observer {
   /** @brief Destroys all scenes and clears the stack. */
   void Clear();
 
+  /** @brief Pushes a new scene onto the stack without removing previous ones. */
+  void ApplyPushScene(const std::string& name);
+
+  /** @brief Removes the top-most scene and returns to the previous one. */
+  void ApplyPopScene();
+
  private:
   SceneManager() = default;
   ~SceneManager() = default;
@@ -70,14 +76,8 @@ class SceneManager : public Observer {
   /** @brief Internal helper to swap the top scene or replace the stack. */
   void ChangeSceneInternal(std::unique_ptr<Scene> newScene);
 
-  /** @brief Pushes a new scene onto the stack without removing previous ones. */
-  void ApplyPushScene(const std::string& name);
-
-  /** @brief Removes the top-most scene and returns to the previous one. */
-  void ApplyPopScene();
-
   std::map<std::string, SceneFactory> m_factories;  ///< Registry of available scene types.
-  std::stack<std::unique_ptr<Scene>> m_sceneStack;  ///< The actual stack of active scenes.
+  std::vector<std::unique_ptr<Scene>> m_sceneStack;  ///< The actual stack of active scenes.
   bool m_isLoading = false;                         ///< Guard flag for transition safety.
 };
 

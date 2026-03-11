@@ -15,6 +15,7 @@ class UIManager {
 
   void UpdateHitbox(uint32_t entityID, const sf::FloatRect& bounds);
   void RemoveHitbox(uint32_t entityID);
+  void Clear();
 
   bool IsPointerOverUI(const Vector2Df& mousePos) const;
 
