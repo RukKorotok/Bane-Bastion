@@ -125,8 +125,9 @@ void NPC::HitAction(FalkonEngine::GameObject& gameObject) {
 // --------------------------------------------------------------------------------------------------------
 void NPC::OnNotify(const FalkonEngine::GameEvent& event) {
   // Centralized Event Bus: Handling internal component communication
-
-    auto soundComp = p_gameObject->GetComponent<FalkonEngine::SoundComponent>();
+  if (!p_gameObject) {
+    return;
+  }
   switch (event.type) {
     case GameEventType::MovementRequested: {
       // Triggered when AI pathfinding decides on a new target coordinate
@@ -148,6 +149,7 @@ void NPC::OnNotify(const FalkonEngine::GameEvent& event) {
 
           float moveSpeed = std::sqrt(moveLenSq);
           animComp->SetCurrentSpeed(moveSpeed / 2000.0f);
+          auto soundComp = p_gameObject->GetComponent<FalkonEngine::SoundComponent>();
           if (soundComp) {
             soundComp->Play("monster_run", 0, 20.0f, 1.2f);
           }
@@ -202,6 +204,7 @@ void NPC::OnNotify(const FalkonEngine::GameEvent& event) {
         if (currentHP <= 0.0f) {
           Destroy();  // Handle player death
           FE_APP_TRACE(p_gameObject->GetName() + " has reached 0 HP. Triggering death sequence.");
+          return;
         } else {
           FE_APP_TRACE(p_gameObject->GetName() + " HP is now: " + std::to_string(currentHP));
         }
